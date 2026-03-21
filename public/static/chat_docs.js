@@ -42,27 +42,27 @@ async function renderChat(container, sessionId = null) {
     container.innerHTML = `
     <div class="flex h-full gap-0 -m-6 animate-fade" style="height: calc(100vh - 73px)">
       <!-- Sessions Sidebar -->
-      <div id="chat-sidebar" class="w-72 bg-white border-r border-slate-100 flex flex-col flex-shrink-0">
-        <div class="p-4 border-b border-slate-100">
+      <div id="chat-sidebar" class="w-72 border-r border-gold-faint flex flex-col flex-shrink-0">
+        <div class="p-4 border-b border-gold-faint">
           <button onclick="createNewChatSession()" class="w-full btn-primary py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
             <i class="fas fa-plus"></i> Nova conversa
           </button>
         </div>
         <div id="sessions-list" class="flex-1 overflow-y-auto p-3 space-y-1">
           ${sessions.length === 0 ? `
-          <div class="text-center py-8 text-gray-400">
+          <div class="text-center py-8 text-dim">
             <i class="fas fa-comments text-3xl mb-3 block opacity-30"></i>
             <p class="text-sm">Nenhuma conversa ainda</p>
           </div>` : sessions.map(s => `
-          <div onclick="loadChatSession('${s.id}')" id="session-${s.id}" class="session-item flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all hover:bg-slate-50 group ${s.id === chatSessionId ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'}">
-            <div class="w-8 h-8 rounded-lg ${s.id === chatSessionId ? 'bg-indigo-100' : 'bg-gray-100'} flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-comments text-xs ${s.id === chatSessionId ? 'text-indigo-600' : 'text-gray-500'}"></i>
+          <div onclick="loadChatSession('${s.id}')" id="session-${s.id}" class="session-item flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all hover:bg-dark-2 group ${s.id === chatSessionId ? 'bg-yellow-900/20 text-yellow-400' : 'text-cream-3'}">
+            <div class="w-8 h-8 rounded-lg ${s.id === chatSessionId ? 'bg-yellow-900/30' : 'bg-dark-4'} flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-comments text-xs ${s.id === chatSessionId ? 'text-yellow-500' : 'text-warm-gray'}"></i>
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium truncate">${s.title || 'Nova conversa'}</p>
-              <p class="text-xs text-gray-400">${timeAgo(s.updated_at)}</p>
+              <p class="text-xs text-dim">${timeAgo(s.updated_at)}</p>
             </div>
-            <button onclick="event.stopPropagation(); deleteChatSession('${s.id}')" class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all p-1">
+            <button onclick="event.stopPropagation(); deleteChatSession('${s.id}')" class="opacity-0 group-hover:opacity-100 text-dim hover:text-red-500 transition-all p-1">
               <i class="fas fa-trash text-xs"></i>
             </button>
           </div>`).join('')}
@@ -70,24 +70,24 @@ async function renderChat(container, sessionId = null) {
       </div>
 
       <!-- Chat Main -->
-      <div class="flex-1 flex flex-col bg-slate-50 min-w-0">
+      <div class="flex-1 flex flex-col bg-dark-2 min-w-0">
         ${currentSession ? `
         <!-- Chat Header -->
-        <div class="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+        <div class="border-b border-gold-faint px-6 py-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
               <i class="fas fa-brain text-white text-sm"></i>
             </div>
             <div>
-              <h2 class="font-bold text-gray-900 text-sm" id="chat-title">${currentSession.title || 'Nova conversa'}</h2>
-              <p class="text-xs text-gray-400" id="chat-model-badge">Assistente de Negócios IA</p>
+              <h2 class="font-bold text-cream text-sm" id="chat-title">${currentSession.title || 'Nova conversa'}</h2>
+              <p class="text-xs text-dim" id="chat-model-badge">Assistente de Negócios IA</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="clearChatHistory()" title="Limpar conversa" class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
+            <button onclick="clearChatHistory()" title="Limpar conversa" class="p-2 rounded-lg text-dim hover:text-red-500 hover:bg-red-50 transition-all">
               <i class="fas fa-broom text-sm"></i>
             </button>
-            <button onclick="exportChat()" title="Exportar conversa" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+            <button onclick="exportChat()" title="Exportar conversa" class="p-2 rounded-lg text-dim hover:text-yellow-500 hover:bg-yellow-900/20 transition-all">
               <i class="fas fa-download text-sm"></i>
             </button>
           </div>
@@ -99,7 +99,7 @@ async function renderChat(container, sessionId = null) {
         </div>
 
         <!-- Input -->
-        <div class="bg-white border-t border-slate-100 p-4">
+        <div class="border-t border-gold-faint p-4">
           <!-- Quick actions -->
           <div id="quick-actions" class="flex gap-2 mb-3 flex-wrap">
             ${[
@@ -108,7 +108,7 @@ async function renderChat(container, sessionId = null) {
               { label: '📱 Post Instagram', msg: 'Crie um post para Instagram sobre os benefícios do meu serviço' },
               { label: '💰 Estratégia de preço', msg: 'Como definir o preço ideal para meu serviço?' },
             ].map(a => `
-            <button onclick="sendQuickMessage('${a.msg.replace(/'/g, "\\'")}')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            <button onclick="sendQuickMessage('${a.msg.replace(/'/g, "\\'")}')" class="text-xs bg-yellow-900/20 hover:bg-yellow-900/30 text-yellow-400 px-3 py-1.5 rounded-lg transition-colors font-medium">
               ${a.label}
             </button>`).join('')}
           </div>
@@ -124,17 +124,17 @@ async function renderChat(container, sessionId = null) {
               <i class="fas fa-paper-plane text-sm"></i>
             </button>
           </div>
-          <p class="text-xs text-gray-400 mt-2 text-center" id="ai-status">
-            Configure sua chave OpenAI em <button onclick="navigate('/conta#config')" class="text-indigo-500 hover:underline">Configurações</button> para IA real
+          <p class="text-xs text-dim mt-2 text-center" id="ai-status">
+            Configure sua chave OpenAI em <button onclick="navigate('/conta#config')" class="text-yellow-500 hover:underline">Configurações</button> para IA real
           </p>
         </div>` : `
         <!-- No session selected -->
         <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-          <div class="w-20 h-20 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-200">
+          <div class="w-20 h-20 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-6 shadow-xl shadow-yellow-900/30">
             <i class="fas fa-brain text-white text-3xl"></i>
           </div>
-          <h2 class="text-2xl font-black text-gray-900 mb-3">Assistente de Negócios IA</h2>
-          <p class="text-gray-500 max-w-md mb-8">Tire dúvidas, peça estratégias, crie conteúdo e muito mais com sua IA especializada em pequenos negócios.</p>
+          <h2 class="text-2xl font-black text-cream mb-3">Assistente de Negócios IA</h2>
+          <p class="text-warm-gray max-w-md mb-8">Tire dúvidas, peça estratégias, crie conteúdo e muito mais com sua IA especializada em pequenos negócios.</p>
           <button onclick="createNewChatSession()" class="btn-primary px-8 py-3 rounded-xl font-semibold">
             <i class="fas fa-plus mr-2"></i>Iniciar nova conversa
           </button>
@@ -159,11 +159,11 @@ async function renderChat(container, sessionId = null) {
 function renderChatWelcome() {
   return `
   <div class="flex flex-col items-center justify-center py-12 text-center animate-fade">
-    <div class="w-16 h-16 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+    <div class="w-16 h-16 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-900/30">
       <i class="fas fa-brain text-white text-2xl"></i>
     </div>
-    <h3 class="text-xl font-bold text-gray-900 mb-2">Como posso ajudar?</h3>
-    <p class="text-gray-500 text-sm mb-6 max-w-sm">Sou seu assistente especializado em negócios. Posso ajudar com estratégias, conteúdo, documentos e muito mais.</p>
+    <h3 class="text-xl font-bold text-cream mb-2">Como posso ajudar?</h3>
+    <p class="text-warm-gray text-sm mb-6 max-w-sm">Sou seu assistente especializado em negócios. Posso ajudar com estratégias, conteúdo, documentos e muito mais.</p>
     <div class="grid grid-cols-2 gap-3 w-full max-w-lg">
       ${[
         { icon: 'fa-lightbulb', title: 'Estratégias', desc: 'Marketing, vendas e crescimento' },
@@ -171,10 +171,10 @@ function renderChatWelcome() {
         { icon: 'fa-chart-line', title: 'Análises', desc: 'Diagnósticos e métricas' },
         { icon: 'fa-users', title: 'Clientes', desc: 'Prospecção e atendimento' },
       ].map(s => `
-      <div class="bg-white border border-slate-100 rounded-xl p-4 text-left hover:border-indigo-200 transition-colors cursor-pointer" onclick="document.getElementById('chat-input').focus()">
-        <i class="fas ${s.icon} text-indigo-500 mb-2 block"></i>
-        <p class="font-semibold text-gray-800 text-sm">${s.title}</p>
-        <p class="text-xs text-gray-400">${s.desc}</p>
+      <div class="border border-gold-faint rounded-xl p-4 text-left hover:border-yellow-800 transition-colors cursor-pointer" onclick="document.getElementById('chat-input').focus()">
+        <i class="fas ${s.icon} text-yellow-500 mb-2 block"></i>
+        <p class="font-semibold text-cream-2 text-sm">${s.title}</p>
+        <p class="text-xs text-dim">${s.desc}</p>
       </div>`).join('')}
     </div>
   </div>`
@@ -184,20 +184,20 @@ function renderMessage(msg) {
   const isUser = msg.role === 'user'
   return `
   <div class="flex gap-3 ${isUser ? 'flex-row-reverse' : ''} animate-fade">
-    <div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${isUser ? 'gradient-bg' : 'bg-white border border-slate-200'}">
-      ${isUser ? `<span class="text-white text-xs font-bold">${currentUser?.name?.charAt(0) || 'U'}</span>` : '<i class="fas fa-brain text-indigo-600 text-xs"></i>'}
+    <div class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${isUser ? 'gradient-bg' : 'border border-slate-200'}">
+      ${isUser ? `<span class="text-white text-xs font-bold">${currentUser?.name?.charAt(0) || 'U'}</span>` : '<i class="fas fa-brain text-yellow-500 text-xs"></i>'}
     </div>
     <div class="max-w-[75%] ${isUser ? 'items-end' : 'items-start'} flex flex-col gap-1">
       <div class="${isUser ? 'message-user' : 'message-ai'} px-4 py-3 text-sm leading-relaxed">
         ${isUser ? `<p>${msg.content.replace(/\n/g, '<br>')}</p>` : `<div class="prose text-sm">${renderMD(msg.content)}</div>`}
       </div>
       <div class="flex items-center gap-2 px-1">
-        <span class="text-xs text-gray-400">${timeAgo(msg.created_at)}</span>
+        <span class="text-xs text-dim">${timeAgo(msg.created_at)}</span>
         ${!isUser ? `
-        <button onclick="copyToClipboard('${encodeURIComponent(msg.content)}')" class="text-xs text-gray-400 hover:text-indigo-600 transition-colors" title="Copiar">
+        <button onclick="copyToClipboard('${encodeURIComponent(msg.content)}')" class="text-xs text-dim hover:text-yellow-500 transition-colors" title="Copiar">
           <i class="fas fa-copy"></i>
         </button>
-        <button onclick="saveMessageAsDocument('${encodeURIComponent(msg.content)}')" class="text-xs text-gray-400 hover:text-indigo-600 transition-colors" title="Salvar como documento">
+        <button onclick="saveMessageAsDocument('${encodeURIComponent(msg.content)}')" class="text-xs text-dim hover:text-yellow-500 transition-colors" title="Salvar como documento">
           <i class="fas fa-save"></i>
         </button>` : ''}
       </div>
@@ -208,8 +208,8 @@ function renderMessage(msg) {
 function renderTypingIndicator() {
   return `
   <div id="typing-indicator" class="flex gap-3 animate-fade">
-    <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center flex-shrink-0">
-      <i class="fas fa-brain text-indigo-600 text-xs"></i>
+    <div class="w-8 h-8 rounded-xl border border-slate-200 flex items-center justify-center flex-shrink-0">
+      <i class="fas fa-brain text-yellow-500 text-xs"></i>
     </div>
     <div class="message-ai px-4 py-3">
       <div class="flex gap-1 items-center">
@@ -433,8 +433,8 @@ async function checkOpenAIStatus() {
         statusEl.innerHTML = '<i class="fas fa-circle text-green-500 text-xs mr-1"></i>OpenAI configurado • Usando GPT-4o-mini'
         statusEl.className = 'text-xs text-green-600 mt-2 text-center'
       } else {
-        statusEl.innerHTML = `Configure sua chave OpenAI em <button onclick="navigate('/conta')" class="text-indigo-500 hover:underline">Configurações</button> para IA real`
-        statusEl.className = 'text-xs text-gray-400 mt-2 text-center'
+        statusEl.innerHTML = `Configure sua chave OpenAI em <button onclick="navigate('/conta')" class="text-yellow-500 hover:underline">Configurações</button> para IA real`
+        statusEl.className = 'text-xs text-dim mt-2 text-center'
       }
     }
   } catch {}
@@ -467,8 +467,8 @@ async function renderDocuments(container) {
       <!-- Header -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-black text-gray-900">Documentos</h1>
-          <p class="text-gray-500 text-sm">${docs.length} documento${docs.length !== 1 ? 's' : ''} criado${docs.length !== 1 ? 's' : ''}</p>
+          <h1 class="text-2xl font-black text-cream">Documentos</h1>
+          <p class="text-warm-gray text-sm">${docs.length} documento${docs.length !== 1 ? 's' : ''} criado${docs.length !== 1 ? 's' : ''}</p>
         </div>
         <button onclick="showDocumentWizard()" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fas fa-plus"></i> Novo documento
@@ -477,14 +477,14 @@ async function renderDocuments(container) {
 
       <!-- Templates grid -->
       <div class="card p-6">
-        <h2 class="font-bold text-gray-900 mb-4">Templates Disponíveis</h2>
+        <h2 class="font-bold text-cream mb-4">Templates Disponíveis</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           ${Object.entries(DOC_TEMPLATES).map(([id, t]) => `
-          <button onclick="showDocumentWizard('${id}')" class="p-4 rounded-xl border-2 border-transparent hover:border-indigo-200 hover:bg-indigo-50 transition-all text-left group">
+          <button onclick="showDocumentWizard('${id}')" class="p-4 rounded-xl border-2 border-transparent hover:border-yellow-800 hover:bg-yellow-900/20 transition-all text-left group">
             <div class="w-10 h-10 rounded-xl bg-${t.color}-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <i class="fas ${t.icon} text-${t.color}-600 text-sm"></i>
             </div>
-            <p class="font-semibold text-gray-800 text-xs leading-tight">${t.name}</p>
+            <p class="font-semibold text-cream-2 text-xs leading-tight">${t.name}</p>
           </button>`).join('')}
         </div>
       </div>
@@ -492,7 +492,7 @@ async function renderDocuments(container) {
       <!-- Documents list -->
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold text-gray-900">Meus Documentos</h2>
+          <h2 class="font-bold text-cream">Meus Documentos</h2>
           <div class="flex gap-2">
             <input type="text" id="doc-search" placeholder="Buscar..." class="input-field text-sm py-2 px-3 w-40" oninput="filterDocs(this.value)">
           </div>
@@ -500,9 +500,9 @@ async function renderDocuments(container) {
         <div id="docs-list">
           ${docs.length === 0 ? `
           <div class="text-center py-12">
-            <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4"><i class="fas fa-file-lines text-gray-400 text-2xl"></i></div>
-            <p class="font-semibold text-gray-700 mb-2">Nenhum documento ainda</p>
-            <p class="text-gray-400 text-sm mb-4">Crie seu primeiro documento usando um template</p>
+            <div class="w-16 h-16 rounded-2xl bg-dark-4 flex items-center justify-center mx-auto mb-4"><i class="fas fa-file-lines text-dim text-2xl"></i></div>
+            <p class="font-semibold text-cream-3 mb-2">Nenhum documento ainda</p>
+            <p class="text-dim text-sm mb-4">Crie seu primeiro documento usando um template</p>
             <button onclick="showDocumentWizard()" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">
               <i class="fas fa-plus mr-2"></i>Criar documento
             </button>
@@ -523,20 +523,20 @@ async function renderDocuments(container) {
 function renderDocumentItem(d) {
   const t = DOC_TEMPLATES[d.template_type] || { icon: 'fa-file', color: 'gray', name: d.template_type }
   return `
-  <div class="doc-item flex items-center gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer" onclick="navigate('/documentos/${d.id}')">
+  <div class="doc-item flex items-center gap-4 p-4 rounded-xl hover:bg-dark-2 transition-colors group cursor-pointer" onclick="navigate('/documentos/${d.id}')">
     <div class="w-10 h-10 rounded-xl bg-${t.color}-100 flex items-center justify-center flex-shrink-0">
       <i class="fas ${t.icon} text-${t.color}-600 text-sm"></i>
     </div>
     <div class="flex-1 min-w-0">
-      <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-indigo-600 transition-colors">${d.title}</p>
-      <p class="text-xs text-gray-400">${t.name} • ${formatDate(d.created_at)}</p>
+      <p class="font-semibold text-cream-2 text-sm truncate group-hover:text-yellow-500 transition-colors">${d.title}</p>
+      <p class="text-xs text-dim">${t.name} • ${formatDate(d.created_at)}</p>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
       <span class="tag ${d.status === 'draft' ? 'bg-yellow-50 text-yellow-600 border border-yellow-100' : 'bg-green-50 text-green-600 border border-green-100'}">${d.status === 'draft' ? 'Rascunho' : 'Finalizado'}</span>
-      <button onclick="event.stopPropagation(); printDocument('${d.id}')" class="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all" title="Imprimir/PDF">
+      <button onclick="event.stopPropagation(); printDocument('${d.id}')" class="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-dim hover:text-yellow-500 hover:bg-yellow-900/20 transition-all" title="Imprimir/PDF">
         <i class="fas fa-print text-xs"></i>
       </button>
-      <button onclick="event.stopPropagation(); deleteDocument('${d.id}')" class="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all" title="Excluir">
+      <button onclick="event.stopPropagation(); deleteDocument('${d.id}')" class="opacity-0 group-hover:opacity-100 p-2 rounded-lg text-dim hover:text-red-500 hover:bg-red-50 transition-all" title="Excluir">
         <i class="fas fa-trash text-xs"></i>
       </button>
     </div>
@@ -555,13 +555,13 @@ function showDocumentWizard(preselectedTemplate = null) {
   modal.className = 'fixed inset-0 z-50 flex items-center justify-center modal-overlay'
   modal.id = 'doc-wizard-modal'
   modal.innerHTML = `
-  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden max-h-[90vh] flex flex-col">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
+  <div class="modal-content rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-gold-faint">
       <div>
-        <h2 class="text-xl font-black text-gray-900">Novo Documento</h2>
-        <p class="text-gray-500 text-sm">Escolha um template e preencha os dados</p>
+        <h2 class="text-xl font-black text-cream">Novo Documento</h2>
+        <p class="text-warm-gray text-sm">Escolha um template e preencha os dados</p>
       </div>
-      <button onclick="document.getElementById('doc-wizard-modal').remove()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+      <button onclick="document.getElementById('doc-wizard-modal').remove()" class="text-dim hover:text-gold-muted w-8 h-8 flex items-center justify-center rounded-lg hover:bg-dark-4">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -569,17 +569,17 @@ function showDocumentWizard(preselectedTemplate = null) {
     <div class="flex-1 overflow-y-auto">
       <!-- Step 1: Template Selection -->
       <div id="wizard-step-1" class="p-6">
-        <p class="text-sm font-semibold text-gray-700 mb-4">Selecione o tipo de documento:</p>
+        <p class="text-sm font-semibold text-cream-3 mb-4">Selecione o tipo de documento:</p>
         <div class="grid grid-cols-2 gap-3">
           ${Object.entries(DOC_TEMPLATES).map(([id, t]) => `
-          <button onclick="selectDocTemplate('${id}')" id="tmpl-${id}" class="p-4 rounded-xl border-2 ${id === preselectedTemplate ? 'border-indigo-500 bg-indigo-50' : 'border-gray-100 hover:border-indigo-200'} transition-all text-left group">
+          <button onclick="selectDocTemplate('${id}')" id="tmpl-${id}" class="p-4 rounded-xl border-2 ${id === preselectedTemplate ? 'border-yellow-500 bg-yellow-900/20' : 'border-gold-faint hover:border-yellow-800'} transition-all text-left group">
             <div class="flex items-center gap-3">
               <div class="w-9 h-9 rounded-lg bg-${t.color}-100 flex items-center justify-center flex-shrink-0">
                 <i class="fas ${t.icon} text-${t.color}-600 text-sm"></i>
               </div>
               <div>
-                <p class="font-semibold text-gray-800 text-sm">${t.name}</p>
-                <p class="text-xs text-gray-400">${t.desc}</p>
+                <p class="font-semibold text-cream-2 text-sm">${t.name}</p>
+                <p class="text-xs text-dim">${t.desc}</p>
               </div>
             </div>
           </button>`).join('')}
@@ -589,19 +589,19 @@ function showDocumentWizard(preselectedTemplate = null) {
       <!-- Step 2: Fill fields -->
       <div id="wizard-step-2" class="p-6 hidden">
         <div id="wizard-fields"></div>
-        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-4">
+        <div class="bg-yellow-900/20 border border-yellow-900/40 rounded-xl p-4 mb-4">
           <div class="flex items-start gap-3">
-            <i class="fas fa-brain text-indigo-500 mt-0.5"></i>
+            <i class="fas fa-brain text-yellow-500 mt-0.5"></i>
             <div>
               <p class="text-sm font-semibold text-indigo-800">Geração com IA</p>
-              <p class="text-xs text-indigo-600 mt-1">Com OpenAI configurado, seu documento será gerado com IA real e personalizado. Sem IA, usamos templates profissionais.</p>
+              <p class="text-xs text-yellow-500 mt-1">Com OpenAI configurado, seu documento será gerado com IA real e personalizado. Sem IA, usamos templates profissionais.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="p-6 border-t border-slate-100 flex gap-3">
+    <div class="p-6 border-t border-gold-faint flex gap-3">
       <button id="wizard-back-btn" onclick="wizardBack()" class="hidden btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">
         <i class="fas fa-arrow-left mr-2"></i>Voltar
       </button>
@@ -625,13 +625,13 @@ let _selectedDocTemplate = null
 function selectDocTemplate(id) {
   _selectedDocTemplate = id
   document.querySelectorAll('[id^="tmpl-"]').forEach(el => {
-    el.classList.remove('border-indigo-500', 'bg-indigo-50')
-    el.classList.add('border-gray-100')
+    el.classList.remove('border-yellow-500', 'bg-yellow-900/20')
+    el.classList.add('border-gold-faint')
   })
   const el = document.getElementById(`tmpl-${id}`)
   if (el) {
-    el.classList.add('border-indigo-500', 'bg-indigo-50')
-    el.classList.remove('border-gray-100')
+    el.classList.add('border-yellow-500', 'bg-yellow-900/20')
+    el.classList.remove('border-gold-faint')
   }
 }
 
@@ -722,14 +722,14 @@ function wizardNext() {
         <i class="fas ${t.icon} text-${t.color}-600"></i>
       </div>
       <div>
-        <h3 class="font-bold text-gray-900">${t.name}</h3>
-        <p class="text-xs text-gray-500">${t.desc}</p>
+        <h3 class="font-bold text-cream">${t.name}</h3>
+        <p class="text-xs text-warm-gray">${t.desc}</p>
       </div>
     </div>
     <div class="space-y-4">
       ${fields.map(f => `
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">${f.label}</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">${f.label}</label>
         ${f.textarea
           ? `<textarea id="wf-${f.id}" class="input-field w-full text-sm" rows="3" placeholder="${f.placeholder}"></textarea>`
           : `<input id="wf-${f.id}" type="text" class="input-field w-full text-sm" placeholder="${f.placeholder}">`
@@ -812,7 +812,7 @@ async function renderDocumentEditor(container, docId) {
           <i class="fas fa-arrow-left text-sm"></i>
         </button>
         <div class="flex-1">
-          <input id="doc-title" type="text" value="${doc.title}" class="text-xl font-black text-gray-900 bg-transparent border-none outline-none w-full focus:bg-white focus:border focus:border-indigo-200 focus:rounded-lg focus:px-2 transition-all">
+          <input id="doc-title" type="text" value="${doc.title}" class="text-xl font-black text-cream bg-transparent border-none outline-none w-full focus:bg-white focus:border focus:border-yellow-800 focus:rounded-lg focus:px-2 transition-all">
         </div>
         <div class="flex items-center gap-2">
           <button onclick="printDocument('${doc.id}')" class="btn-secondary px-3 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
@@ -833,27 +833,27 @@ async function renderDocumentEditor(container, docId) {
           <option value="draft" ${doc.status === 'draft' ? 'selected' : ''}>Rascunho</option>
           <option value="final" ${doc.status === 'final' ? 'selected' : ''}>Finalizado</option>
         </select>
-        <span class="text-xs text-gray-400">Criado em ${formatDate(doc.created_at)}</span>
+        <span class="text-xs text-dim">Criado em ${formatDate(doc.created_at)}</span>
       </div>
 
       <!-- Main content area -->
       <div class="grid lg:grid-cols-4 gap-4">
         <!-- Editor -->
         <div class="lg:col-span-3 card overflow-hidden">
-          <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-100 bg-slate-50">
-            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Editor</span>
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-gold-faint bg-dark-2">
+            <span class="text-xs font-semibold text-warm-gray uppercase tracking-wider">Editor</span>
             <div class="flex-1"></div>
             <div class="flex gap-1">
-              <button onclick="toggleEditorMode()" id="editor-mode-btn" class="text-xs px-3 py-1.5 rounded-lg bg-indigo-100 text-indigo-700 font-medium">
+              <button onclick="toggleEditorMode()" id="editor-mode-btn" class="text-xs px-3 py-1.5 rounded-lg bg-yellow-900/30 text-yellow-400 font-medium">
                 <i class="fas fa-edit mr-1"></i>Editar
               </button>
-              <button onclick="togglePreviewMode()" id="preview-mode-btn" class="text-xs px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 font-medium">
+              <button onclick="togglePreviewMode()" id="preview-mode-btn" class="text-xs px-3 py-1.5 rounded-lg text-gold-muted hover:bg-dark-4 font-medium">
                 <i class="fas fa-eye mr-1"></i>Preview
               </button>
             </div>
           </div>
           <div id="editor-wrapper" class="relative">
-            <textarea id="doc-content" class="w-full p-6 text-sm leading-relaxed font-mono text-gray-800 outline-none resize-none border-none bg-white" rows="25" style="min-height: 500px">${doc.content || ''}</textarea>
+            <textarea id="doc-content" class="w-full p-6 text-sm leading-relaxed font-mono text-cream-2 outline-none resize-none border-none bg-white" rows="25" style="min-height: 500px">${doc.content || ''}</textarea>
             <div id="doc-preview" class="hidden p-6 prose text-sm" style="min-height: 500px"></div>
           </div>
         </div>
@@ -862,8 +862,8 @@ async function renderDocumentEditor(container, docId) {
         <div class="space-y-4">
           <!-- AI Improve -->
           <div class="card p-4">
-            <h3 class="font-bold text-gray-900 text-sm mb-3 flex items-center gap-2">
-              <i class="fas fa-brain text-indigo-500"></i>Melhorar com IA
+            <h3 class="font-bold text-cream text-sm mb-3 flex items-center gap-2">
+              <i class="fas fa-brain text-yellow-500"></i>Melhorar com IA
             </h3>
             <div class="space-y-2">
               ${[
@@ -872,24 +872,24 @@ async function renderDocumentEditor(container, docId) {
                 { label: 'Resumir', prompt: 'Crie uma versão mais curta e direta deste documento' },
                 { label: 'Adicionar CTA', prompt: 'Adicione uma chamada para ação mais forte no final' },
               ].map(a => `
-              <button onclick="improveDocWithAI('${a.prompt}')" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:text-indigo-700 transition-colors font-medium">
-                <i class="fas fa-wand-magic-sparkles text-indigo-400 mr-2"></i>${a.label}
+              <button onclick="improveDocWithAI('${a.prompt}')" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-dark-2 hover:bg-yellow-900/20 hover:text-yellow-400 transition-colors font-medium">
+                <i class="fas fa-wand-magic-sparkles text-yellow-600 mr-2"></i>${a.label}
               </button>`).join('')}
             </div>
           </div>
 
           <!-- Actions -->
           <div class="card p-4">
-            <h3 class="font-bold text-gray-900 text-sm mb-3">Ações</h3>
+            <h3 class="font-bold text-cream text-sm mb-3">Ações</h3>
             <div class="space-y-2">
-              <button onclick="duplicateDocument('${doc.id}')" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors font-medium text-gray-700">
-                <i class="fas fa-copy text-gray-400 mr-2"></i>Duplicar documento
+              <button onclick="duplicateDocument('${doc.id}')" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-dark-2 hover:bg-dark-3 transition-colors font-medium text-cream-3">
+                <i class="fas fa-copy text-dim mr-2"></i>Duplicar documento
               </button>
-              <button onclick="printDocument('${doc.id}')" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors font-medium text-gray-700">
-                <i class="fas fa-print text-gray-400 mr-2"></i>Imprimir / Salvar PDF
+              <button onclick="printDocument('${doc.id}')" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-dark-2 hover:bg-dark-3 transition-colors font-medium text-cream-3">
+                <i class="fas fa-print text-dim mr-2"></i>Imprimir / Salvar PDF
               </button>
-              <button onclick="copyDocContent()" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors font-medium text-gray-700">
-                <i class="fas fa-clipboard text-gray-400 mr-2"></i>Copiar conteúdo
+              <button onclick="copyDocContent()" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-dark-2 hover:bg-dark-3 transition-colors font-medium text-cream-3">
+                <i class="fas fa-clipboard text-dim mr-2"></i>Copiar conteúdo
               </button>
               <button onclick="deleteDocument('${doc.id}', true)" class="w-full text-left text-xs px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 transition-colors font-medium text-red-600">
                 <i class="fas fa-trash text-red-400 mr-2"></i>Excluir documento
@@ -918,8 +918,8 @@ async function renderDocumentEditor(container, docId) {
 function toggleEditorMode() {
   document.getElementById('doc-content').classList.remove('hidden')
   document.getElementById('doc-preview').classList.add('hidden')
-  document.getElementById('editor-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg bg-indigo-100 text-indigo-700 font-medium'
-  document.getElementById('preview-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 font-medium'
+  document.getElementById('editor-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg bg-yellow-900/30 text-yellow-400 font-medium'
+  document.getElementById('preview-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg text-gold-muted hover:bg-dark-4 font-medium'
 }
 
 function togglePreviewMode() {
@@ -928,8 +928,8 @@ function togglePreviewMode() {
   const preview = document.getElementById('doc-preview')
   preview.classList.remove('hidden')
   preview.innerHTML = renderMD(content)
-  document.getElementById('preview-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg bg-indigo-100 text-indigo-700 font-medium'
-  document.getElementById('editor-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-100 font-medium'
+  document.getElementById('preview-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg bg-yellow-900/30 text-yellow-400 font-medium'
+  document.getElementById('editor-mode-btn').className = 'text-xs px-3 py-1.5 rounded-lg text-gold-muted hover:bg-dark-4 font-medium'
 }
 
 async function saveDocument(docId) {

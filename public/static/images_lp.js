@@ -36,8 +36,8 @@ async function renderImages(container) {
       <!-- Header -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-black text-gray-900">Imagens & Criativos</h1>
-          <p class="text-gray-500 text-sm">${images.length} imagem${images.length !== 1 ? 'ns' : ''} criada${images.length !== 1 ? 's' : ''}</p>
+          <h1 class="text-2xl font-black text-cream">Imagens & Criativos</h1>
+          <p class="text-warm-gray text-sm">${images.length} imagem${images.length !== 1 ? 'ns' : ''} criada${images.length !== 1 ? 's' : ''}</p>
         </div>
         <button onclick="showImageWizard()" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fas fa-plus"></i> Gerar imagem
@@ -48,10 +48,10 @@ async function renderImages(container) {
       <div class="card p-6">
         <div class="flex items-center justify-between mb-5">
           <div>
-            <h2 class="font-bold text-gray-900">Gerador de Imagens IA</h2>
-            <p class="text-sm text-gray-500">Descreva sua imagem e a IA criará algo único</p>
+            <h2 class="font-bold text-cream">Gerador de Imagens IA</h2>
+            <p class="text-sm text-warm-gray">Descreva sua imagem e a IA criará algo único</p>
           </div>
-          <div id="dalle-status" class="flex items-center gap-2 text-xs text-gray-400">
+          <div id="dalle-status" class="flex items-center gap-2 text-xs text-dim">
             <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
             Verificando...
           </div>
@@ -59,44 +59,44 @@ async function renderImages(container) {
 
         <!-- Type selection -->
         <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-700 mb-3">Tipo de Peça</label>
+          <label class="block text-sm font-medium text-cream-3 mb-3">Tipo de Peça</label>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
             ${Object.entries(IMAGE_TYPES_UI).map(([id, t], i) => `
-            <button onclick="selectImageType('${id}')" id="itype-${id}" class="p-3 rounded-xl border-2 ${i === 0 ? 'border-indigo-500 bg-indigo-50' : 'border-gray-100 hover:border-indigo-100'} transition-all text-left">
+            <button onclick="selectImageType('${id}')" id="itype-${id}" class="p-3 rounded-xl border-2 ${i === 0 ? 'border-yellow-500 bg-yellow-900/20' : 'border-gold-faint hover:border-yellow-900/40'} transition-all text-left">
               <div class="w-8 h-8 rounded-lg bg-${t.color}-100 flex items-center justify-center mb-2">
                 <i class="fas ${t.icon} text-${t.color}-500 text-xs"></i>
               </div>
-              <p class="font-semibold text-gray-800 text-xs">${t.label}</p>
-              <p class="text-xs text-gray-400">${t.desc}</p>
+              <p class="font-semibold text-cream-2 text-xs">${t.label}</p>
+              <p class="text-xs text-dim">${t.desc}</p>
             </button>`).join('')}
           </div>
         </div>
 
         <!-- Description -->
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Descrição da Imagem</label>
+          <label class="block text-sm font-medium text-cream-3 mb-1.5">Descrição da Imagem</label>
           <textarea id="img-prompt" rows="3" class="input-field w-full text-sm" placeholder="Descreva o que você quer na imagem. Ex: Logo minimalista para clínica odontológica, cores azul e branco, estilo moderno..."></textarea>
         </div>
 
         <!-- Style & Colors row -->
         <div class="grid sm:grid-cols-2 gap-4 mb-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Estilo Visual</label>
+            <label class="block text-sm font-medium text-cream-3 mb-2">Estilo Visual</label>
             <div class="grid grid-cols-3 gap-2">
               ${Object.entries(IMAGE_STYLES_UI).map(([id, s], i) => `
-              <button onclick="selectImageStyle('${id}')" id="istyle-${id}" class="p-2 rounded-lg border-2 ${i === 0 ? 'border-indigo-500 bg-indigo-50' : 'border-gray-100 hover:border-indigo-100'} transition-all text-center text-xs">
+              <button onclick="selectImageStyle('${id}')" id="istyle-${id}" class="p-2 rounded-lg border-2 ${i === 0 ? 'border-yellow-500 bg-yellow-900/20' : 'border-gold-faint hover:border-yellow-900/40'} transition-all text-center text-xs">
                 <div class="text-lg mb-1">${s.icon}</div>
-                <div class="font-medium text-gray-700 text-xs">${s.label}</div>
+                <div class="font-medium text-cream-3 text-xs">${s.label}</div>
               </button>`).join('')}
             </div>
           </div>
           <div class="space-y-3">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">Cores Principais</label>
+              <label class="block text-sm font-medium text-cream-3 mb-1.5">Cores Principais</label>
               <input id="img-colors" type="text" class="input-field w-full text-sm" placeholder="Ex: azul, branco e dourado">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">CTA (opcional)</label>
+              <label class="block text-sm font-medium text-cream-3 mb-1.5">CTA (opcional)</label>
               <input id="img-cta" type="text" class="input-field w-full text-sm" placeholder="Ex: Ligue agora, Saiba mais">
             </div>
           </div>
@@ -110,12 +110,12 @@ async function renderImages(container) {
       <!-- Gallery -->
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold text-gray-900">Galeria de Imagens</h2>
+          <h2 class="font-bold text-cream">Galeria de Imagens</h2>
           <div class="flex gap-2">
-            <button onclick="renderImagesGallery('grid')" id="view-grid" class="p-2 rounded-lg bg-indigo-100 text-indigo-700">
+            <button onclick="renderImagesGallery('grid')" id="view-grid" class="p-2 rounded-lg bg-yellow-900/30 text-yellow-400">
               <i class="fas fa-grid-2 text-sm"></i>
             </button>
-            <button onclick="renderImagesGallery('list')" id="view-list" class="p-2 rounded-lg text-gray-400 hover:bg-gray-100">
+            <button onclick="renderImagesGallery('list')" id="view-list" class="p-2 rounded-lg text-dim hover:bg-dark-4">
               <i class="fas fa-list text-sm"></i>
             </button>
           </div>
@@ -123,9 +123,9 @@ async function renderImages(container) {
         <div id="images-gallery">
           ${images.length === 0 ? `
           <div class="text-center py-12">
-            <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4"><i class="fas fa-image text-gray-400 text-2xl"></i></div>
-            <p class="font-semibold text-gray-700 mb-2">Nenhuma imagem ainda</p>
-            <p class="text-gray-400 text-sm">Gere sua primeira imagem usando o formulário acima</p>
+            <div class="w-16 h-16 rounded-2xl bg-dark-4 flex items-center justify-center mx-auto mb-4"><i class="fas fa-image text-dim text-2xl"></i></div>
+            <p class="font-semibold text-cream-3 mb-2">Nenhuma imagem ainda</p>
+            <p class="text-dim text-sm">Gere sua primeira imagem usando o formulário acima</p>
           </div>` : renderImageGalleryGrid(images)}
         </div>
       </div>
@@ -144,7 +144,7 @@ async function renderImages(container) {
 function renderImageGalleryGrid(images) {
   return `<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
     ${images.map(img => `
-    <div class="group relative rounded-xl overflow-hidden aspect-square cursor-pointer bg-gray-100" onclick="openImageModal('${img.id}', '${encodeURIComponent(img.image_url)}', '${encodeURIComponent(img.title || '')}')">
+    <div class="group relative rounded-xl overflow-hidden aspect-square cursor-pointer bg-dark-4" onclick="openImageModal('${img.id}', '${encodeURIComponent(img.image_url)}', '${encodeURIComponent(img.title || '')}')">
       <img src="${img.image_url}" alt="${img.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop'">
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity">
         <div class="absolute bottom-0 left-0 right-0 p-3">
@@ -169,25 +169,25 @@ function renderImagesGallery(mode) {
   const gallery = document.getElementById('images-gallery')
   if (!gallery) return
 
-  document.getElementById('view-grid').className = `p-2 rounded-lg ${mode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:bg-gray-100'}`
-  document.getElementById('view-list').className = `p-2 rounded-lg ${mode === 'list' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:bg-gray-100'}`
+  document.getElementById('view-grid').className = `p-2 rounded-lg ${mode === 'grid' ? 'bg-yellow-900/30 text-yellow-400' : 'text-dim hover:bg-dark-4'}`
+  document.getElementById('view-list').className = `p-2 rounded-lg ${mode === 'list' ? 'bg-yellow-900/30 text-yellow-400' : 'text-dim hover:bg-dark-4'}`
 
   if (mode === 'grid') {
     gallery.innerHTML = renderImageGalleryGrid(images)
   } else {
     gallery.innerHTML = `<div class="space-y-3">
       ${images.map(img => `
-      <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors group">
+      <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-dark-2 transition-colors group">
         <img src="${img.image_url}" alt="${img.title}" class="w-16 h-16 rounded-xl object-cover flex-shrink-0">
         <div class="flex-1 min-w-0">
-          <p class="font-semibold text-gray-800 text-sm truncate">${img.title}</p>
-          <p class="text-xs text-gray-400">${img.image_type?.replace(/_/g, ' ')} • ${img.style || ''} • ${formatDate(img.created_at)}</p>
+          <p class="font-semibold text-cream-2 text-sm truncate">${img.title}</p>
+          <p class="text-xs text-dim">${img.image_type?.replace(/_/g, ' ')} • ${img.style || ''} • ${formatDate(img.created_at)}</p>
         </div>
         <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onclick="downloadImage('${encodeURIComponent(img.image_url)}', '${encodeURIComponent(img.title)}')" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50" title="Download">
+          <button onclick="downloadImage('${encodeURIComponent(img.image_url)}', '${encodeURIComponent(img.title)}')" class="p-2 rounded-lg text-dim hover:text-yellow-500 hover:bg-yellow-900/20" title="Download">
             <i class="fas fa-download text-xs"></i>
           </button>
-          <button onclick="deleteImage('${img.id}')" class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50" title="Excluir">
+          <button onclick="deleteImage('${img.id}')" class="p-2 rounded-lg text-dim hover:text-red-500 hover:bg-red-50" title="Excluir">
             <i class="fas fa-trash text-xs"></i>
           </button>
         </div>
@@ -199,26 +199,26 @@ function renderImagesGallery(mode) {
 function selectImageType(id) {
   window._selectedImageType = id
   document.querySelectorAll('[id^="itype-"]').forEach(el => {
-    el.classList.remove('border-indigo-500', 'bg-indigo-50')
-    el.classList.add('border-gray-100')
+    el.classList.remove('border-yellow-500', 'bg-yellow-900/20')
+    el.classList.add('border-gold-faint')
   })
   const el = document.getElementById(`itype-${id}`)
   if (el) {
-    el.classList.add('border-indigo-500', 'bg-indigo-50')
-    el.classList.remove('border-gray-100')
+    el.classList.add('border-yellow-500', 'bg-yellow-900/20')
+    el.classList.remove('border-gold-faint')
   }
 }
 
 function selectImageStyle(id) {
   window._selectedImageStyle = id
   document.querySelectorAll('[id^="istyle-"]').forEach(el => {
-    el.classList.remove('border-indigo-500', 'bg-indigo-50')
-    el.classList.add('border-gray-100')
+    el.classList.remove('border-yellow-500', 'bg-yellow-900/20')
+    el.classList.add('border-gold-faint')
   })
   const el = document.getElementById(`istyle-${id}`)
   if (el) {
-    el.classList.add('border-indigo-500', 'bg-indigo-50')
-    el.classList.remove('border-gray-100')
+    el.classList.add('border-yellow-500', 'bg-yellow-900/20')
+    el.classList.remove('border-gold-faint')
   }
 }
 
@@ -275,15 +275,15 @@ function openImageModal(id, encodedUrl, encodedTitle) {
   modal.className = 'fixed inset-0 z-50 flex items-center justify-center modal-overlay'
   modal.id = 'img-modal'
   modal.innerHTML = `
-  <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden">
-    <div class="flex items-center justify-between p-4 border-b border-slate-100">
-      <h3 class="font-bold text-gray-900">${title}</h3>
-      <button onclick="document.getElementById('img-modal').remove()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+  <div class="modal-content rounded-2xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden">
+    <div class="flex items-center justify-between p-4 border-b border-gold-faint">
+      <h3 class="font-bold text-cream">${title}</h3>
+      <button onclick="document.getElementById('img-modal').remove()" class="text-dim hover:text-gold-muted w-8 h-8 flex items-center justify-center rounded-lg hover:bg-dark-4">
         <i class="fas fa-times"></i>
       </button>
     </div>
     <div class="relative">
-      <img src="${url}" alt="${title}" class="w-full max-h-[60vh] object-contain bg-slate-50">
+      <img src="${url}" alt="${title}" class="w-full max-h-[60vh] object-contain bg-dark-2">
     </div>
     <div class="p-4 flex gap-3 justify-end">
       <button onclick="downloadImage('${encodeURIComponent(url)}', '${encodeURIComponent(title)}')" class="btn-secondary px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2">
@@ -360,8 +360,8 @@ async function renderLandingPages(container) {
       <!-- Header -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-black text-gray-900">Landing Pages</h1>
-          <p class="text-gray-500 text-sm">${pages.length} página${pages.length !== 1 ? 's' : ''} criada${pages.length !== 1 ? 's' : ''}</p>
+          <h1 class="text-2xl font-black text-cream">Landing Pages</h1>
+          <p class="text-warm-gray text-sm">${pages.length} página${pages.length !== 1 ? 's' : ''} criada${pages.length !== 1 ? 's' : ''}</p>
         </div>
         <button onclick="showLPWizard()" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fas fa-plus"></i>Nova landing page
@@ -373,10 +373,10 @@ async function renderLandingPages(container) {
         ${pages.length === 0 ? `
         <div class="card p-12 text-center">
           <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center mx-auto mb-5">
-            <i class="fas fa-globe text-indigo-500 text-3xl"></i>
+            <i class="fas fa-globe text-yellow-500 text-3xl"></i>
           </div>
-          <h2 class="text-2xl font-black text-gray-900 mb-3">Crie sua primeira Landing Page</h2>
-          <p class="text-gray-500 max-w-md mx-auto mb-6">Gere páginas de vendas completas em minutos com IA. Copy persuasivo, design profissional e formulário de captura prontos.</p>
+          <h2 class="text-2xl font-black text-cream mb-3">Crie sua primeira Landing Page</h2>
+          <p class="text-warm-gray max-w-md mx-auto mb-6">Gere páginas de vendas completas em minutos com IA. Copy persuasivo, design profissional e formulário de captura prontos.</p>
           <div class="flex gap-3 justify-center flex-wrap">
             <button onclick="showLPWizard()" class="btn-primary px-6 py-3 rounded-xl font-semibold">
               <i class="fas fa-wand-magic-sparkles mr-2"></i>Criar com IA
@@ -406,10 +406,10 @@ function renderLPCard(page) {
         </div>
       </div>
       <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-        <button onclick="openLPPreview('${page.id}')" class="bg-white text-gray-900 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-100 transition-colors">
+        <button onclick="openLPPreview('${page.id}')" class="bg-white text-cream px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-dark-4 transition-colors">
           <i class="fas fa-eye mr-1"></i>Preview
         </button>
-        <button onclick="navigate('/landing-pages/${page.id}')" class="bg-white text-gray-900 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-100 transition-colors">
+        <button onclick="navigate('/landing-pages/${page.id}')" class="bg-white text-cream px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-dark-4 transition-colors">
           <i class="fas fa-edit mr-1"></i>Editar
         </button>
       </div>
@@ -418,12 +418,12 @@ function renderLPCard(page) {
     <div class="p-4">
       <div class="flex items-start justify-between mb-2">
         <div class="flex-1 min-w-0">
-          <h3 class="font-bold text-gray-900 text-sm truncate">${page.title}</h3>
-          <p class="text-xs text-gray-500 truncate">${page.business_name || ''} ${page.offer ? '• ' + page.offer : ''}</p>
+          <h3 class="font-bold text-cream text-sm truncate">${page.title}</h3>
+          <p class="text-xs text-warm-gray truncate">${page.business_name || ''} ${page.offer ? '• ' + page.offer : ''}</p>
         </div>
         <span class="tag ${page.status === 'published' ? 'bg-green-50 text-green-600' : 'bg-yellow-50 text-yellow-600'} ml-2 flex-shrink-0">${page.status === 'published' ? 'Publicada' : 'Rascunho'}</span>
       </div>
-      <p class="text-xs text-gray-400 mb-3">${formatDate(page.created_at)}</p>
+      <p class="text-xs text-dim mb-3">${formatDate(page.created_at)}</p>
 
       <div class="flex gap-2">
         <button onclick="navigate('/landing-pages/${page.id}')" class="flex-1 btn-secondary py-2 rounded-xl text-xs font-medium">
@@ -432,7 +432,7 @@ function renderLPCard(page) {
         <button onclick="openLPPreview('${page.id}')" class="flex-1 btn-secondary py-2 rounded-xl text-xs font-medium">
           <i class="fas fa-eye mr-1"></i>Preview
         </button>
-        <button onclick="deleteLandingPage('${page.id}')" class="p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors">
+        <button onclick="deleteLandingPage('${page.id}')" class="p-2 rounded-xl text-dim hover:text-red-500 hover:bg-red-50 transition-colors">
           <i class="fas fa-trash text-xs"></i>
         </button>
       </div>
@@ -445,13 +445,13 @@ function showLPWizard() {
   modal.className = 'fixed inset-0 z-50 flex items-center justify-center modal-overlay'
   modal.id = 'lp-wizard-modal'
   modal.innerHTML = `
-  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden max-h-[90vh] flex flex-col">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
+  <div class="modal-content rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden max-h-[90vh] flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-gold-faint">
       <div>
-        <h2 class="text-xl font-black text-gray-900">Nova Landing Page</h2>
-        <p class="text-gray-500 text-sm">A IA vai criar uma página completa para você</p>
+        <h2 class="text-xl font-black text-cream">Nova Landing Page</h2>
+        <p class="text-warm-gray text-sm">A IA vai criar uma página completa para você</p>
       </div>
-      <button onclick="document.getElementById('lp-wizard-modal').remove()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+      <button onclick="document.getElementById('lp-wizard-modal').remove()" class="text-dim hover:text-gold-muted w-8 h-8 flex items-center justify-center rounded-lg hover:bg-dark-4">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -460,37 +460,37 @@ function showLPWizard() {
       <div class="space-y-4">
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nome do Negócio *</label>
+            <label class="block text-sm font-medium text-cream-3 mb-1.5">Nome do Negócio *</label>
             <input id="lp-business" type="text" class="input-field w-full text-sm" placeholder="Ex: Clínica Saúde Total">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Título da Página *</label>
+            <label class="block text-sm font-medium text-cream-3 mb-1.5">Título da Página *</label>
             <input id="lp-title" type="text" class="input-field w-full text-sm" placeholder="Ex: Consulta Gratuita de Nutrição">
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Oferta Principal *</label>
+          <label class="block text-sm font-medium text-cream-3 mb-1.5">Oferta Principal *</label>
           <input id="lp-offer" type="text" class="input-field w-full text-sm" placeholder="Ex: Consultoria gratuita de 30 minutos">
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Público-alvo</label>
+          <label class="block text-sm font-medium text-cream-3 mb-1.5">Público-alvo</label>
           <input id="lp-audience" type="text" class="input-field w-full text-sm" placeholder="Ex: Profissionais 35-50 anos que querem melhorar a saúde">
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Principais Benefícios</label>
+          <label class="block text-sm font-medium text-cream-3 mb-1.5">Principais Benefícios</label>
           <textarea id="lp-benefits" rows="3" class="input-field w-full text-sm" placeholder="Ex: Atendimento personalizado&#10;Resultados em 30 dias&#10;Sem contratos de longo prazo"></textarea>
         </div>
 
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Call to Action (CTA)</label>
+            <label class="block text-sm font-medium text-cream-3 mb-1.5">Call to Action (CTA)</label>
             <input id="lp-cta" type="text" class="input-field w-full text-sm" placeholder="Ex: Agendar consulta grátis">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Tom de Comunicação</label>
+            <label class="block text-sm font-medium text-cream-3 mb-1.5">Tom de Comunicação</label>
             <select id="lp-tone" class="input-field w-full text-sm">
               <option value="profissional">Profissional e confiável</option>
               <option value="amigavel">Amigável e próximo</option>
@@ -502,34 +502,34 @@ function showLPWizard() {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">Prova Social (depoimentos, números)</label>
+          <label class="block text-sm font-medium text-cream-3 mb-1.5">Prova Social (depoimentos, números)</label>
           <textarea id="lp-social-proof" rows="2" class="input-field w-full text-sm" placeholder="Ex: +500 clientes atendidos, 4.9/5 de avaliação"></textarea>
         </div>
 
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Cor Principal</label>
+            <label class="block text-sm font-medium text-cream-3 mb-1.5">Cor Principal</label>
             <input id="lp-color" type="text" class="input-field w-full text-sm" placeholder="Ex: azul escuro, verde, roxo">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Setor / Nicho</label>
+            <label class="block text-sm font-medium text-cream-3 mb-1.5">Setor / Nicho</label>
             <input id="lp-sector" type="text" class="input-field w-full text-sm" placeholder="Ex: saúde, consultoria, beleza">
           </div>
         </div>
 
-        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
+        <div class="bg-yellow-900/20 border border-yellow-900/40 rounded-xl p-4">
           <div class="flex items-start gap-3">
-            <i class="fas fa-brain text-indigo-500 mt-0.5"></i>
+            <i class="fas fa-brain text-yellow-500 mt-0.5"></i>
             <div>
               <p class="text-sm font-semibold text-indigo-800">Geração Inteligente com IA</p>
-              <p class="text-xs text-indigo-600 mt-1">Com OpenAI configurado, a página será gerada com copy personalizado e persuasivo. Sem IA, usamos templates otimizados de alta conversão.</p>
+              <p class="text-xs text-yellow-500 mt-1">Com OpenAI configurado, a página será gerada com copy personalizado e persuasivo. Sem IA, usamos templates otimizados de alta conversão.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="p-6 border-t border-slate-100 flex gap-3 justify-end">
+    <div class="p-6 border-t border-gold-faint flex gap-3 justify-end">
       <button onclick="document.getElementById('lp-wizard-modal').remove()" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">
         Cancelar
       </button>
@@ -596,7 +596,7 @@ async function renderLandingPageEditor(container, pageId) {
           <i class="fas fa-arrow-left text-sm"></i>
         </button>
         <div class="flex-1">
-          <input id="lp-edit-title" type="text" value="${page.title}" class="text-xl font-black text-gray-900 bg-transparent border-none outline-none w-full focus:bg-white focus:border focus:border-indigo-200 focus:rounded-lg focus:px-2 transition-all">
+          <input id="lp-edit-title" type="text" value="${page.title}" class="text-xl font-black text-cream bg-transparent border-none outline-none w-full focus:bg-white focus:border focus:border-yellow-800 focus:rounded-lg focus:px-2 transition-all">
         </div>
         <div class="flex items-center gap-2">
           <button onclick="openLPPreview('${page.id}')" class="btn-secondary px-3 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
@@ -614,44 +614,44 @@ async function renderLandingPageEditor(container, pageId) {
           <option value="draft" ${page.status === 'draft' ? 'selected' : ''}>Rascunho</option>
           <option value="published" ${page.status === 'published' ? 'selected' : ''}>Publicada</option>
         </select>
-        <span class="text-xs text-gray-400">Criada em ${formatDate(page.created_at)}</span>
+        <span class="text-xs text-dim">Criada em ${formatDate(page.created_at)}</span>
       </div>
 
       <!-- Tabs -->
       <div class="card overflow-hidden">
-        <div class="flex border-b border-slate-100">
-          <button onclick="switchLPTab('html')" id="tab-html" class="flex-1 py-3 text-sm font-semibold text-indigo-600 border-b-2 border-indigo-500 bg-indigo-50/50">
+        <div class="flex border-b border-gold-faint">
+          <button onclick="switchLPTab('html')" id="tab-html" class="flex-1 py-3 text-sm font-semibold text-yellow-500 border-b-2 border-yellow-500 bg-yellow-900/20/50">
             <i class="fas fa-code mr-2"></i>HTML
           </button>
-          <button onclick="switchLPTab('preview')" id="tab-preview" class="flex-1 py-3 text-sm font-semibold text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+          <button onclick="switchLPTab('preview')" id="tab-preview" class="flex-1 py-3 text-sm font-semibold text-warm-gray hover:text-cream-3 border-b-2 border-transparent">
             <i class="fas fa-eye mr-2"></i>Preview ao Vivo
           </button>
-          <button onclick="switchLPTab('config')" id="tab-config" class="flex-1 py-3 text-sm font-semibold text-gray-500 hover:text-gray-700 border-b-2 border-transparent">
+          <button onclick="switchLPTab('config')" id="tab-config" class="flex-1 py-3 text-sm font-semibold text-warm-gray hover:text-cream-3 border-b-2 border-transparent">
             <i class="fas fa-sliders mr-2"></i>Configurações
           </button>
         </div>
 
         <!-- HTML Tab -->
         <div id="tab-content-html">
-          <div class="flex items-center justify-between px-4 py-2 bg-slate-50 border-b border-slate-100">
-            <span class="text-xs text-gray-500 font-mono">index.html</span>
+          <div class="flex items-center justify-between px-4 py-2 bg-dark-2 border-b border-gold-faint">
+            <span class="text-xs text-warm-gray font-mono">index.html</span>
             <div class="flex gap-2">
-              <button onclick="copyLPHtml()" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors px-2 py-1 rounded">
+              <button onclick="copyLPHtml()" class="text-xs text-warm-gray hover:text-yellow-500 transition-colors px-2 py-1 rounded">
                 <i class="fas fa-copy mr-1"></i>Copiar
               </button>
-              <button onclick="improveLP('${page.id}')" class="text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-2 py-1 rounded bg-indigo-50 hover:bg-indigo-100">
+              <button onclick="improveLP('${page.id}')" class="text-xs text-yellow-500 hover:text-indigo-800 transition-colors px-2 py-1 rounded bg-yellow-900/20 hover:bg-yellow-900/30">
                 <i class="fas fa-brain mr-1"></i>Melhorar com IA
               </button>
             </div>
           </div>
-          <textarea id="lp-html-editor" class="w-full p-4 font-mono text-xs text-gray-800 outline-none resize-none border-none bg-white" rows="20" style="min-height: 400px; tab-size: 2">${escapeHtml(page.html_content || '')}</textarea>
+          <textarea id="lp-html-editor" class="w-full p-4 font-mono text-xs text-cream-2 outline-none resize-none border-none bg-white" rows="20" style="min-height: 400px; tab-size: 2">${escapeHtml(page.html_content || '')}</textarea>
         </div>
 
         <!-- Preview Tab -->
         <div id="tab-content-preview" class="hidden">
-          <div class="flex items-center justify-between px-4 py-2 bg-slate-50 border-b border-slate-100">
-            <span class="text-xs text-gray-500">Preview ao vivo da sua landing page</span>
-            <button onclick="refreshLPPreview()" class="text-xs text-gray-500 hover:text-indigo-600 transition-colors px-2 py-1 rounded">
+          <div class="flex items-center justify-between px-4 py-2 bg-dark-2 border-b border-gold-faint">
+            <span class="text-xs text-warm-gray">Preview ao vivo da sua landing page</span>
+            <button onclick="refreshLPPreview()" class="text-xs text-warm-gray hover:text-yellow-500 transition-colors px-2 py-1 rounded">
               <i class="fas fa-refresh mr-1"></i>Atualizar
             </button>
           </div>
@@ -664,19 +664,19 @@ async function renderLandingPageEditor(container, pageId) {
         <div id="tab-content-config" class="hidden p-6">
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">Nome do Negócio</label>
+              <label class="block text-sm font-medium text-cream-3 mb-1.5">Nome do Negócio</label>
               <input id="lp-cfg-business" type="text" value="${page.business_name || ''}" class="input-field w-full text-sm">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">Oferta Principal</label>
+              <label class="block text-sm font-medium text-cream-3 mb-1.5">Oferta Principal</label>
               <input id="lp-cfg-offer" type="text" value="${page.offer || ''}" class="input-field w-full text-sm">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">CTA Principal</label>
+              <label class="block text-sm font-medium text-cream-3 mb-1.5">CTA Principal</label>
               <input id="lp-cfg-cta" type="text" value="${page.cta_text || ''}" class="input-field w-full text-sm">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+              <label class="block text-sm font-medium text-cream-3 mb-1.5">Status</label>
               <select id="lp-cfg-status" class="input-field w-full text-sm">
                 <option value="draft" ${page.status === 'draft' ? 'selected' : ''}>Rascunho</option>
                 <option value="published" ${page.status === 'published' ? 'selected' : ''}>Publicada</option>
@@ -715,10 +715,10 @@ function switchLPTab(tab) {
     const btn = document.getElementById(`tab-${t}`)
     const content = document.getElementById(`tab-content-${t}`)
     if (t === tab) {
-      if (btn) btn.className = 'flex-1 py-3 text-sm font-semibold text-indigo-600 border-b-2 border-indigo-500 bg-indigo-50/50'
+      if (btn) btn.className = 'flex-1 py-3 text-sm font-semibold text-yellow-500 border-b-2 border-yellow-500 bg-yellow-900/20/50'
       if (content) content.classList.remove('hidden')
     } else {
-      if (btn) btn.className = 'flex-1 py-3 text-sm font-semibold text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
+      if (btn) btn.className = 'flex-1 py-3 text-sm font-semibold text-warm-gray hover:text-cream-3 border-b-2 border-transparent'
       if (content) content.classList.add('hidden')
     }
   })
@@ -796,19 +796,19 @@ async function openLPPreview(pageId) {
           <button onclick="setPreviewDevice('desktop')" id="prev-desktop" class="px-3 py-1.5 bg-gray-700 text-white">
             <i class="fas fa-desktop"></i>
           </button>
-          <button onclick="setPreviewDevice('tablet')" id="prev-tablet" class="px-3 py-1.5 text-gray-400 hover:bg-gray-700 transition-colors">
+          <button onclick="setPreviewDevice('tablet')" id="prev-tablet" class="px-3 py-1.5 text-dim hover:bg-gray-700 transition-colors">
             <i class="fas fa-tablet-screen-button"></i>
           </button>
-          <button onclick="setPreviewDevice('mobile')" id="prev-mobile" class="px-3 py-1.5 text-gray-400 hover:bg-gray-700 transition-colors">
+          <button onclick="setPreviewDevice('mobile')" id="prev-mobile" class="px-3 py-1.5 text-dim hover:bg-gray-700 transition-colors">
             <i class="fas fa-mobile-screen-button"></i>
           </button>
         </div>
-        <button onclick="document.getElementById('lp-full-preview').remove()" class="text-gray-400 hover:text-white transition-colors px-3 py-1.5">
+        <button onclick="document.getElementById('lp-full-preview').remove()" class="text-dim hover:text-white transition-colors px-3 py-1.5">
           <i class="fas fa-times mr-1"></i>Fechar
         </button>
       </div>
     </div>
-    <div class="flex-1 bg-gray-200 flex items-start justify-center py-4 overflow-auto">
+    <div class="flex-1 bg-dark-5 flex items-start justify-center py-4 overflow-auto">
       <div id="preview-container" class="w-full max-w-none bg-white shadow-xl transition-all duration-300" style="min-height: 100%">
         <iframe id="lp-full-frame" class="w-full border-none" style="height: 100vh" sandbox="allow-scripts allow-same-origin"></iframe>
       </div>
@@ -831,7 +831,7 @@ function setPreviewDevice(device) {
 
   Object.entries(btns).forEach(([d, id]) => {
     const btn = document.getElementById(id)
-    if (btn) btn.className = `px-3 py-1.5 ${d === device ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-700'} transition-colors`
+    if (btn) btn.className = `px-3 py-1.5 ${d === device ? 'bg-gray-700 text-white' : 'text-dim hover:bg-gray-700'} transition-colors`
   })
 
   if (device === 'desktop') {

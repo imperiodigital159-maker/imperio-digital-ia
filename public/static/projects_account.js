@@ -6,7 +6,7 @@
 // PROJETOS
 // ============================================================
 const PROJECT_COLORS = [
-  '#6366f1', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316',
+  '#D4AF37', '#A8891A', '#ec4899', '#14b8a6', '#f97316',
   '#10b981', '#3b82f6', '#ef4444', '#84cc16', '#f59e0b'
 ]
 
@@ -23,8 +23,8 @@ async function renderProjects(container) {
       <!-- Header -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 class="text-2xl font-black text-gray-900">Projetos</h1>
-          <p class="text-gray-500 text-sm">${projects.length} projeto${projects.length !== 1 ? 's' : ''}</p>
+          <h1 class="text-2xl font-black text-cream">Projetos</h1>
+          <p class="text-warm-gray text-sm">${projects.length} projeto${projects.length !== 1 ? 's' : ''}</p>
         </div>
         <button onclick="showCreateProjectModal()" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fas fa-plus"></i>Novo projeto
@@ -35,9 +35,9 @@ async function renderProjects(container) {
       ${projects.length > 0 ? `
       <div class="flex gap-3 items-center flex-wrap">
         <input type="text" id="project-search" placeholder="Buscar projetos..." class="input-field text-sm py-2 px-3 flex-1 min-w-48" oninput="filterProjects(this.value)">
-        <div class="flex gap-1 bg-white border border-slate-200 rounded-xl p-1">
-          <button onclick="setProjectView('grid')" id="pview-grid" class="p-2 rounded-lg bg-indigo-100 text-indigo-700 text-xs"><i class="fas fa-grid-2"></i></button>
-          <button onclick="setProjectView('list')" id="pview-list" class="p-2 rounded-lg text-gray-400 hover:bg-gray-100 text-xs"><i class="fas fa-list"></i></button>
+        <div class="flex gap-1 border border-slate-200 rounded-xl p-1">
+          <button onclick="setProjectView('grid')" id="pview-grid" class="p-2 rounded-lg bg-yellow-900/30 text-yellow-400 text-xs"><i class="fas fa-grid-2"></i></button>
+          <button onclick="setProjectView('list')" id="pview-list" class="p-2 rounded-lg text-dim hover:bg-dark-4 text-xs"><i class="fas fa-list"></i></button>
         </div>
       </div>` : ''}
 
@@ -45,11 +45,11 @@ async function renderProjects(container) {
       <div id="projects-container">
         ${projects.length === 0 ? `
         <div class="card p-12 text-center">
-          <div class="w-20 h-20 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-5 shadow-xl shadow-indigo-200">
+          <div class="w-20 h-20 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-5 shadow-xl shadow-yellow-900/30">
             <i class="fas fa-folder text-white text-3xl"></i>
           </div>
-          <h2 class="text-2xl font-black text-gray-900 mb-3">Organize com Projetos</h2>
-          <p class="text-gray-500 max-w-md mx-auto mb-6">Agrupe documentos, imagens, landing pages e conversas em projetos para manter tudo organizado e acessível.</p>
+          <h2 class="text-2xl font-black text-cream mb-3">Organize com Projetos</h2>
+          <p class="text-warm-gray max-w-md mx-auto mb-6">Agrupe documentos, imagens, landing pages e conversas em projetos para manter tudo organizado e acessível.</p>
           <button onclick="showCreateProjectModal()" class="btn-primary px-6 py-3 rounded-xl font-semibold">
             <i class="fas fa-plus mr-2"></i>Criar primeiro projeto
           </button>
@@ -71,7 +71,7 @@ function renderProjectsGrid(projects) {
 }
 
 function renderProjectCard(p) {
-  const color = p.color || '#6366f1'
+  const color = p.color || '#D4AF37'
   const totalItems = (p.doc_count || 0) + (p.image_count || 0) + (p.lp_count || 0)
   return `
   <div class="card overflow-hidden group cursor-pointer" onclick="navigate('/projetos/${p.id}')">
@@ -83,24 +83,24 @@ function renderProjectCard(p) {
           <i class="fas fa-folder text-xl" style="color: ${color}"></i>
         </div>
         <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onclick="event.stopPropagation(); showEditProjectModal('${p.id}', '${encodeURIComponent(p.name)}', '${p.color || '#6366f1'}')" class="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+          <button onclick="event.stopPropagation(); showEditProjectModal('${p.id}', '${encodeURIComponent(p.name)}', '${p.color || '#D4AF37'}')" class="p-1.5 rounded-lg text-dim hover:text-yellow-500 hover:bg-yellow-900/20 transition-colors">
             <i class="fas fa-edit text-xs"></i>
           </button>
-          <button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors">
+          <button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-1.5 rounded-lg text-dim hover:text-red-500 hover:bg-red-50 transition-colors">
             <i class="fas fa-trash text-xs"></i>
           </button>
         </div>
       </div>
-      <h3 class="font-bold text-gray-900 mb-1 group-hover:text-indigo-600 transition-colors">${p.name}</h3>
-      ${p.description ? `<p class="text-xs text-gray-400 mb-3 line-clamp-2">${p.description}</p>` : ''}
-      <div class="flex items-center gap-3 text-xs text-gray-400">
+      <h3 class="font-bold text-cream mb-1 group-hover:text-yellow-500 transition-colors">${p.name}</h3>
+      ${p.description ? `<p class="text-xs text-dim mb-3 line-clamp-2">${p.description}</p>` : ''}
+      <div class="flex items-center gap-3 text-xs text-dim">
         <span><i class="fas fa-file-lines mr-1"></i>${p.doc_count || 0} docs</span>
         <span><i class="fas fa-image mr-1"></i>${p.image_count || 0} imgs</span>
         <span><i class="fas fa-globe mr-1"></i>${p.lp_count || 0} páginas</span>
       </div>
-      <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-        <span class="text-xs text-gray-400">${timeAgo(p.updated_at)}</span>
-        <span class="text-xs font-semibold text-gray-600">${totalItems} item${totalItems !== 1 ? 's' : ''}</span>
+      <div class="mt-3 pt-3 border-t border-gold-faint flex items-center justify-between">
+        <span class="text-xs text-dim">${timeAgo(p.updated_at)}</span>
+        <span class="text-xs font-semibold text-gold-muted">${totalItems} item${totalItems !== 1 ? 's' : ''}</span>
       </div>
     </div>
   </div>`
@@ -111,8 +111,8 @@ function setProjectView(mode) {
   const container = document.getElementById('projects-container')
   if (!container) return
 
-  document.getElementById('pview-grid').className = `p-2 rounded-lg ${mode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:bg-gray-100'} text-xs`
-  document.getElementById('pview-list').className = `p-2 rounded-lg ${mode === 'list' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:bg-gray-100'} text-xs`
+  document.getElementById('pview-grid').className = `p-2 rounded-lg ${mode === 'grid' ? 'bg-yellow-900/30 text-yellow-400' : 'text-dim hover:bg-dark-4'} text-xs`
+  document.getElementById('pview-list').className = `p-2 rounded-lg ${mode === 'list' ? 'bg-yellow-900/30 text-yellow-400' : 'text-dim hover:bg-dark-4'} text-xs`
 
   if (mode === 'grid') {
     container.innerHTML = renderProjectsGrid(projects)
@@ -120,19 +120,19 @@ function setProjectView(mode) {
     container.innerHTML = `<div class="card overflow-hidden">
       <div class="divide-y divide-slate-100">
         ${projects.map(p => `
-        <div class="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors cursor-pointer group" onclick="navigate('/projetos/${p.id}')">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: ${p.color || '#6366f1'}20">
-            <i class="fas fa-folder" style="color: ${p.color || '#6366f1'}"></i>
+        <div class="flex items-center gap-4 p-4 hover:bg-dark-2 transition-colors cursor-pointer group" onclick="navigate('/projetos/${p.id}')">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: ${p.color || '#D4AF37'}20">
+            <i class="fas fa-folder" style="color: ${p.color || '#D4AF37'}"></i>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">${p.name}</p>
-            <p class="text-xs text-gray-400">${(p.doc_count || 0) + (p.image_count || 0) + (p.lp_count || 0)} itens • ${timeAgo(p.updated_at)}</p>
+            <p class="font-semibold text-cream-2 group-hover:text-yellow-500 transition-colors">${p.name}</p>
+            <p class="text-xs text-dim">${(p.doc_count || 0) + (p.image_count || 0) + (p.lp_count || 0)} itens • ${timeAgo(p.updated_at)}</p>
           </div>
           <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onclick="event.stopPropagation(); showEditProjectModal('${p.id}', '${encodeURIComponent(p.name)}', '${p.color || '#6366f1'}')" class="p-2 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50">
+            <button onclick="event.stopPropagation(); showEditProjectModal('${p.id}', '${encodeURIComponent(p.name)}', '${p.color || '#D4AF37'}')" class="p-2 rounded-lg text-dim hover:text-yellow-500 hover:bg-yellow-900/20">
               <i class="fas fa-edit text-xs"></i>
             </button>
-            <button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50">
+            <button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-2 rounded-lg text-dim hover:text-red-500 hover:bg-red-50">
               <i class="fas fa-trash text-xs"></i>
             </button>
           </div>
@@ -152,7 +152,7 @@ function filterProjects(search) {
 }
 
 function showCreateProjectModal() {
-  showProjectModal(null, '', '#6366f1')
+  showProjectModal(null, '', '#D4AF37')
 }
 
 function showEditProjectModal(id, encodedName, color) {
@@ -165,24 +165,24 @@ function showProjectModal(id, name, color) {
   modal.className = 'fixed inset-0 z-50 flex items-center justify-center modal-overlay'
   modal.id = 'project-modal'
   modal.innerHTML = `
-  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h2 class="text-lg font-black text-gray-900">${isEdit ? 'Editar Projeto' : 'Novo Projeto'}</h2>
-      <button onclick="document.getElementById('project-modal').remove()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+  <div class="modal-content rounded-2xl shadow-2xl w-full max-w-md mx-4">
+    <div class="flex items-center justify-between p-6 border-b border-gold-faint">
+      <h2 class="text-lg font-black text-cream">${isEdit ? 'Editar Projeto' : 'Novo Projeto'}</h2>
+      <button onclick="document.getElementById('project-modal').remove()" class="text-dim hover:text-gold-muted w-8 h-8 flex items-center justify-center rounded-lg hover:bg-dark-4">
         <i class="fas fa-times"></i>
       </button>
     </div>
     <div class="p-6 space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Nome do Projeto *</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">Nome do Projeto *</label>
         <input id="proj-name" type="text" value="${name}" class="input-field w-full" placeholder="Ex: Campanha de Marketing Q1">
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Descrição (opcional)</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">Descrição (opcional)</label>
         <textarea id="proj-desc" rows="2" class="input-field w-full text-sm" placeholder="Descreva o objetivo deste projeto"></textarea>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Cor do Projeto</label>
+        <label class="block text-sm font-medium text-cream-3 mb-2">Cor do Projeto</label>
         <div class="flex gap-2 flex-wrap">
           ${PROJECT_COLORS.map(c => `
           <button onclick="selectProjectColor('${c}')" id="pcolor-${c.replace('#', '')}" class="w-8 h-8 rounded-xl border-2 ${c === color ? 'border-gray-900 scale-110' : 'border-transparent'} transition-all" style="background: ${c}"></button>`).join('')}
@@ -190,7 +190,7 @@ function showProjectModal(id, name, color) {
         <input type="hidden" id="proj-color" value="${color}">
       </div>
     </div>
-    <div class="p-6 border-t border-slate-100 flex gap-3 justify-end">
+    <div class="p-6 border-t border-gold-faint flex gap-3 justify-end">
       <button onclick="document.getElementById('project-modal').remove()" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
       <button onclick="${isEdit ? `saveProject('${id}')` : 'createProject()'}" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold">
         ${isEdit ? '<i class="fas fa-save mr-2"></i>Salvar' : '<i class="fas fa-plus mr-2"></i>Criar Projeto'}
@@ -214,7 +214,7 @@ async function createProject() {
   const name = document.getElementById('proj-name')?.value?.trim()
   if (!name) { showToast('Nome do projeto é obrigatório', 'warning'); return }
   const description = document.getElementById('proj-desc')?.value?.trim()
-  const color = document.getElementById('proj-color')?.value || '#6366f1'
+  const color = document.getElementById('proj-color')?.value || '#D4AF37'
   try {
     await api('POST', '/projects', { name, description, color })
     document.getElementById('project-modal')?.remove()
@@ -230,7 +230,7 @@ async function saveProject(id) {
   const name = document.getElementById('proj-name')?.value?.trim()
   if (!name) { showToast('Nome é obrigatório', 'warning'); return }
   const description = document.getElementById('proj-desc')?.value?.trim()
-  const color = document.getElementById('proj-color')?.value || '#6366f1'
+  const color = document.getElementById('proj-color')?.value || '#D4AF37'
   try {
     await api('PUT', `/projects/${id}`, { name, description, color })
     document.getElementById('project-modal')?.remove()
@@ -278,15 +278,15 @@ async function renderProjectDetail(container, projectId) {
         <button onclick="navigate('/projetos')" class="btn-secondary p-2 rounded-xl">
           <i class="fas fa-arrow-left text-sm"></i>
         </button>
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background: ${project.color || '#6366f1'}20">
-          <i class="fas fa-folder text-xl" style="color: ${project.color || '#6366f1'}"></i>
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background: ${project.color || '#D4AF37'}20">
+          <i class="fas fa-folder text-xl" style="color: ${project.color || '#D4AF37'}"></i>
         </div>
         <div class="flex-1">
-          <h1 class="text-2xl font-black text-gray-900">${project.name}</h1>
-          ${project.description ? `<p class="text-gray-500 text-sm">${project.description}</p>` : ''}
+          <h1 class="text-2xl font-black text-cream">${project.name}</h1>
+          ${project.description ? `<p class="text-warm-gray text-sm">${project.description}</p>` : ''}
         </div>
         <div class="flex gap-2">
-          <button onclick="showEditProjectModal('${project.id}', '${encodeURIComponent(project.name)}', '${project.color || '#6366f1'}')" class="btn-secondary px-3 py-2 rounded-xl text-sm font-medium">
+          <button onclick="showEditProjectModal('${project.id}', '${encodeURIComponent(project.name)}', '${project.color || '#D4AF37'}')" class="btn-secondary px-3 py-2 rounded-xl text-sm font-medium">
             <i class="fas fa-edit mr-1.5"></i>Editar
           </button>
         </div>
@@ -303,29 +303,29 @@ async function renderProjectDetail(container, projectId) {
           <div class="w-10 h-10 rounded-xl bg-${s.color}-100 flex items-center justify-center mx-auto mb-2">
             <i class="fas ${s.icon} text-${s.color}-600 text-sm"></i>
           </div>
-          <p class="text-2xl font-black text-gray-900">${s.count}</p>
-          <p class="text-xs text-gray-500">${s.label}</p>
+          <p class="text-2xl font-black text-cream">${s.count}</p>
+          <p class="text-xs text-warm-gray">${s.label}</p>
         </div>`).join('')}
       </div>
 
       <!-- Documents -->
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold text-gray-900">Documentos</h2>
+          <h2 class="font-bold text-cream">Documentos</h2>
           <button onclick="showDocumentWizard()" class="btn-primary px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5">
             <i class="fas fa-plus text-xs"></i>Novo
           </button>
         </div>
-        ${docs.length === 0 ? `<p class="text-gray-400 text-sm text-center py-4">Nenhum documento neste projeto</p>` :
+        ${docs.length === 0 ? `<p class="text-dim text-sm text-center py-4">Nenhum documento neste projeto</p>` :
         `<div class="space-y-2">
           ${docs.map(d => `
-          <div onclick="navigate('/documentos/${d.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer group transition-colors">
-            <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-              <i class="fas fa-file-lines text-purple-600 text-xs"></i>
+          <div onclick="navigate('/documentos/${d.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-dark-2 cursor-pointer group transition-colors">
+            <div class="w-8 h-8 rounded-lg bg-yellow-900/20 flex items-center justify-center">
+              <i class="fas fa-file-lines text-yellow-400 text-xs"></i>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-800 truncate group-hover:text-indigo-600 transition-colors">${d.title}</p>
-              <p class="text-xs text-gray-400">${formatDate(d.created_at)}</p>
+              <p class="text-sm font-medium text-cream-2 truncate group-hover:text-yellow-500 transition-colors">${d.title}</p>
+              <p class="text-xs text-dim">${formatDate(d.created_at)}</p>
             </div>
             <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
           </div>`).join('')}
@@ -336,8 +336,8 @@ async function renderProjectDetail(container, projectId) {
       ${images.length > 0 ? `
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold text-gray-900">Imagens</h2>
-          <button onclick="navigate('/imagens')" class="text-indigo-600 text-sm font-medium hover:underline">Ver todas →</button>
+          <h2 class="font-bold text-cream">Imagens</h2>
+          <button onclick="navigate('/imagens')" class="text-yellow-500 text-sm font-medium hover:underline">Ver todas →</button>
         </div>
         <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
           ${images.slice(0, 8).map(img => `
@@ -351,18 +351,18 @@ async function renderProjectDetail(container, projectId) {
       ${pages.length > 0 ? `
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold text-gray-900">Landing Pages</h2>
-          <button onclick="navigate('/landing-pages')" class="text-indigo-600 text-sm font-medium hover:underline">Ver todas →</button>
+          <h2 class="font-bold text-cream">Landing Pages</h2>
+          <button onclick="navigate('/landing-pages')" class="text-yellow-500 text-sm font-medium hover:underline">Ver todas →</button>
         </div>
         <div class="space-y-2">
           ${pages.map(p => `
-          <div onclick="navigate('/landing-pages/${p.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer group transition-colors">
+          <div onclick="navigate('/landing-pages/${p.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-dark-2 cursor-pointer group transition-colors">
             <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
               <i class="fas fa-globe text-blue-600 text-xs"></i>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-800 truncate group-hover:text-indigo-600 transition-colors">${p.title}</p>
-              <p class="text-xs text-gray-400">${formatDate(p.created_at)}</p>
+              <p class="text-sm font-medium text-cream-2 truncate group-hover:text-yellow-500 transition-colors">${p.title}</p>
+              <p class="text-xs text-dim">${formatDate(p.created_at)}</p>
             </div>
             <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
           </div>`).join('')}
@@ -396,8 +396,8 @@ async function renderAccount(container) {
     <div class="space-y-6 animate-fade">
       <!-- Header -->
       <div>
-        <h1 class="text-2xl font-black text-gray-900">Minha Conta</h1>
-        <p class="text-gray-500 text-sm">Gerencie seu perfil, assinatura e configurações</p>
+        <h1 class="text-2xl font-black text-cream">Minha Conta</h1>
+        <p class="text-warm-gray text-sm">Gerencie seu perfil, assinatura e configurações</p>
       </div>
 
       <!-- Profile card -->
@@ -409,12 +409,12 @@ async function renderAccount(container) {
           <div class="flex-1">
             <div class="flex items-start justify-between flex-wrap gap-3">
               <div>
-                <h2 class="text-xl font-black text-gray-900">${user.name}</h2>
-                <p class="text-gray-500">${user.email}</p>
-                <p class="text-xs text-gray-400 mt-1">Membro desde ${formatDate(user.created_at)}</p>
+                <h2 class="text-xl font-black text-cream">${user.name}</h2>
+                <p class="text-warm-gray">${user.email}</p>
+                <p class="text-xs text-dim mt-1">Membro desde ${formatDate(user.created_at)}</p>
               </div>
               <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${isPro ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-700'}">
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold ${isPro ? 'bg-yellow-900/30 text-yellow-400' : 'bg-dark-4 text-cream-3'}">
                   ${isPro ? '<i class="fas fa-star text-yellow-500"></i> Plano Pro' : '<i class="fas fa-user"></i> Plano Grátis'}
                 </span>
                 ${!isPro ? `<button onclick="handleUpgrade()" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Fazer Upgrade ⚡</button>` : ''}
@@ -436,8 +436,8 @@ async function renderAccount(container) {
       <div class="card p-6">
         <div class="flex items-center justify-between mb-5">
           <div>
-            <h2 class="font-bold text-gray-900">Uso do Plano</h2>
-            <p class="text-sm text-gray-500">${new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</p>
+            <h2 class="font-bold text-cream">Uso do Plano</h2>
+            <p class="text-sm text-warm-gray">${new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</p>
           </div>
           ${!isPro ? `<button onclick="handleUpgrade()" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">
             <i class="fas fa-arrow-up mr-1.5"></i>Aumentar limites
@@ -454,18 +454,18 @@ async function renderAccount(container) {
             const barColor = pct > 85 ? 'bg-red-500' : pct > 65 ? 'bg-yellow-500' : `bg-${u.color}-500`
             const textColor = pct > 85 ? 'text-red-600' : pct > 65 ? 'text-yellow-600' : `text-${u.color}-600`
             return `
-            <div class="bg-slate-50 rounded-xl p-4">
+            <div class="bg-dark-2 rounded-xl p-4">
               <div class="flex items-center gap-2 mb-3">
                 <div class="w-8 h-8 rounded-lg bg-${u.color}-100 flex items-center justify-center">
                   <i class="fas ${u.icon} text-${u.color}-600 text-xs"></i>
                 </div>
-                <span class="text-sm font-semibold text-gray-700">${u.label}</span>
+                <span class="text-sm font-semibold text-cream-3">${u.label}</span>
               </div>
               <div class="flex items-end justify-between mb-2">
-                <span class="text-2xl font-black text-gray-900">${u.used}</span>
-                <span class="text-sm text-gray-400">/${u.limit}</span>
+                <span class="text-2xl font-black text-cream">${u.used}</span>
+                <span class="text-sm text-dim">/${u.limit}</span>
               </div>
-              <div class="bg-gray-200 rounded-full h-2 mb-1">
+              <div class="bg-dark-5 rounded-full h-2 mb-1">
                 <div class="${barColor} h-2 rounded-full transition-all" style="width: ${pct}%"></div>
               </div>
               <p class="text-xs ${textColor} font-medium">${pct}% utilizado</p>
@@ -476,14 +476,14 @@ async function renderAccount(container) {
 
       <!-- Plan comparison -->
       <div class="card p-6">
-        <h2 class="font-bold text-gray-900 mb-5">Comparativo de Planos</h2>
+        <h2 class="font-bold text-cream mb-5">Comparativo de Planos</h2>
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
               <tr>
-                <th class="text-left py-3 px-4 text-sm font-semibold text-gray-600 w-1/2">Recurso</th>
-                <th class="text-center py-3 px-4 text-sm font-semibold text-gray-500">Grátis</th>
-                <th class="text-center py-3 px-4 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-t-xl">Pro ⭐</th>
+                <th class="text-left py-3 px-4 text-sm font-semibold text-gold-muted w-1/2">Recurso</th>
+                <th class="text-center py-3 px-4 text-sm font-semibold text-warm-gray">Grátis</th>
+                <th class="text-center py-3 px-4 text-sm font-semibold text-yellow-400 bg-yellow-900/20 rounded-t-xl">Pro ⭐</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -500,19 +500,19 @@ async function renderAccount(container) {
                 ['OpenAI (chave própria)', '✅', '✅'],
               ].map(([feature, free, pro]) => `
               <tr>
-                <td class="py-3 px-4 text-sm text-gray-700">${feature}</td>
-                <td class="py-3 px-4 text-center text-sm text-gray-500">${free}</td>
-                <td class="py-3 px-4 text-center text-sm font-semibold text-indigo-700 bg-indigo-50/50">${pro}</td>
+                <td class="py-3 px-4 text-sm text-cream-3">${feature}</td>
+                <td class="py-3 px-4 text-center text-sm text-warm-gray">${free}</td>
+                <td class="py-3 px-4 text-center text-sm font-semibold text-yellow-400 bg-yellow-900/20/50">${pro}</td>
               </tr>`).join('')}
             </tbody>
           </table>
         </div>
         ${!isPro ? `
-        <div class="mt-5 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+        <div class="mt-5 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-yellow-900/40">
           <div class="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <p class="font-bold text-gray-900">Plano Pro — R$ 97/mês</p>
-              <p class="text-sm text-gray-600">10x mais recursos, sem limites restritivos</p>
+              <p class="font-bold text-cream">Plano Pro — R$ 97/mês</p>
+              <p class="text-sm text-gold-muted">10x mais recursos, sem limites restritivos</p>
             </div>
             <button onclick="handleUpgrade()" class="btn-primary px-6 py-2.5 rounded-xl font-semibold">
               <i class="fas fa-star mr-2 text-yellow-400"></i>Assinar Pro
@@ -532,24 +532,24 @@ async function renderAccount(container) {
 
       <!-- Settings -->
       <div class="card p-6" id="config">
-        <h2 class="font-bold text-gray-900 mb-5 flex items-center gap-2">
-          <i class="fas fa-sliders text-indigo-500"></i>Configurações de Integrações
+        <h2 class="font-bold text-cream mb-5 flex items-center gap-2">
+          <i class="fas fa-sliders text-yellow-500"></i>Configurações de Integrações
         </h2>
         
         <!-- OpenAI -->
         <div class="space-y-4">
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="p-4 bg-dark-2 rounded-xl border border-slate-200">
             <div class="flex items-start justify-between mb-3">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
                   <span class="text-white font-bold text-xs">AI</span>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-900">OpenAI (GPT-4o-mini + DALL-E 3)</p>
-                  <p class="text-xs text-gray-500">Chat com IA real, geração de documentos e imagens</p>
+                  <p class="font-semibold text-cream">OpenAI (GPT-4o-mini + DALL-E 3)</p>
+                  <p class="text-xs text-warm-gray">Chat com IA real, geração de documentos e imagens</p>
                 </div>
               </div>
-              <div id="openai-badge" class="text-xs px-2 py-1 rounded-full ${settings.openai_key ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+              <div id="openai-badge" class="text-xs px-2 py-1 rounded-full ${settings.openai_key ? 'bg-green-100 text-green-700' : 'bg-dark-4 text-warm-gray'}">
                 ${settings.openai_key ? '✅ Configurado' : '⚪ Não configurado'}
               </div>
             </div>
@@ -559,25 +559,25 @@ async function renderAccount(container) {
                 Salvar
               </button>
             </div>
-            <p class="text-xs text-gray-400 mt-2">
+            <p class="text-xs text-dim mt-2">
               <i class="fas fa-lock mr-1"></i>Sua chave é armazenada com segurança e nunca compartilhada.
-              <a href="https://platform.openai.com/api-keys" target="_blank" class="text-indigo-500 hover:underline ml-1">Obter chave →</a>
+              <a href="https://platform.openai.com/api-keys" target="_blank" class="text-yellow-500 hover:underline ml-1">Obter chave →</a>
             </p>
           </div>
 
           <!-- Stripe -->
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="p-4 bg-dark-2 rounded-xl border border-slate-200">
             <div class="flex items-start justify-between mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl bg-yellow-600 flex items-center justify-center">
                   <i class="fas fa-credit-card text-white text-sm"></i>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-900">Stripe (Pagamentos)</p>
-                  <p class="text-xs text-gray-500">Para cobranças reais do plano Pro</p>
+                  <p class="font-semibold text-cream">Stripe (Pagamentos)</p>
+                  <p class="text-xs text-warm-gray">Para cobranças reais do plano Pro</p>
                 </div>
               </div>
-              <div id="stripe-badge" class="text-xs px-2 py-1 rounded-full ${settings.stripe_secret_key ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+              <div id="stripe-badge" class="text-xs px-2 py-1 rounded-full ${settings.stripe_secret_key ? 'bg-green-100 text-green-700' : 'bg-dark-4 text-warm-gray'}">
                 ${settings.stripe_secret_key ? '✅ Configurado' : '⚪ Não configurado'}
               </div>
             </div>
@@ -586,8 +586,8 @@ async function renderAccount(container) {
               <input id="stripe-price-input" type="text" class="input-field w-full text-sm" placeholder="price_... (Price ID do plano Pro)" value="${settings.stripe_price_id || ''}">
               <button onclick="saveStripeKeys()" class="btn-primary px-4 py-2 rounded-xl text-sm font-medium">Salvar</button>
             </div>
-            <p class="text-xs text-gray-400 mt-2">
-              <a href="https://dashboard.stripe.com/apikeys" target="_blank" class="text-indigo-500 hover:underline">Obter chaves Stripe →</a>
+            <p class="text-xs text-dim mt-2">
+              <a href="https://dashboard.stripe.com/apikeys" target="_blank" class="text-yellow-500 hover:underline">Obter chaves Stripe →</a>
             </p>
           </div>
         </div>
@@ -600,8 +600,8 @@ async function renderAccount(container) {
         </h2>
         <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-100">
           <div>
-            <p class="font-semibold text-gray-900 text-sm">Excluir conta</p>
-            <p class="text-xs text-gray-500">Remove permanentemente sua conta e todos os dados</p>
+            <p class="font-semibold text-cream text-sm">Excluir conta</p>
+            <p class="text-xs text-warm-gray">Remove permanentemente sua conta e todos os dados</p>
           </div>
           <button onclick="confirmDeleteAccount()" class="px-4 py-2 rounded-xl text-sm font-semibold text-red-600 bg-red-100 hover:bg-red-200 transition-colors">
             Excluir conta
@@ -621,25 +621,25 @@ function showEditProfileModal() {
   modal.className = 'fixed inset-0 z-50 flex items-center justify-center modal-overlay'
   modal.id = 'edit-profile-modal'
   modal.innerHTML = `
-  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h2 class="text-lg font-black text-gray-900">Editar Perfil</h2>
-      <button onclick="document.getElementById('edit-profile-modal').remove()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+  <div class="modal-content rounded-2xl shadow-2xl w-full max-w-md mx-4">
+    <div class="flex items-center justify-between p-6 border-b border-gold-faint">
+      <h2 class="text-lg font-black text-cream">Editar Perfil</h2>
+      <button onclick="document.getElementById('edit-profile-modal').remove()" class="text-dim hover:text-gold-muted w-8 h-8 flex items-center justify-center rounded-lg hover:bg-dark-4">
         <i class="fas fa-times"></i>
       </button>
     </div>
     <div class="p-6 space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Nome completo</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">Nome completo</label>
         <input id="edit-name" type="text" value="${user?.name || ''}" class="input-field w-full">
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mail</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">E-mail</label>
         <input id="edit-email" type="email" value="${user?.email || ''}" class="input-field w-full" disabled>
-        <p class="text-xs text-gray-400 mt-1">O e-mail não pode ser alterado</p>
+        <p class="text-xs text-dim mt-1">O e-mail não pode ser alterado</p>
       </div>
     </div>
-    <div class="p-6 border-t border-slate-100 flex gap-3 justify-end">
+    <div class="p-6 border-t border-gold-faint flex gap-3 justify-end">
       <button onclick="document.getElementById('edit-profile-modal').remove()" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
       <button onclick="saveProfile()" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold">
         <i class="fas fa-save mr-2"></i>Salvar
@@ -671,28 +671,28 @@ function showChangePasswordModal() {
   modal.className = 'fixed inset-0 z-50 flex items-center justify-center modal-overlay'
   modal.id = 'change-password-modal'
   modal.innerHTML = `
-  <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4">
-    <div class="flex items-center justify-between p-6 border-b border-slate-100">
-      <h2 class="text-lg font-black text-gray-900">Alterar Senha</h2>
-      <button onclick="document.getElementById('change-password-modal').remove()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+  <div class="modal-content rounded-2xl shadow-2xl w-full max-w-md mx-4">
+    <div class="flex items-center justify-between p-6 border-b border-gold-faint">
+      <h2 class="text-lg font-black text-cream">Alterar Senha</h2>
+      <button onclick="document.getElementById('change-password-modal').remove()" class="text-dim hover:text-gold-muted w-8 h-8 flex items-center justify-center rounded-lg hover:bg-dark-4">
         <i class="fas fa-times"></i>
       </button>
     </div>
     <div class="p-6 space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Senha atual</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">Senha atual</label>
         <input id="old-password" type="password" class="input-field w-full" placeholder="Sua senha atual">
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Nova senha</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">Nova senha</label>
         <input id="new-password" type="password" class="input-field w-full" placeholder="Mínimo 6 caracteres">
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirmar nova senha</label>
+        <label class="block text-sm font-medium text-cream-3 mb-1.5">Confirmar nova senha</label>
         <input id="confirm-password" type="password" class="input-field w-full" placeholder="Repita a nova senha">
       </div>
     </div>
-    <div class="p-6 border-t border-slate-100 flex gap-3 justify-end">
+    <div class="p-6 border-t border-gold-faint flex gap-3 justify-end">
       <button onclick="document.getElementById('change-password-modal').remove()" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">Cancelar</button>
       <button onclick="changePassword()" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold">
         <i class="fas fa-lock mr-2"></i>Alterar senha
@@ -803,8 +803,8 @@ async function renderAnalytics(container) {
     container.innerHTML = `
     <div class="space-y-6 animate-fade">
       <div>
-        <h1 class="text-2xl font-black text-gray-900">Analytics</h1>
-        <p class="text-gray-500 text-sm">Acompanhe seu uso e produtividade</p>
+        <h1 class="text-2xl font-black text-cream">Analytics</h1>
+        <p class="text-warm-gray text-sm">Acompanhe seu uso e produtividade</p>
       </div>
 
       <!-- Stats -->
@@ -822,15 +822,15 @@ async function renderAnalytics(container) {
               <i class="fas ${s.icon} text-${s.color}-600 text-xs"></i>
             </div>
           </div>
-          <p class="text-2xl font-black text-gray-900">${s.value}</p>
-          <p class="text-xs text-gray-500">${s.label}</p>
+          <p class="text-2xl font-black text-cream">${s.value}</p>
+          <p class="text-xs text-warm-gray">${s.label}</p>
         </div>`).join('')}
       </div>
 
       <!-- Monthly usage chart -->
       <div class="card p-6">
         <div class="flex items-center justify-between mb-5">
-          <h2 class="font-bold text-gray-900">Uso nos Últimos 6 Meses</h2>
+          <h2 class="font-bold text-cream">Uso nos Últimos 6 Meses</h2>
           <div class="flex items-center gap-2 text-sm ${trend >= 0 ? 'text-green-600' : 'text-red-500'}">
             <i class="fas ${trend >= 0 ? 'fa-trending-up' : 'fa-trending-down'}"></i>
             <span>${Math.abs(trend)}% vs mês anterior</span>
@@ -845,24 +845,24 @@ async function renderAnalytics(container) {
             const isLast = m === chartData[chartData.length - 1]
             return `
             <div class="flex-1 flex flex-col items-center gap-1">
-              <span class="text-xs text-gray-500 font-medium">${m.total}</span>
-              <div class="w-full rounded-t-lg transition-all ${isLast ? 'gradient-bg' : 'bg-indigo-100'}" style="height: ${height}%"></div>
+              <span class="text-xs text-warm-gray font-medium">${m.total}</span>
+              <div class="w-full rounded-t-lg transition-all ${isLast ? 'gradient-bg' : 'bg-yellow-900/30'}" style="height: ${height}%"></div>
             </div>`
           }).join('')}
         </div>
         <div class="flex gap-3">
-          ${chartData.map(m => `<div class="flex-1 text-center text-xs text-gray-400">${m.label}</div>`).join('')}
+          ${chartData.map(m => `<div class="flex-1 text-center text-xs text-dim">${m.label}</div>`).join('')}
         </div>
 
         <!-- Legend -->
         <div class="flex gap-4 mt-4 flex-wrap">
           ${[
-            { label: 'Chat', color: 'bg-indigo-500' },
-            { label: 'Documentos', color: 'bg-purple-500' },
+            { label: 'Chat', color: 'bg-yellow-500' },
+            { label: 'Documentos', color: 'bg-yellow-900/100' },
             { label: 'Imagens', color: 'bg-pink-500' },
             { label: 'Landing Pages', color: 'bg-blue-500' },
           ].map(l => `
-          <div class="flex items-center gap-1.5 text-xs text-gray-500">
+          <div class="flex items-center gap-1.5 text-xs text-warm-gray">
             <div class="w-3 h-3 rounded-sm ${l.color}"></div>${l.label}
           </div>`).join('')}
         </div>
@@ -871,8 +871,8 @@ async function renderAnalytics(container) {
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Top templates -->
         <div class="card p-6">
-          <h2 class="font-bold text-gray-900 mb-4">Templates Mais Usados</h2>
-          ${topTemplates.length === 0 ? `<p class="text-gray-400 text-sm text-center py-4">Nenhum dado ainda</p>` : `
+          <h2 class="font-bold text-cream mb-4">Templates Mais Usados</h2>
+          ${topTemplates.length === 0 ? `<p class="text-dim text-sm text-center py-4">Nenhum dado ainda</p>` : `
           <div class="space-y-3">
             ${topTemplates.map((t, i) => {
               const maxCnt = topTemplates[0]?.cnt || 1
@@ -880,10 +880,10 @@ async function renderAnalytics(container) {
               return `
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-sm font-medium text-gray-700 capitalize">${(t.template_type || '').replace(/_/g, ' ')}</span>
-                  <span class="text-xs text-gray-500">${t.cnt}x</span>
+                  <span class="text-sm font-medium text-cream-3 capitalize">${(t.template_type || '').replace(/_/g, ' ')}</span>
+                  <span class="text-xs text-warm-gray">${t.cnt}x</span>
                 </div>
-                <div class="bg-gray-100 rounded-full h-1.5">
+                <div class="bg-dark-4 rounded-full h-1.5">
                   <div class="gradient-bg h-1.5 rounded-full" style="width: ${pct}%"></div>
                 </div>
               </div>`
@@ -893,21 +893,21 @@ async function renderAnalytics(container) {
 
         <!-- Recent activity -->
         <div class="card p-6">
-          <h2 class="font-bold text-gray-900 mb-4">Atividade Recente</h2>
-          ${recentActivity.length === 0 ? `<p class="text-gray-400 text-sm text-center py-4">Nenhuma atividade registrada</p>` : `
+          <h2 class="font-bold text-cream mb-4">Atividade Recente</h2>
+          ${recentActivity.length === 0 ? `<p class="text-dim text-sm text-center py-4">Nenhuma atividade registrada</p>` : `
           <div class="space-y-3">
             ${recentActivity.map(a => {
-              const icons = { chat: 'fa-comments text-indigo-500', document: 'fa-file-lines text-purple-500', image: 'fa-image text-pink-500', landing_page: 'fa-globe text-blue-500' }
+              const icons = { chat: 'fa-comments text-yellow-500', document: 'fa-file-lines text-yellow-400', image: 'fa-image text-pink-500', landing_page: 'fa-globe text-blue-500' }
               const labels = { chat: 'Chat', document: 'Documento', image: 'Imagem', landing_page: 'Landing Page' }
               return `
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
-                  <i class="fas ${icons[a.resource_type] || 'fa-circle text-gray-400'} text-xs"></i>
+                <div class="w-8 h-8 rounded-lg bg-dark-3 flex items-center justify-center flex-shrink-0">
+                  <i class="fas ${icons[a.resource_type] || 'fa-circle text-dim'} text-xs"></i>
                 </div>
                 <div class="flex-1">
-                  <p class="text-sm text-gray-700">${a.action_type === 'create' ? 'Criou' : 'Acessou'} <span class="font-medium">${labels[a.resource_type] || a.resource_type}</span></p>
+                  <p class="text-sm text-cream-3">${a.action_type === 'create' ? 'Criou' : 'Acessou'} <span class="font-medium">${labels[a.resource_type] || a.resource_type}</span></p>
                 </div>
-                <span class="text-xs text-gray-400">${timeAgo(a.created_at)}</span>
+                <span class="text-xs text-dim">${timeAgo(a.created_at)}</span>
               </div>`
             }).join('')}
           </div>`}

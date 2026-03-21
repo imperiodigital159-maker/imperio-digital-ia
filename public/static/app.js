@@ -73,7 +73,7 @@ function renderMD(text) {
 
 function showToast(msg, type = 'success') {
   const t = document.createElement('div')
-  const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-indigo-500', warning: 'bg-yellow-500' }
+  const colors = { success: 'bg-green-500', error: 'bg-red-500', info: 'bg-yellow-500', warning: 'bg-yellow-500' }
   t.className = `fixed bottom-6 right-6 z-[9999] ${colors[type] || colors.success} text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium animate-fade flex items-center gap-2`
   const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' }
   t.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`
@@ -82,7 +82,7 @@ function showToast(msg, type = 'success') {
 }
 
 function showLoader(container, msg = 'Carregando...') {
-  if (container) container.innerHTML = `<div class="flex flex-col items-center justify-center py-16 text-gray-400"><div class="w-10 h-10 border-3 border-indigo-200 border-t-indigo-600 rounded-full spinner mb-4" style="border-width:3px"></div><p class="text-sm">${msg}</p></div>`
+  if (container) container.innerHTML = `<div class="flex flex-col items-center justify-center py-16 text-gray-400"><div class="w-10 h-10 border-3 border-yellow-800 border-t-yellow-500 rounded-full spinner mb-4" style="border-width:3px"></div><p class="text-sm">${msg}</p></div>`
 }
 
 function truncate(str, n = 50) {
@@ -180,23 +180,23 @@ async function render() {
 // ============================================================
 function renderAppShell() {
   return `
-  <div class="flex h-screen overflow-hidden bg-slate-50">
+  <div class="flex h-screen overflow-hidden" style="background:#0A0A0A">
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar w-64 bg-white border-r border-slate-100 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-sm -translate-x-full lg:translate-x-0 transition-transform duration-300">
-      <div class="p-5 border-b border-slate-100">
+    <aside id="sidebar" class="sidebar w-64 flex flex-col h-screen fixed left-0 top-0 z-40 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+      <div class="p-5" style="border-bottom:1px solid rgba(212,175,55,0.15)">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-            <i class="fas fa-brain text-white text-sm"></i>
+            <i class="fas fa-brain text-black text-sm"></i>
           </div>
           <div>
-            <h1 class="font-bold text-gray-900 text-sm leading-tight">Studio IA</h1>
-            <p class="text-xs text-gray-400">para Negócios</p>
+            <h1 class="font-bold text-sm leading-tight" style="color:#F5F0E8">Studio IA</h1>
+            <p class="text-xs" style="color:#6B6355">para Negócios</p>
           </div>
         </div>
       </div>
       
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-3">Workspace</p>
+        <p class="text-xs font-semibold uppercase tracking-wider px-2 mb-3" style="color:#6B6355">Workspace</p>
         ${[
           { icon: 'fa-house', label: 'Dashboard', route: '/dashboard' },
           { icon: 'fa-comments', label: 'Chat IA', route: '/chat' },
@@ -212,8 +212,8 @@ function renderAppShell() {
           </button>
         `).join('')}
         
-        <div class="pt-4 mt-4 border-t border-slate-100">
-          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-3">Conta</p>
+        <div class="pt-4 mt-4" style="border-top:1px solid rgba(212,175,55,0.15)">
+          <p class="text-xs font-semibold uppercase tracking-wider px-2 mb-3" style="color:#6B6355">Conta</p>
           <button onclick="navigate('/conta'); closeSidebar()" class="sidebar-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 ${currentRoute === '/conta' ? 'active' : ''}">
             <i class="fas fa-user-circle w-4 text-center"></i>
             <span>Minha Conta</span>
@@ -222,16 +222,16 @@ function renderAppShell() {
       </nav>
       
       <!-- User info -->
-      <div class="p-4 border-t border-slate-100">
+      <div class="p-4" style="border-top:1px solid rgba(212,175,55,0.15)">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
             ${currentUser?.name?.charAt(0)?.toUpperCase() || 'U'}
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-gray-900 truncate">${currentUser?.name || 'Usuário'}</p>
-            <p class="text-xs text-gray-400 capitalize">${currentUser?.plan === 'pro' ? '⭐ Plano Pro' : 'Plano Grátis'}</p>
+            <p class="text-sm font-semibold truncate" style="color:#F5F0E8">${currentUser?.name || 'Usuário'}</p>
+            <p class="text-xs" style="color:#6B6355">${currentUser?.plan === 'pro' ? '⭐ Plano Pro' : 'Plano Grátis'}</p>
           </div>
-          <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition-colors" title="Sair">
+          <button onclick="logout()" class="transition-colors" style="color:#6B6355" onmouseover="this.style.color='#F87171'" onmouseout="this.style.color='#6B6355'" title="Sair">
             <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
@@ -244,15 +244,15 @@ function renderAppShell() {
     <!-- Main content -->
     <div class="flex-1 flex flex-col ml-64">
       <!-- Top bar -->
-      <header class="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
+      <header class="px-6 py-4 flex items-center justify-between sticky top-0 z-20" style="background:#111111; border-bottom:1px solid rgba(212,175,55,0.15)">
         <div class="flex items-center gap-3">
-          <button onclick="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700">
+          <button onclick="toggleSidebar()" class="lg:hidden" style="color:#A09880">
             <i class="fas fa-bars text-lg"></i>
           </button>
           <div id="breadcrumb" class="text-sm text-gray-500"></div>
         </div>
         <div class="flex items-center gap-3">
-          <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${currentUser?.plan === 'pro' ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-600'}">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${currentUser?.plan === 'pro' ? 'bg-yellow-900/30 text-yellow-400' : 'bg-gray-100 text-gray-600'}">
             ${currentUser?.plan === 'pro' ? '<i class="fas fa-star text-yellow-500"></i> Pro' : '<i class="fas fa-user"></i> Grátis'}
           </span>
           <button onclick="navigate('/conta')" class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center text-white font-bold text-sm">
@@ -262,9 +262,9 @@ function renderAppShell() {
       </header>
 
       <!-- Page content -->
-      <main id="main-content" class="flex-1 overflow-y-auto p-6">
+      <main id="main-content" class="flex-1 overflow-y-auto p-6" style="background:#0A0A0A">
         <div class="flex items-center justify-center h-full">
-          <div class="w-8 h-8 border-2 border-indigo-200 border-t-indigo-600 rounded-full spinner"></div>
+          <div class="w-8 h-8 border-2 border-yellow-800 border-t-yellow-500 rounded-full spinner"></div>
         </div>
       </main>
     </div>
@@ -312,54 +312,54 @@ function logout() {
 // ============================================================
 function renderLandingPage() {
   return `
-  <div class="min-h-screen bg-white font-sans">
+  <div class="min-h-screen font-sans" style="background-color: #0A0A0A; color: #F5F0E8">
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-gray-100 z-50">
+    <nav class="fixed top-0 w-full backdrop-blur-xl z-50" style="background: rgba(10,10,10,0.9); border-bottom: 1px solid rgba(212,175,55,0.2)">
       <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-            <i class="fas fa-brain text-white text-sm"></i>
+            <i class="fas fa-brain text-black text-sm"></i>
           </div>
           <span class="font-bold text-gray-900">Studio IA</span>
         </div>
         <div class="hidden md:flex items-center gap-8 text-sm text-gray-600">
-          <a href="#funcionalidades" class="hover:text-indigo-600 transition-colors">Funcionalidades</a>
-          <a href="#como-funciona" class="hover:text-indigo-600 transition-colors">Como Funciona</a>
-          <a href="#planos" class="hover:text-indigo-600 transition-colors">Planos</a>
+          <a href="#funcionalidades" class="hover:text-yellow-500 transition-colors">Funcionalidades</a>
+          <a href="#como-funciona" class="hover:text-yellow-500 transition-colors">Como Funciona</a>
+          <a href="#planos" class="hover:text-yellow-500 transition-colors">Planos</a>
         </div>
         <div class="flex items-center gap-3">
-          <button onclick="navigate('/login')" class="text-sm text-gray-600 hover:text-indigo-600 font-medium transition-colors">Entrar</button>
+          <button onclick="navigate('/login')" class="text-sm text-gray-600 hover:text-yellow-500 font-medium transition-colors">Entrar</button>
           <button onclick="navigate('/cadastro')" class="btn-primary px-5 py-2 rounded-xl text-sm font-semibold">Começar grátis</button>
         </div>
       </div>
     </nav>
 
     <!-- Hero -->
-    <section class="pt-32 pb-24 px-6 relative overflow-hidden" style="background: linear-gradient(135deg, #fafafe 0%, #f0f4ff 50%, #faf5ff 100%)">
+    <section class="pt-32 pb-24 px-6 relative overflow-hidden" style="background: linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)">
       <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-indigo-100 rounded-full opacity-40 blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-100 rounded-full opacity-40 blur-3xl"></div>
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-yellow-900/30 rounded-full opacity-40 blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-900/20 rounded-full opacity-40 blur-3xl"></div>
       </div>
       <div class="max-w-5xl mx-auto text-center relative">
-        <div class="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-medium mb-8">
-          <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+        <div class="inline-flex items-center gap-2 bg-yellow-900/20 border border-yellow-900/40 text-yellow-400 px-4 py-1.5 rounded-full text-sm font-medium mb-8">
+          <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
           Plataforma de IA para Pequenos Negócios
         </div>
-        <h1 class="text-5xl md:text-7xl font-black text-gray-900 mb-6 leading-tight tracking-tight">
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight" style="color:#F5F0E8">
           Crie, organize e <br><span class="gradient-text">cresça com IA</span>
         </h1>
-        <p class="text-xl md:text-2xl text-gray-500 mb-10 max-w-3xl mx-auto leading-relaxed">
+        <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed" style="color:#A09880">
           Uma central de criação com IA para pequenos negócios criarem documentos, imagens e páginas — em um só lugar.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <button onclick="navigate('/cadastro')" class="btn-primary px-8 py-4 rounded-2xl text-lg font-bold shadow-xl shadow-indigo-200">
+          <button onclick="navigate('/cadastro')" class="btn-primary px-8 py-4 rounded-2xl text-lg font-bold shadow-xl shadow-yellow-900/30">
             Começar gratuitamente <i class="fas fa-arrow-right ml-2"></i>
           </button>
           <button onclick="navigate('/login')" class="btn-secondary px-8 py-4 rounded-2xl text-lg font-semibold">
             <i class="fas fa-play mr-2"></i> Ver demonstração
           </button>
         </div>
-        <p class="text-sm text-gray-400">Sem cartão de crédito • Começa em 30 segundos • Cancele quando quiser</p>
+        <p class="text-sm" style="color:#6B6355">Sem cartão de crédito • Começa em 30 segundos • Cancele quando quiser</p>
       </div>
       
       <!-- App preview -->
@@ -378,7 +378,7 @@ function renderLandingPage() {
                 <span class="text-xs font-bold text-gray-700">Studio IA</span>
               </div>
               ${['Dashboard','Chat IA','Documentos','Imagens','Landing Pages','Projetos'].map((item, i) => `
-              <div class="flex items-center gap-2 px-3 py-2 rounded-lg mb-1 text-xs font-medium ${i === 0 ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500'}">
+              <div class="flex items-center gap-2 px-3 py-2 rounded-lg mb-1 text-xs font-medium ${i === 0 ? 'bg-yellow-900/20 text-yellow-500' : 'text-gray-500'}">
                 <div class="w-3 h-3 rounded ${i === 0 ? 'bg-indigo-400' : 'bg-gray-200'}"></div>${item}
               </div>`).join('')}
             </div>
@@ -389,12 +389,12 @@ function renderLandingPage() {
                   <div class="h-3 bg-gray-100 rounded w-56"></div>
                 </div>
                 <div class="flex gap-2">
-                  <div class="h-8 w-24 bg-indigo-100 rounded-lg"></div>
+                  <div class="h-8 w-24 bg-yellow-900/30 rounded-lg"></div>
                   <div class="h-8 w-24 gradient-bg rounded-lg"></div>
                 </div>
               </div>
               <div class="grid grid-cols-3 gap-3 mb-4">
-                ${['bg-indigo-50','bg-purple-50','bg-green-50'].map(bg => `<div class="${bg} rounded-xl p-3"><div class="h-3 bg-white rounded w-1/2 mb-2"></div><div class="h-6 bg-white rounded w-3/4"></div></div>`).join('')}
+                ${['bg-yellow-900/20','bg-yellow-900/10','bg-green-50'].map(bg => `<div class="${bg} rounded-xl p-3"><div class="h-3 bg-white rounded w-1/2 mb-2"></div><div class="h-6 bg-white rounded w-3/4"></div></div>`).join('')}
               </div>
               <div class="grid grid-cols-2 gap-3">
                 ${['',''].map(() => `<div class="bg-white rounded-xl p-3 border border-gray-100"><div class="h-2 bg-gray-100 rounded w-3/4 mb-2"></div><div class="h-2 bg-gray-100 rounded w-1/2 mb-3"></div><div class="h-16 bg-slate-50 rounded-lg"></div></div>`).join('')}
@@ -406,7 +406,7 @@ function renderLandingPage() {
     </section>
 
     <!-- Social proof -->
-    <div class="bg-white py-10 border-y border-gray-100">
+    <div class="py-10" style="background:#0A0A0A; border-top:1px solid rgba(212,175,55,0.15); border-bottom:1px solid rgba(212,175,55,0.15)">
       <div class="max-w-5xl mx-auto px-6">
         <p class="text-center text-gray-400 text-sm mb-6 uppercase tracking-wider font-medium">Ideal para profissionais de</p>
         <div class="flex flex-wrap justify-center gap-8 text-gray-400">
@@ -417,11 +417,11 @@ function renderLandingPage() {
     </div>
 
     <!-- Features -->
-    <section id="funcionalidades" class="py-24 px-6 bg-white">
+    <section id="funcionalidades" class="py-24 px-6" style="background:#111111">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-black text-gray-900 mb-4">Tudo que você precisa <br><span class="gradient-text">em um só lugar</span></h2>
-          <p class="text-xl text-gray-500 max-w-2xl mx-auto">Substitua dezenas de ferramentas por uma plataforma completa e inteligente.</p>
+          <h2 class="text-4xl md:text-5xl font-black mb-4" style="color:#F5F0E8">Tudo que você precisa <br><span class="gradient-text">em um só lugar</span></h2>
+          <p class="text-xl max-w-2xl mx-auto" style="color:#A09880">Substitua dezenas de ferramentas por uma plataforma completa e inteligente.</p>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           ${[
@@ -444,11 +444,11 @@ function renderLandingPage() {
     </section>
 
     <!-- How it works -->
-    <section id="como-funciona" class="py-24 px-6 bg-slate-50">
+    <section id="como-funciona" class="py-24 px-6" style="background:#0A0A0A">
       <div class="max-w-5xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="text-4xl font-black text-gray-900 mb-4">Como funciona?</h2>
-          <p class="text-xl text-gray-500">Simples, rápido e intuitivo.</p>
+          <h2 class="text-4xl font-black mb-4" style="color:#F5F0E8">Como funciona?</h2>
+          <p class="text-xl" style="color:#A09880">Simples, rápido e intuitivo.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
           ${[
@@ -457,10 +457,10 @@ function renderLandingPage() {
             { n: '03', icon: 'fa-rocket', title: 'Salve e use', desc: 'Organize tudo em projetos e use os materiais criados no seu negócio imediatamente.' },
           ].map(s => `
           <div class="text-center">
-            <div class="w-16 h-16 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+            <div class="w-16 h-16 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-900/30">
               <i class="fas ${s.icon} text-white text-xl"></i>
             </div>
-            <div class="text-xs font-bold text-indigo-500 mb-2">PASSO ${s.n}</div>
+            <div class="text-xs font-bold text-yellow-500 mb-2">PASSO ${s.n}</div>
             <h3 class="font-bold text-gray-900 text-xl mb-2">${s.title}</h3>
             <p class="text-gray-500">${s.desc}</p>
           </div>`).join('')}
@@ -469,11 +469,11 @@ function renderLandingPage() {
     </section>
 
     <!-- Use cases -->
-    <section class="py-24 px-6 bg-white">
+    <section class="py-24 px-6" style="background:#111111">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="text-4xl font-black text-gray-900 mb-4">Veja na prática</h2>
-          <p class="text-xl text-gray-500">Exemplos reais de como nossos usuários usam o Studio IA</p>
+          <h2 class="text-4xl font-black mb-4" style="color:#F5F0E8">Veja na prática</h2>
+          <p class="text-xl" style="color:#A09880">Exemplos reais de como nossos usuários usam o Studio IA</p>
         </div>
         <div class="grid md:grid-cols-2 gap-6">
           ${[
@@ -499,9 +499,9 @@ function renderLandingPage() {
     </section>
 
     <!-- Testimonials -->
-    <section class="py-24 px-6 bg-slate-50">
+    <section class="py-24 px-6" style="background:#0A0A0A">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-black text-center text-gray-900 mb-12">O que dizem nossos usuários</h2>
+        <h2 class="text-4xl font-black text-center mb-12" style="color:#F5F0E8">O que dizem nossos usuários</h2>
         <div class="grid md:grid-cols-3 gap-6">
           ${[
             { name: 'Mariana Costa', role: 'Consultora de Negócios', text: 'Economizo pelo menos 10 horas por semana em criação de conteúdo. O retorno sobre o investimento é absurdo!' },
@@ -521,11 +521,11 @@ function renderLandingPage() {
     </section>
 
     <!-- Pricing -->
-    <section id="planos" class="py-24 px-6 bg-white">
+    <section id="planos" class="py-24 px-6" style="background:#111111">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="text-4xl font-black text-gray-900 mb-4">Planos simples e transparentes</h2>
-          <p class="text-xl text-gray-500">Comece grátis, escale quando precisar.</p>
+          <h2 class="text-4xl font-black mb-4" style="color:#F5F0E8">Planos simples e transparentes</h2>
+          <p class="text-xl" style="color:#A09880">Comece grátis, escale quando precisar.</p>
         </div>
         <div class="grid md:grid-cols-2 gap-8">
           <div class="card p-8 border-2 border-gray-100">
@@ -537,13 +537,13 @@ function renderLandingPage() {
             </ul>
             <button onclick="navigate('/cadastro')" class="w-full btn-secondary py-3 rounded-xl font-semibold">Começar grátis</button>
           </div>
-          <div class="card p-8 border-2 border-indigo-500 relative overflow-hidden">
-            <div class="absolute top-4 right-4 bg-indigo-500 text-white text-xs font-bold px-2 py-1 rounded-full">POPULAR</div>
-            <div class="text-indigo-600 text-sm font-semibold uppercase tracking-wider mb-2">PRO</div>
+          <div class="card p-8 border-2 border-yellow-500 relative overflow-hidden">
+            <div class="absolute top-4 right-4 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">POPULAR</div>
+            <div class="text-yellow-500 text-sm font-semibold uppercase tracking-wider mb-2">PRO</div>
             <div class="text-4xl font-black text-gray-900 mb-1">R$ 97</div>
             <div class="text-gray-500 text-sm mb-6">por mês</div>
             <ul class="space-y-3 mb-8 text-sm text-gray-600">
-              ${['500 mensagens de chat/mês','100 documentos/mês','50 imagens/mês','20 landing pages/mês','50 projetos','Todos os templates','Prioridade no suporte','Exportação avançada'].map(f => `<li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i>${f}</li>`).join('')}
+              ${['500 mensagens de chat/mês','100 documentos/mês','50 imagens/mês','20 landing pages/mês','50 projetos','Todos os templates','Prioridade no suporte','Exportação avançada'].map(f => `<li class="flex items-center gap-2"><i class="fas fa-check text-yellow-500"></i>${f}</li>`).join('')}
             </ul>
             <button onclick="navigate('/cadastro')" class="w-full btn-primary py-3 rounded-xl font-semibold">Assinar Pro</button>
           </div>
@@ -552,27 +552,27 @@ function renderLandingPage() {
     </section>
 
     <!-- CTA Final -->
-    <section class="py-24 px-6 gradient-bg">
+    <section class="py-24 px-6" style="background:linear-gradient(135deg,#0A0A0A,#1A1500,#0A0A0A); border-top:1px solid rgba(212,175,55,0.2)">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Pronto para começar?</h2>
-        <p class="text-white/80 text-xl mb-8">Junte-se a centenas de profissionais que já usam o Studio IA para crescer.</p>
-        <button onclick="navigate('/cadastro')" class="bg-white text-indigo-700 px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-xl transition-all hover:scale-105">
+        <h2 class="text-4xl md:text-5xl font-black mb-4" style="color:#F5F0E8">Pronto para começar?</h2>
+        <p class="text-xl mb-8" style="color:#A09880">Junte-se a centenas de profissionais que já usam o Studio IA para crescer.</p>
+        <button onclick="navigate('/cadastro')" class="bg-white text-yellow-400 px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-xl transition-all hover:scale-105">
           Criar conta gratuita <i class="fas fa-arrow-right ml-2"></i>
         </button>
-        <p class="text-white/60 text-sm mt-4">Sem cartão de crédito • Setup em 30 segundos</p>
+        <p class="text-sm mt-4" style="color:#6B6355">Sem cartão de crédito • Setup em 30 segundos</p>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 py-12 px-6">
+    <footer class="py-12 px-6" style="background:#0A0A0A; border-top:1px solid rgba(212,175,55,0.15)">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-            <i class="fas fa-brain text-white text-sm"></i>
+            <i class="fas fa-brain text-black text-sm"></i>
           </div>
-          <span class="font-bold text-white">Studio IA para Negócios</span>
+          <span class="font-bold" style="color:#F5F0E8">Studio IA para Negócios</span>
         </div>
-        <p class="text-gray-500 text-sm">&copy; ${new Date().getFullYear()} Studio IA. Todos os direitos reservados.</p>
+        <p class="text-sm" style="color:#6B6355">&copy; ${new Date().getFullYear()} Studio IA. Todos os direitos reservados.</p>
         <div class="flex gap-6 text-sm text-gray-500">
           <a href="#" class="hover:text-white transition-colors">Privacidade</a>
           <a href="#" class="hover:text-white transition-colors">Termos</a>
@@ -599,18 +599,18 @@ function initLandingPage() {
 function renderAuthPage(mode) {
   const isLogin = mode === 'login'
   return `
-  <div class="min-h-screen flex" style="background: linear-gradient(135deg, #fafafe, #f0f4ff)">
+  <div class="min-h-screen flex" style="background: #0A0A0A">
     <!-- Left panel — hidden on mobile -->
-    <div class="hidden lg:flex flex-col justify-between w-1/2 gradient-bg p-12">
+    <div class="hidden lg:flex flex-col justify-between w-1/2 p-12" style="background:linear-gradient(135deg,#111111 0%,#1A1500 100%); border-right:1px solid rgba(212,175,55,0.2)">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(212,175,55,0.15)">
           <i class="fas fa-brain text-white"></i>
         </div>
-        <span class="font-bold text-white text-lg">Studio IA para Negócios</span>
+        <span class="font-bold text-lg" style="color:#F5F0E8">Studio IA para Negócios</span>
       </div>
       <div>
-        <h2 class="text-4xl font-black text-white mb-4 leading-tight">Sua central de criação<br>com Inteligência Artificial</h2>
-        <p class="text-white/70 text-lg mb-8">Documentos, imagens, páginas e muito mais para o seu negócio crescer.</p>
+        <h2 class="text-4xl font-black mb-4 leading-tight" style="color:#F5F0E8">Sua central de criação<br>com Inteligência Artificial</h2>
+        <p class="text-lg mb-8" style="color:#A09880">Documentos, imagens, páginas e muito mais para o seu negócio crescer.</p>
         <div class="space-y-4">
           ${[
             { icon: 'fa-comments', text: 'Chat com IA real (OpenAI GPT-4o-mini)' },
@@ -619,60 +619,60 @@ function renderAuthPage(mode) {
             { icon: 'fa-globe', text: 'Landing pages que convertem' },
             { icon: 'fa-chart-bar', text: 'Analytics e métricas de uso' },
           ].map(f => `
-          <div class="flex items-center gap-3 text-white/80">
-            <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+          <div class="flex items-center gap-3" style="color:#A09880">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.3)">
               <i class="fas ${f.icon} text-sm"></i>
             </div>
             <span class="text-sm">${f.text}</span>
           </div>`).join('')}
         </div>
       </div>
-      <p class="text-white/50 text-sm">© ${new Date().getFullYear()} Studio IA para Negócios</p>
+      <p class="text-sm" style="color:#6B6355">© ${new Date().getFullYear()} Studio IA para Negócios</p>
     </div>
 
     <!-- Right panel -->
-    <div class="flex-1 flex items-center justify-center p-6 sm:p-8">
+    <div class="flex-1 flex items-center justify-center p-6 sm:p-8" style="background:#0A0A0A">
       <div class="w-full max-w-md">
         <!-- Mobile logo -->
         <div class="lg:hidden flex items-center gap-3 mb-8">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-            <i class="fas fa-brain text-white text-sm"></i>
+            <i class="fas fa-brain text-black text-sm"></i>
           </div>
           <span class="font-bold text-gray-900">Studio IA para Negócios</span>
         </div>
 
-        <h1 class="text-3xl font-black text-gray-900 mb-2">${isLogin ? 'Bem-vindo de volta!' : 'Criar conta grátis'}</h1>
-        <p class="text-gray-500 mb-6">${isLogin ? 'Entre para acessar seu workspace.' : 'Comece a criar com IA em segundos.'}</p>
+        <h1 class="text-3xl font-black mb-2" style="color:#F5F0E8">${isLogin ? 'Bem-vindo de volta!' : 'Criar conta grátis'}</h1>
+        <p class="mb-6" style="color:#A09880">${isLogin ? 'Entre para acessar seu workspace.' : 'Comece a criar com IA em segundos.'}</p>
 
         <!-- Google OAuth button -->
-        <a href="/api/oauth/google" class="flex items-center justify-center gap-3 w-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-all mb-4 shadow-sm">
+        <a href="/api/oauth/google" class="flex items-center justify-center gap-3 w-full font-semibold py-3 rounded-xl transition-all mb-4" style="background:#111111; border:1px solid rgba(212,175,55,0.2); color:#D0C8B8">
           <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Continuar com Google
         </a>
 
         <div class="flex items-center gap-3 mb-4">
-          <div class="flex-1 h-px bg-gray-200"></div>
-          <span class="text-xs text-gray-400 font-medium">ou com e-mail</span>
-          <div class="flex-1 h-px bg-gray-200"></div>
+          <div class="flex-1 h-px" style="background:rgba(212,175,55,0.15)"></div>
+          <span class="text-xs font-medium" style="color:#6B6355">ou com e-mail</span>
+          <div class="flex-1 h-px" style="background:rgba(212,175,55,0.15)"></div>
         </div>
 
         <!-- Demo hint -->
-        ${isLogin ? `<div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 mb-4 text-sm text-indigo-700">
+        ${isLogin ? `<div class="bg-yellow-900/20 border border-yellow-900/40 rounded-xl p-3 mb-4 text-sm text-yellow-400">
           <p class="font-semibold mb-1">🎯 Conta demo:</p>
           <p>E-mail: <strong>ana@exemplo.com</strong> · Senha: <strong>demo123</strong></p>
         </div>` : ''}
 
         <form id="auth-form" class="space-y-4">
           ${!isLogin ? `<div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Nome completo</label>
+            <label class="block text-sm font-medium mb-1.5" style="color:#A09880">Nome completo</label>
             <input id="auth-name" type="text" class="input-field w-full" placeholder="Seu nome completo" required autocomplete="name">
           </div>` : ''}
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mail</label>
+            <label class="block text-sm font-medium mb-1.5" style="color:#A09880">E-mail</label>
             <input id="auth-email" type="email" class="input-field w-full" placeholder="seu@email.com" required autocomplete="email" value="${isLogin ? 'ana@exemplo.com' : ''}">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Senha</label>
+            <label class="block text-sm font-medium mb-1.5" style="color:#A09880">Senha</label>
             <div class="relative">
               <input id="auth-password" type="password" class="input-field w-full pr-10" placeholder="${isLogin ? 'Sua senha' : 'Mínimo 6 caracteres'}" required autocomplete="${isLogin ? 'current-password' : 'new-password'}" value="${isLogin ? 'demo123' : ''}">
               <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -690,7 +690,7 @@ function renderAuthPage(mode) {
 
         <p class="text-center text-gray-500 text-sm mt-5">
           ${isLogin ? 'Não tem conta?' : 'Já tem conta?'}
-          <button onclick="navigate('${isLogin ? '/cadastro' : '/login'}')" class="text-indigo-600 font-semibold hover:underline ml-1">
+          <button onclick="navigate('${isLogin ? '/cadastro' : '/login'}')" class="text-yellow-500 font-semibold hover:underline ml-1">
             ${isLogin ? 'Criar agora' : 'Fazer login'}
           </button>
         </p>
@@ -766,13 +766,13 @@ async function renderDashboard(container) {
     container.innerHTML = `
     <div class="space-y-6 animate-fade">
       <!-- Welcome -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" style="background:#111111; border:1px solid rgba(212,175,55,0.15)">
         <div>
-          <h1 class="text-2xl font-black text-gray-900">Olá, ${user.name.split(' ')[0]}! 👋</h1>
-          <p class="text-gray-500 mt-1">Bem-vindo ao seu workspace. O que vamos criar hoje?</p>
+          <h1 class="text-2xl font-black" style="color:#F5F0E8">Olá, ${user.name.split(' ')[0]}! 👋</h1>
+          <p class="mt-1" style="color:#A09880">Bem-vindo ao seu workspace. O que vamos criar hoje?</p>
         </div>
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${isProPlan ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-600'}">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${isProPlan ? 'bg-yellow-900/30 text-yellow-400' : 'bg-gray-100 text-gray-600'}">
             ${isProPlan ? '<i class="fas fa-star text-yellow-500"></i> Plano Pro' : '<i class="fas fa-user"></i> Plano Grátis'}
           </span>
           ${!isProPlan ? `<button onclick="navigate('/conta')" class="btn-primary px-4 py-1.5 rounded-xl text-sm font-semibold">Fazer upgrade</button>` : ''}
@@ -798,8 +798,8 @@ async function renderDashboard(container) {
       <!-- Usage -->
       <div class="card p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="font-bold text-gray-900">Uso do Plano — ${new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</h2>
-          <button onclick="navigate('/conta')" class="text-indigo-600 text-sm font-medium hover:underline">Ver detalhes →</button>
+          <h2 class="font-bold" style="color:#F5F0E8">Uso do Plano — ${new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</h2>
+          <button onclick="navigate('/conta')" class="text-yellow-500 text-sm font-medium hover:underline">Ver detalhes →</button>
         </div>
         <div class="grid sm:grid-cols-3 gap-4">
           ${[
@@ -810,14 +810,14 @@ async function renderDashboard(container) {
             const pct = Math.min(Math.round((u.used / u.limit) * 100), 100)
             const barColor = pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : `bg-${u.color}-500`
             return `
-            <div class="bg-slate-50 rounded-xl p-4">
+            <div class="rounded-xl p-4" style="background:#1A1A1A">
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <i class="fas ${u.icon} text-${u.color}-500"></i>${u.label}
                 </div>
                 <span class="text-xs text-gray-500">${u.used}/${u.limit}</span>
               </div>
-              <div class="bg-gray-200 rounded-full h-1.5 mb-1">
+              <div class="rounded-full h-1.5 mb-1" style="background:#2A2A2A">
                 <div class="${barColor} h-1.5 rounded-full transition-all" style="width: ${pct}%"></div>
               </div>
               <p class="text-xs text-gray-400">${pct}% utilizado</p>
@@ -830,8 +830,8 @@ async function renderDashboard(container) {
         <!-- Recent Projects -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="font-bold text-gray-900">Projetos Recentes</h2>
-            <button onclick="navigate('/projetos')" class="text-indigo-600 text-sm font-medium hover:underline">Ver todos →</button>
+            <h2 class="font-bold" style="color:#F5F0E8">Projetos Recentes</h2>
+            <button onclick="navigate('/projetos')" class="text-yellow-500 text-sm font-medium hover:underline">Ver todos →</button>
           </div>
           ${recentProjects.length > 0 ? `
           <div class="space-y-3">
@@ -841,15 +841,15 @@ async function renderDashboard(container) {
                 <i class="fas fa-folder text-sm" style="color: ${p.color}"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-indigo-600 transition-colors">${p.name}</p>
+                <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-yellow-500 transition-colors">${p.name}</p>
                 <p class="text-xs text-gray-400">${timeAgo(p.updated_at)}</p>
               </div>
-              <i class="fas fa-chevron-right text-gray-300 text-xs group-hover:text-indigo-400"></i>
+              <i class="fas fa-chevron-right text-gray-300 text-xs group-hover:text-yellow-600"></i>
             </div>`).join('')}
           </div>` : `
-          <div class="text-center py-8">
-            <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-3"><i class="fas fa-folder text-gray-400"></i></div>
-            <p class="text-gray-500 text-sm mb-3">Nenhum projeto ainda</p>
+          <div class="text-center py-8" style="color:#A09880">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#1A1A1A"><i class="fas fa-folder text-gray-400"></i></div>
+            <p class="text-sm mb-3" style="color:#6B6355">Nenhum projeto ainda</p>
             <button onclick="navigate('/projetos')" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Criar projeto</button>
           </div>`}
         </div>
@@ -857,26 +857,26 @@ async function renderDashboard(container) {
         <!-- Recent Documents -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="font-bold text-gray-900">Documentos Recentes</h2>
-            <button onclick="navigate('/documentos')" class="text-indigo-600 text-sm font-medium hover:underline">Ver todos →</button>
+            <h2 class="font-bold" style="color:#F5F0E8">Documentos Recentes</h2>
+            <button onclick="navigate('/documentos')" class="text-yellow-500 text-sm font-medium hover:underline">Ver todos →</button>
           </div>
           ${recentDocs.length > 0 ? `
           <div class="space-y-3">
             ${recentDocs.map(d => `
             <div onclick="navigate('/documentos/${d.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group">
-              <div class="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-file-lines text-purple-600 text-sm"></i>
+              <div class="w-9 h-9 rounded-xl bg-yellow-900/20 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-file-lines text-yellow-400 text-sm"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-indigo-600 transition-colors">${d.title}</p>
-                <p class="text-xs text-gray-400 capitalize">${d.template_type?.replace(/_/g, ' ')} • ${formatDate(d.created_at)}</p>
+                <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-yellow-500 transition-colors">${d.title}</p>
+                <p class="text-xs" style="color:#6B6355">${d.template_type?.replace(/_/g, ' ')} • ${formatDate(d.created_at)}</p>
               </div>
               <span class="tag ${d.status === 'draft' ? 'bg-yellow-50 text-yellow-600' : 'bg-green-50 text-green-600'}">${d.status === 'draft' ? 'Rascunho' : 'Finalizado'}</span>
             </div>`).join('')}
           </div>` : `
-          <div class="text-center py-8">
-            <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-3"><i class="fas fa-file-lines text-gray-400"></i></div>
-            <p class="text-gray-500 text-sm mb-3">Nenhum documento ainda</p>
+          <div class="text-center py-8" style="color:#A09880">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#1A1A1A"><i class="fas fa-file-lines text-gray-400"></i></div>
+            <p class="text-sm mb-3" style="color:#6B6355">Nenhum documento ainda</p>
             <button onclick="navigate('/documentos')" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Criar documento</button>
           </div>`}
         </div>
@@ -887,8 +887,8 @@ async function renderDashboard(container) {
         <!-- Recent Images -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="font-bold text-gray-900">Imagens Recentes</h2>
-            <button onclick="navigate('/imagens')" class="text-indigo-600 text-sm font-medium hover:underline">Ver todas →</button>
+            <h2 class="font-bold" style="color:#F5F0E8">Imagens Recentes</h2>
+            <button onclick="navigate('/imagens')" class="text-yellow-500 text-sm font-medium hover:underline">Ver todas →</button>
           </div>
           ${recentImages.length > 0 ? `
           <div class="grid grid-cols-2 gap-3">
@@ -900,9 +900,9 @@ async function renderDashboard(container) {
               </div>
             </div>`).join('')}
           </div>` : `
-          <div class="text-center py-8">
-            <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-3"><i class="fas fa-image text-gray-400"></i></div>
-            <p class="text-gray-500 text-sm mb-3">Nenhuma imagem ainda</p>
+          <div class="text-center py-8" style="color:#A09880">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#1A1A1A"><i class="fas fa-image text-gray-400"></i></div>
+            <p class="text-sm mb-3" style="color:#6B6355">Nenhuma imagem ainda</p>
             <button onclick="navigate('/imagens')" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Gerar imagem</button>
           </div>`}
         </div>
@@ -910,25 +910,25 @@ async function renderDashboard(container) {
         <!-- Recent Chats -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="font-bold text-gray-900">Conversas Recentes</h2>
-            <button onclick="navigate('/chat')" class="text-indigo-600 text-sm font-medium hover:underline">Ver todas →</button>
+            <h2 class="font-bold" style="color:#F5F0E8">Conversas Recentes</h2>
+            <button onclick="navigate('/chat')" class="text-yellow-500 text-sm font-medium hover:underline">Ver todas →</button>
           </div>
           ${recentChats.length > 0 ? `
           <div class="space-y-3">
             ${recentChats.map(s => `
             <div onclick="navigate('/chat/${s.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group">
-              <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-comments text-indigo-600 text-sm"></i>
+              <div class="w-9 h-9 rounded-xl bg-yellow-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-comments text-yellow-500 text-sm"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-indigo-600 transition-colors">${s.title}</p>
+                <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-yellow-500 transition-colors">${s.title}</p>
                 <p class="text-xs text-gray-400">${timeAgo(s.updated_at)}</p>
               </div>
             </div>`).join('')}
           </div>` : `
-          <div class="text-center py-8">
-            <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-3"><i class="fas fa-comments text-gray-400"></i></div>
-            <p class="text-gray-500 text-sm mb-3">Nenhuma conversa ainda</p>
+          <div class="text-center py-8" style="color:#A09880">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:#1A1A1A"><i class="fas fa-comments text-gray-400"></i></div>
+            <p class="text-sm mb-3" style="color:#6B6355">Nenhuma conversa ainda</p>
             <button onclick="navigate('/chat')" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Iniciar chat</button>
           </div>`}
         </div>
