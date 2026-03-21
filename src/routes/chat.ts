@@ -20,11 +20,9 @@ chatRoutes.post('/sessions', async (c) => {
   const userId = c.get('userId')
   const { title, project_id } = await c.req.json()
   const id = generateId()
-  
   await c.env.DB.prepare(
     'INSERT INTO chat_sessions (id, user_id, project_id, title) VALUES (?, ?, ?, ?)'
   ).bind(id, userId, project_id || null, title || 'Nova conversa').run()
-  
   const session = await c.env.DB.prepare('SELECT * FROM chat_sessions WHERE id = ?').bind(id).first()
   return c.json({ session })
 })
@@ -32,255 +30,190 @@ chatRoutes.post('/sessions', async (c) => {
 // Get session with messages
 chatRoutes.get('/sessions/:id', async (c) => {
   const userId = c.get('userId')
-  const session = await c.env.DB.prepare('SELECT * FROM chat_sessions WHERE id = ? AND user_id = ?').bind(c.req.param('id'), userId).first()
+  const session = await c.env.DB.prepare(
+    'SELECT * FROM chat_sessions WHERE id = ? AND user_id = ?'
+  ).bind(c.req.param('id'), userId).first()
   if (!session) return c.json({ error: 'Sessão não encontrada' }, 404)
-  
   const messages = await c.env.DB.prepare(
     'SELECT * FROM chat_messages WHERE session_id = ? ORDER BY created_at ASC'
   ).bind(c.req.param('id')).all()
-  
   return c.json({ session, messages: messages.results })
 })
 
-// Send message (AI response simulated)
+// Send message — uses OpenAI if key configured, else fallback
 chatRoutes.post('/sessions/:id/messages', async (c) => {
   const userId = c.get('userId')
   const user = c.get('user') as any
   const sessionId = c.req.param('id')
-  
-  const session = await c.env.DB.prepare('SELECT * FROM chat_sessions WHERE id = ? AND user_id = ?').bind(sessionId, userId).first()
+
+  const session = await c.env.DB.prepare(
+    'SELECT * FROM chat_sessions WHERE id = ? AND user_id = ?'
+  ).bind(sessionId, userId).first()
   if (!session) return c.json({ error: 'Sessão não encontrada' }, 404)
-  
+
   const limits = PLAN_LIMITS[user.plan || 'free']
   const monthYear = getMonthYear()
   const usageCount = await c.env.DB.prepare(
     'SELECT COUNT(*) as cnt FROM usage_logs WHERE user_id = ? AND resource_type = ? AND month_year = ?'
   ).bind(userId, 'chat', monthYear).first() as any
-  
+
   if (usageCount.cnt >= limits.chat_messages) {
     return c.json({ error: `Limite de mensagens atingido (${limits.chat_messages}/mês no plano ${user.plan})` }, 403)
   }
-  
+
   const { content } = await c.req.json()
-  if (!content) return c.json({ error: 'Conteúdo da mensagem é obrigatório' }, 400)
-  
+  if (!content) return c.json({ error: 'Conteúdo é obrigatório' }, 400)
+
   // Save user message
   const userMsgId = generateId()
-  await c.env.DB.prepare('INSERT INTO chat_messages (id, session_id, role, content) VALUES (?, ?, ?, ?)').bind(userMsgId, sessionId, 'user', content).run()
-  
-  // Generate AI response
-  const aiResponse = await generateAIResponse(content, user.plan)
-  
+  await c.env.DB.prepare(
+    'INSERT INTO chat_messages (id, session_id, role, content) VALUES (?, ?, ?, ?)'
+  ).bind(userMsgId, sessionId, 'user', content).run()
+
+  // Get previous messages for context (last 10)
+  const history = await c.env.DB.prepare(
+    'SELECT role, content FROM chat_messages WHERE session_id = ? ORDER BY created_at DESC LIMIT 10'
+  ).bind(sessionId).all()
+  const previousMessages = (history.results as any[]).reverse().slice(0, -1) // exclude the message we just saved
+
+  // Try OpenAI first
+  let aiResponse: string
+  let usedOpenAI = false
+
+  try {
+    const settingsRow = await c.env.DB.prepare(
+      'SELECT openai_key FROM user_settings WHERE user_id = ?'
+    ).bind(userId).first() as any
+
+    if (settingsRow?.openai_key) {
+      aiResponse = await callOpenAI(settingsRow.openai_key, content, previousMessages)
+      usedOpenAI = true
+    } else {
+      aiResponse = generateFallbackResponse(content)
+    }
+  } catch (err: any) {
+    console.error('OpenAI error:', err.message)
+    aiResponse = generateFallbackResponse(content)
+  }
+
+  // Save AI message
   const aiMsgId = generateId()
-  await c.env.DB.prepare('INSERT INTO chat_messages (id, session_id, role, content) VALUES (?, ?, ?, ?)').bind(aiMsgId, sessionId, 'assistant', aiResponse).run()
-  
-  // Update session timestamp and title
+  await c.env.DB.prepare(
+    'INSERT INTO chat_messages (id, session_id, role, content) VALUES (?, ?, ?, ?)'
+  ).bind(aiMsgId, sessionId, 'assistant', aiResponse).run()
+
+  // Update session title
   const sessionData = session as any
   if (sessionData.title === 'Nova conversa') {
-    const shortTitle = content.substring(0, 50) + (content.length > 50 ? '...' : '')
-    await c.env.DB.prepare('UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP, title = ? WHERE id = ?').bind(shortTitle, sessionId).run()
+    const shortTitle = content.substring(0, 55) + (content.length > 55 ? '...' : '')
+    await c.env.DB.prepare(
+      'UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP, title = ? WHERE id = ?'
+    ).bind(shortTitle, sessionId).run()
   } else {
-    await c.env.DB.prepare('UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(sessionId).run()
+    await c.env.DB.prepare(
+      'UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE id = ?'
+    ).bind(sessionId).run()
   }
-  
+
   // Log usage
-  await c.env.DB.prepare('INSERT INTO usage_logs (id, user_id, action_type, resource_type, resource_id, month_year) VALUES (?, ?, ?, ?, ?, ?)')
-    .bind(generateId(), userId, 'create', 'chat', aiMsgId, monthYear).run()
-  
+  await c.env.DB.prepare(
+    'INSERT INTO usage_logs (id, user_id, action_type, resource_type, resource_id, month_year) VALUES (?, ?, ?, ?, ?, ?)'
+  ).bind(generateId(), userId, 'create', 'chat', aiMsgId, monthYear).run()
+
   return c.json({
     userMessage: { id: userMsgId, session_id: sessionId, role: 'user', content, created_at: new Date().toISOString() },
-    assistantMessage: { id: aiMsgId, session_id: sessionId, role: 'assistant', content: aiResponse, created_at: new Date().toISOString() }
+    assistantMessage: { id: aiMsgId, session_id: sessionId, role: 'assistant', content: aiResponse, created_at: new Date().toISOString() },
+    model: usedOpenAI ? 'gpt-4o-mini' : 'fallback'
   })
+})
+
+// Update session title
+chatRoutes.put('/sessions/:id', async (c) => {
+  const userId = c.get('userId')
+  const { title } = await c.req.json()
+  await c.env.DB.prepare(
+    'UPDATE chat_sessions SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?'
+  ).bind(title, c.req.param('id'), userId).run()
+  return c.json({ success: true })
 })
 
 // Delete session
 chatRoutes.delete('/sessions/:id', async (c) => {
   const userId = c.get('userId')
-  await c.env.DB.prepare('DELETE FROM chat_sessions WHERE id = ? AND user_id = ?').bind(c.req.param('id'), userId).run()
+  await c.env.DB.prepare(
+    'DELETE FROM chat_messages WHERE session_id = ?'
+  ).bind(c.req.param('id')).run()
+  await c.env.DB.prepare(
+    'DELETE FROM chat_sessions WHERE id = ? AND user_id = ?'
+  ).bind(c.req.param('id'), userId).run()
   return c.json({ success: true })
 })
 
-async function generateAIResponse(prompt: string, plan: string): Promise<string> {
-  const lowerPrompt = prompt.toLowerCase()
-  
-  if (lowerPrompt.includes('proposta') || lowerPrompt.includes('comercial')) {
-    return `# Resposta sobre Proposta Comercial
+// ─── OpenAI Integration ──────────────────────────────────────
+async function callOpenAI(apiKey: string, userMessage: string, history: any[]): Promise<string> {
+  const systemPrompt = `Você é um assistente de negócios especializado para pequenas empresas, autônomos, consultores, advogados, médicos, corretores e prestadores de serviço no Brasil.
 
-Com base no que você mencionou, aqui estão os pontos principais para estruturar sua proposta:
+Seu papel é ajudar com:
+- Estratégias de marketing e vendas
+- Criação de conteúdo e copywriting
+- Propostas comerciais e contratos
+- Gestão empresarial e produtividade
+- Atendimento ao cliente
+- Precificação e finanças básicas
+- Redes sociais e presença digital
 
-## Estrutura Recomendada
+Seja direto, prático e use exemplos brasileiros. Formate respostas com Markdown quando útil (títulos, listas, negrito). Responda sempre em português brasileiro.`
 
-**1. Abertura Impactante**
-- Comece com o problema que você resolve
-- Mostre que entende as dores do cliente
-
-**2. Solução Clara**
-- Descreva o serviço de forma objetiva
-- Destaque os diferenciais
-
-**3. Benefícios Tangíveis**
-- Liste resultados esperados com números sempre que possível
-- Use casos de sucesso semelhantes
-
-**4. Investimento e ROI**
-- Apresente o preço de forma clara
-- Mostre o retorno esperado
-
-**5. Próximos Passos**
-- Defina um CTA claro
-- Estabeleça prazo para resposta
-
-💡 **Dica:** Use o módulo de Documentos para gerar uma proposta completa com templates prontos!`
-  }
-  
-  if (lowerPrompt.includes('marketing') || lowerPrompt.includes('redes sociais') || lowerPrompt.includes('social')) {
-    return `# Estratégia de Marketing para Redes Sociais
-
-Ótima pergunta! Vou compartilhar as melhores práticas:
-
-## Pilares de Conteúdo
-
-**📚 Educativo (40%)**
-- Dicas e tutoriais da sua área
-- Explicação de conceitos relevantes
-- FAQs do seu negócio
-
-**🎯 Conversão (20%)**
-- Ofertas e promoções
-- Depoimentos de clientes
-- CTAs claros
-
-**💬 Engajamento (20%)**
-- Perguntas para a audiência
-- Bastidores do negócio
-- Trends adaptadas ao nicho
-
-**🤝 Relacionamento (20%)**
-- Conteúdo pessoal e humanizado
-- Cases de sucesso
-- Parceiros e colaborações
-
-## Frequência Ideal
-- Instagram: 4-7 posts por semana
-- LinkedIn: 3-5 posts por semana  
-- Facebook: 3-5 posts por semana
-
-🎨 **Use o módulo de Imagens** para criar posts profissionais para suas campanhas!`
-  }
-
-  if (lowerPrompt.includes('contrat') || lowerPrompt.includes('jurídic') || lowerPrompt.includes('legal')) {
-    return `# Orientações sobre Contratos
-
-Para contratos comerciais, aqui estão os elementos essenciais:
-
-## Cláusulas Fundamentais
-
-**1. Identificação das Partes**
-- Nome completo/razão social
-- CPF/CNPJ e endereços
-
-**2. Objeto do Contrato**
-- Descrição detalhada do serviço
-- Escopo e entregáveis
-
-**3. Valores e Pagamentos**
-- Valor total e forma de pagamento
-- Cronograma de parcelas
-- Penalidades por atraso
-
-**4. Prazo de Vigência**
-- Data de início e término
-- Condições de renovação
-
-**5. Confidencialidade**
-- Proteção de informações sensíveis
-
-**6. Rescisão**
-- Condições para encerramento
-- Multas rescisórias
-
-⚠️ **Importante:** Sempre consulte um advogado para validar contratos importantes.
-
-📄 **Use o módulo de Documentos** para gerar um contrato base com nossos templates!`
-  }
-
-  if (lowerPrompt.includes('preço') || lowerPrompt.includes('precifica') || lowerPrompt.includes('valor') || lowerPrompt.includes('cobrar')) {
-    return `# Como Precificar seus Serviços
-
-Precificação é estratégica. Veja os principais métodos:
-
-## Métodos de Precificação
-
-**💰 Por Hora**
-- Calcule seu valor/hora ideal
-- Considere: (salário desejado + custos) ÷ horas trabalhadas
-- Adicione margem de 30-50%
-
-**📦 Por Pacote/Projeto**
-- Mais previsível para o cliente
-- Defina claramente o escopo
-- Inclua buffer para imprevistos (20%)
-
-**🔄 Recorrente (Retainer)**
-- Ideal para serviços contínuos
-- Maior estabilidade financeira
-- Desconto em troca de compromisso
-
-## Calculando seu Preço
-
-1. **Custos diretos:** Ferramentas, materiais, freelancers
-2. **Custos indiretos:** Aluguel, energia, internet
-3. **Pró-labore:** O quanto você quer receber
-4. **Margem:** 20-40% sobre o total
-5. **Impostos:** Dependendo do regime tributário
-
-## Dica de Ouro
-Pesquise concorrentes + posicione pelo valor que entrega, não pelo menor preço!`
-  }
-
-  // Generic intelligent response
-  const topics = [
-    { trigger: 'cliente', topic: 'gestão de clientes' },
-    { trigger: 'vendas', topic: 'estratégias de vendas' },
-    { trigger: 'produto', topic: 'desenvolvimento de produtos' },
-    { trigger: 'equipe', topic: 'gestão de equipes' },
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...history.map((m: any) => ({ role: m.role, content: m.content })),
+    { role: 'user', content: userMessage }
   ]
-  
-  const matchedTopic = topics.find(t => lowerPrompt.includes(t.trigger))
-  
-  return `# Resposta da IA Studio
 
-Entendi sua pergunta sobre: **"${prompt.substring(0, 60)}${prompt.length > 60 ? '...' : ''}"**
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages,
+      max_tokens: 1500,
+      temperature: 0.7
+    })
+  })
 
-## Análise e Recomendações
+  if (!response.ok) {
+    const err = await response.json() as any
+    throw new Error(err.error?.message || `OpenAI error ${response.status}`)
+  }
 
-Com base no contexto apresentado, aqui estão insights relevantes para o seu negócio:
+  const data = await response.json() as any
+  return data.choices[0]?.message?.content || 'Sem resposta da IA.'
+}
 
-**🎯 Ponto Principal**
-${matchedTopic ? `Para ${matchedTopic.topic}, é fundamental ter uma abordagem estruturada e consistente.` : 'Para alcançar seus objetivos, é importante ter clareza sobre os próximos passos.'}
+// ─── Fallback responses ──────────────────────────────────────
+function generateFallbackResponse(prompt: string): string {
+  const p = prompt.toLowerCase()
 
-**📋 Ações Recomendadas**
+  if (p.includes('proposta') || p.includes('comercial')) {
+    return `# Proposta Comercial — Guia Prático\n\nUma boa proposta comercial tem 5 elementos essenciais:\n\n**1. Entendimento do problema**\nMostre que você entende a dor do cliente antes de falar de você.\n\n**2. Solução clara**\nDescreva o serviço de forma objetiva, com escopo bem definido.\n\n**3. Resultados esperados**\nUse números sempre que possível: "redução de 30% no tempo" ou "aumento de 20% nas vendas".\n\n**4. Investimento justificado**\nApresente o preço com contexto — o que ele deixa de perder ou ganha.\n\n**5. Próximos passos**\nTermine com um CTA claro: "Aprovando até sexta, iniciamos na semana que vem."\n\n💡 **Dica:** Use o módulo de Documentos para gerar uma proposta completa com template profissional!`
+  }
 
-1. **Mapeie o cenário atual**
-   - Identifique pontos fortes e oportunidades
-   - Analise o que está funcionando
+  if (p.includes('marketing') || p.includes('redes sociais') || p.includes('instagram') || p.includes('conteúdo')) {
+    return `# Estratégia de Marketing Digital\n\n## Pilares de Conteúdo para Redes Sociais\n\n**📚 Educativo (40%)** — Dicas, tutoriais, dados do setor\n**🎯 Conversão (20%)** — Ofertas, promoções, CTAs diretos\n**💬 Engajamento (20%)** — Perguntas, enquetes, bastidores\n**🤝 Relacionamento (20%)** — Depoimentos, cases, humanização\n\n## Frequência ideal\n- **Instagram:** 4-5x/semana (Reels prioridade)\n- **LinkedIn:** 3x/semana (conteúdo mais longo)\n- **WhatsApp Business:** diário (status + lista de transmissão)\n\n## Métricas para acompanhar\n- Alcance e impressões\n- Taxa de engajamento (likes + comentários ÷ seguidores)\n- Cliques no link da bio\n- Mensagens diretas recebidas\n\n🎨 Use o **módulo de Imagens** para criar posts profissionais rapidamente!`
+  }
 
-2. **Defina objetivos claros**
-   - Use metas SMART (Específicas, Mensuráveis, Atingíveis, Relevantes, Temporais)
-   - Priorize as ações de maior impacto
+  if (p.includes('preço') || p.includes('precific') || p.includes('cobrar') || p.includes('valor')) {
+    return `# Como Precificar seus Serviços\n\n## Fórmula base\n**Preço = (Custos diretos + Custos indiretos + Pró-labore) × Margem**\n\n## Métodos principais\n\n**💰 Por hora**\n- Calcule: Quanto quer ganhar no mês ÷ horas disponíveis\n- Exemplo: R$ 8.000 ÷ 120h = R$ 67/hora + margem = **~R$ 100/hora**\n\n**📦 Por projeto (pacote)**\n- Estime as horas, multiplique pelo valor/hora\n- Adicione 20% de buffer para imprevistos\n- Mais previsível para o cliente\n\n**🔄 Recorrente (retainer)**\n- Ideal para serviços contínuos\n- Dê 10-15% de desconto em troca de compromisso mensal\n- Muito mais estabilidade financeira\n\n## Erros comuns\n❌ Cobrar pelo tempo em vez de pelo resultado\n❌ Não calcular impostos (MEI: 5-6%, ME: 15-20%)\n❌ Dar desconto sem contrapartida\n\n✅ **Dica de ouro:** pesquise o mercado, mas posicione pelo valor que entrega, não pelo menor preço.`
+  }
 
-3. **Execute com consistência**
-   - Estabeleça uma rotina
-   - Meça resultados regularmente
+  if (p.includes('cliente') || p.includes('prospecção') || p.includes('vendas') || p.includes('lead')) {
+    return `# Estratégia de Prospecção de Clientes\n\n## Canais mais eficazes para pequenos negócios\n\n**1. Indicações (melhor ROI)**\n- Peça ativamente para clientes satisfeitos indicarem\n- Crie um programa de indicação com benefícios\n- Mantenha relacionamento pós-venda ativo\n\n**2. LinkedIn (B2B)**\n- Otimize seu perfil com palavras-chave do seu nicho\n- Conecte-se com decisores e comente em posts relevantes\n- Publique cases e resultados regularmente\n\n**3. WhatsApp Business**\n- Catálogo de serviços atualizado\n- Status com conteúdo e ofertas\n- Lista de transmissão segmentada\n\n**4. Google Meu Negócio**\n- Perfil completo com fotos e serviços\n- Responda todas as avaliações\n- Poste atualizações semanais\n\n## Script de abordagem\n1. Pesquise o prospect antes de contatar\n2. Personalize a mensagem com algo específico do negócio dele\n3. Foque no problema que você resolve, não no seu serviço\n4. Termine com uma pergunta aberta ou CTA suave\n\n📄 Use o módulo de Documentos para criar e-mails de prospecção profissionais!`
+  }
 
-4. **Itere e melhore**
-   - Aprenda com os dados
-   - Ajuste a estratégia conforme necessário
-
-**💡 Dica Especial**
-Use os módulos do Studio IA para criar documentos, imagens e landing pages que suportem suas ações!
-
-Tem alguma dúvida específica sobre algum desses pontos? Posso aprofundar qualquer aspecto! 🚀`
+  return `# Resposta da IA Studio\n\nEntendi sua mensagem: **"${prompt.substring(0, 80)}${prompt.length > 80 ? '...' : ''}"**\n\n## Análise e Recomendações\n\nCom base no contexto apresentado, aqui estão os pontos mais relevantes para o seu negócio:\n\n**🎯 Foco principal**\nIdentifique qual é o maior gargalo atual — se é captação de clientes, conversão, entrega ou retenção — e ataque um problema de cada vez.\n\n**📋 Próximos passos práticos**\n\n1. **Mapeie onde você está agora** — documente processos, métricas e resultados atuais\n2. **Defina o objetivo com prazo** — use metas SMART (Específicas, Mensuráveis, Atingíveis, Relevantes, Temporais)\n3. **Execute em ciclos curtos** — teste em 2 semanas, meça, ajuste, repita\n4. **Documente o que funciona** — crie processos replicáveis\n\n**💡 Dica especial**\nPara avançar mais rápido, use os módulos do Studio IA para criar documentos, imagens e landing pages que suportem suas ações!\n\nPosso aprofundar qualquer aspecto específico. Qual ponto você quer explorar mais? 🚀\n\n> ⚙️ *Configure sua chave OpenAI em Configurações para respostas com IA real e avançada.*`
 }
 
 export default chatRoutes

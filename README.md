@@ -1,243 +1,147 @@
-# 🧠 Studio IA para Negócios
+# Studio IA para Negócios
 
-> **Uma central de criação com IA para pequenos negócios criarem documentos, imagens e páginas em um só lugar.**
+## Visão Geral
+SaaS all-in-one com Inteligência Artificial para pequenos negócios, autônomos, consultores, advogados, clínicas e agências.
 
-## 🌐 URL do App
-
-- **Aplicação:** https://3000-injnaik7uiovasl1labk9-b9b802c4.sandbox.novita.ai
-- **Conta Demo:** `ana@exemplo.com` / `demo123` (Plano Pro)
-
----
+## 🔗 URLs
+- **App (sandbox):** https://3000-injnaik7uiovasl1labk9-b9b802c4.sandbox.novita.ai
+- **Login demo:** ana@exemplo.com / demo123
+- **Segundo usuário:** carlos@exemplo.com / demo123
 
 ## ✅ Funcionalidades Implementadas
 
-### 🌍 Landing Page Pública
-- Headline e proposta de valor impactante
-- Seção de funcionalidades com 6 cards
-- Seção "Como Funciona" em 3 passos
-- Casos de uso reais por segmento
-- Depoimentos de clientes
-- Tabela comparativa de planos (Grátis vs Pro)
-- CTA duplo para conversão
-- Design premium e moderno
+### Módulos Públicos
+- **Landing Page** — Hero, benefícios, casos de uso, planos, depoimentos, CTA, rodapé
+- **Autenticação** — Login, cadastro, JWT, recuperação, Google OAuth (mock), dados demo
 
-### 🔐 Autenticação
-- Login com e-mail e senha
-- Cadastro de nova conta
-- JWT com expiração de 7 dias
-- Proteção de rotas (middleware)
-- Conta demo pré-configurada
+### Módulos Privados (pós-login)
+- **Dashboard** — Boas-vindas, ações rápidas, barras de uso, itens recentes
+- **Chat IA** — Múltiplas sessões, histórico, Markdown, sugestões rápidas, exportar, salvar como doc
+- **Gerador de Documentos** — 8 templates com wizard, editor em tela cheia, preview Markdown, export PDF/print, melhoria com IA
+- **Gerador de Imagens** — 6 tipos + 6 estilos, galeria grid/lista, preview modal, download, integração DALL-E 3
+- **Gerador de Landing Pages** — Wizard completo, editor HTML ao vivo, preview iframe, modo desktop/tablet/mobile, melhoria com IA
+- **Sistema de Projetos** — Criar/editar/excluir, cores, view grid/lista, detalhe do projeto com todos os assets
+- **Conta & Assinatura** — Perfil, alterar senha, uso do plano, comparativo grátis vs Pro, configurações de integrações
+- **Analytics** — Gráfico de uso 6 meses, totais, templates mais usados, atividade recente
+- **Configurações** — Chave OpenAI (Chat + DALL-E), Stripe (pagamentos reais)
 
-### 📊 Dashboard Principal
-- Boas-vindas personalizadas
-- Ações rápidas (Chat, Documentos, Imagens, Landing Pages)
-- Barras de uso do plano mensal
-- Projetos recentes
-- Documentos recentes
-- Imagens recentes (galeria)
-- Conversas recentes
-- Indicador de plano e botão de upgrade
+## 🤖 Integrações com IA
 
-### 💬 Chat com IA
-- Criação de múltiplas sessões
-- Histórico completo de conversas
-- Respostas em Markdown renderizado
-- Indicador de digitação animado
-- Sugestões de prompts iniciais
-- Renomeação automática por prompt
-- Excluir sessões
+### OpenAI (configurar em Conta > Configurações)
+- **Chat IA:** usa GPT-4o-mini (sem chave usa respostas de fallback profissionais)
+- **Melhorar documentos:** reescrita via GPT-4o-mini
+- **Geração de imagens:** usa DALL-E 3 (sem chave usa imagens Unsplash por categoria)
+- **Melhorar landing pages:** reescrita via GPT-4o-mini
 
-### 📄 Módulo de Documentos
-- **8 templates disponíveis:**
-  - Proposta Comercial
-  - Orçamento
-  - Contrato Simples
-  - Apresentação de Serviços
-  - E-mail Comercial
-  - Copy para Anúncio
-  - Posts para Redes Sociais
-  - Descrição de Produto/Serviço
-- Formulário guiado por template
-- Geração com IA (conteúdo contextual)
-- Editor inline de texto
-- Status de rascunho/finalizado
-- Histórico de documentos
+### Stripe (configurar em Conta > Configurações)
+- Checkout real para assinatura Pro
+- Portal do cliente para gerenciar assinatura
+- Sem chave: modo demo (upgrade gratuito)
 
-### 🖼️ Módulo de Imagens
-- 6 tipos de peça: Post Social, Banner, Capa, Criativo de Anúncio, Thumbnail, Logo
-- 6 estilos visuais: Minimalista, Moderno, Elegante, Vibrante, Corporativo, Casual
-- Seleção de formato (quadrado, horizontal, vertical)
-- Galeria com hover effects
-- Download e preview
-- Detecção de categoria por palavras-chave
-
-### 🌐 Módulo de Landing Pages
-- Formulário guiado completo
-- Geração de HTML completo com IA
-- Preview em iframe escalado
-- Preview em nova aba
-- Editor de título
-- Status de publicação
-
-### 📁 Sistema de Projetos
-- Criar projetos com nome, descrição e cor
-- 8 cores disponíveis
-- Editar e excluir projetos
-- Detalhe do projeto com todos os recursos associados
-- Contador por tipo de recurso
-
-### 👤 Conta & Assinatura
-- Visualização de perfil
-- Edição de nome
-- Barras de uso mensal detalhadas
-- Comparativo Grátis vs Pro
-- Botão de upgrade (demo)
-- Botão de sair
-
----
-
-## 🗄️ Banco de Dados (Cloudflare D1)
-
-### Tabelas
+## 📊 Estrutura de Dados
 | Tabela | Descrição |
 |--------|-----------|
-| `users` | Usuários cadastrados |
-| `subscriptions` | Assinaturas dos usuários |
-| `projects` | Projetos organizacionais |
-| `chat_sessions` | Sessões de chat |
-| `chat_messages` | Mensagens individuais |
-| `documents` | Documentos gerados |
-| `images` | Imagens geradas |
-| `landing_pages` | Landing pages criadas |
-| `usage_logs` | Histórico de uso por mês |
-| `auth_sessions` | Sessões de autenticação |
+| users | Usuários + plano (free/pro) |
+| subscriptions | Assinaturas e status |
+| projects | Projetos com cor e descrição |
+| chat_sessions | Sessões de chat |
+| chat_messages | Mensagens (user/assistant) |
+| documents | Documentos com content Markdown |
+| images | Imagens com URL e metadados |
+| landing_pages | Páginas com HTML completo |
+| usage_logs | Logs de uso mensal |
+| user_settings | Chaves OpenAI e Stripe por usuário |
 
----
-
-## 📋 Limites por Plano
-
+## 🎯 Planos
 | Recurso | Grátis | Pro |
 |---------|--------|-----|
-| Mensagens Chat/mês | 30 | 500 |
+| Chat/mês | 30 | 500 |
 | Documentos/mês | 5 | 100 |
 | Imagens/mês | 5 | 50 |
 | Landing Pages/mês | 2 | 20 |
 | Projetos | 3 | 50 |
+| Templates | 4 básicos | Todos |
 
----
+## 🛠️ Tech Stack
+- **Backend:** Hono (TypeScript) + Cloudflare Workers
+- **Banco de dados:** Cloudflare D1 (SQLite distribuído)
+- **Autenticação:** JWT com jose (HS256, 7 dias)
+- **Senhas:** SHA-256 + salt
+- **Frontend:** Vanilla JS SPA + Tailwind CSS CDN + Font Awesome
+- **Deploy:** Cloudflare Pages
 
-## 🏗️ Arquitetura
+## 🚀 API Endpoints (30+)
 
-```
-webapp/
-├── src/
-│   ├── index.ts              # App principal Hono
-│   ├── types.ts              # TypeScript types
-│   ├── lib/
-│   │   └── auth.ts           # JWT + hashing
-│   ├── middleware/
-│   │   └── auth.ts           # Auth middleware
-│   └── routes/
-│       ├── auth.ts           # /api/auth/*
-│       ├── users.ts          # /api/users/*
-│       ├── projects.ts       # /api/projects/*
-│       ├── chat.ts           # /api/chat/*
-│       ├── documents.ts      # /api/documents/*
-│       ├── images.ts         # /api/images/*
-│       └── landingPages.ts   # /api/landing-pages/*
-├── public/static/
-│   ├── app.js               # Landing + Auth + Utilities
-│   ├── chat_docs.js         # Chat + Documents modules
-│   ├── images_lp.js         # Images + Landing Pages modules
-│   └── projects_account.js  # Projects + Account modules
-├── migrations/
-│   ├── 0001_initial.sql     # Schema
-│   └── 0002_seed_data.sql   # Dados demo
-└── ecosystem.config.cjs     # PM2 config
-```
+### Auth (`/api/auth`)
+- POST `/login` — Login com e-mail/senha
+- POST `/register` — Cadastro
+- GET `/me` — Usuário atual
 
----
+### Users (`/api/users`)
+- GET `/dashboard` — Dados do dashboard
+- GET `/account` — Dados da conta (perfil + uso + limites)
+- GET `/profile` — Perfil + uso detalhado
+- PUT `/profile` — Atualizar nome
+- PUT `/password` — Alterar senha
+- POST `/upgrade` — Upgrade para Pro (demo)
 
-## 🚀 Stack Técnica
+### Chat (`/api/chat`)
+- GET/POST `/sessions` — Listar/criar sessões
+- GET `/sessions/:id` — Sessão com mensagens
+- POST `/sessions/:id/messages` — Enviar mensagem (OpenAI ou fallback)
+- PUT/DELETE `/sessions/:id` — Renomear/excluir
 
-- **Backend:** Hono Framework (Edge-native)
-- **Runtime:** Cloudflare Workers / Pages
-- **Banco:** Cloudflare D1 (SQLite)
-- **Auth:** JWT com jose
-- **Frontend:** Vanilla JS + Tailwind CSS CDN
-- **Markdown:** marked.js
-- **Icons:** Font Awesome 6
-- **Build:** Vite + @hono/vite-build
+### Documents (`/api/documents`)
+- GET `/` — Listar documentos
+- GET `/templates` — Templates disponíveis
+- POST `/generate` — Gerar documento
+- GET/PUT/DELETE `/:id` — CRUD documento
 
----
+### Images (`/api/images`)
+- GET `/` + GET `/types` — Listar + tipos
+- POST `/generate` — Gerar imagem (DALL-E ou Unsplash)
+- GET/PUT/DELETE `/:id` — CRUD imagem
 
-## 🔑 Endpoints da API
+### Landing Pages (`/api/landing-pages`)
+- GET `/` — Listar
+- POST `/generate` — Gerar landing page
+- GET/PUT/DELETE `/:id` — CRUD
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/api/auth/register` | Cadastro |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/me` | Usuário atual |
-| GET | `/api/users/dashboard` | Dashboard data |
-| GET | `/api/users/profile` | Perfil + uso |
-| PUT | `/api/users/profile` | Atualizar perfil |
-| POST | `/api/users/upgrade` | Upgrade plano |
-| GET | `/api/projects` | Listar projetos |
-| POST | `/api/projects` | Criar projeto |
-| GET | `/api/projects/:id` | Detalhe projeto |
-| PUT | `/api/projects/:id` | Editar projeto |
-| DELETE | `/api/projects/:id` | Excluir projeto |
-| GET | `/api/chat/sessions` | Listar sessões |
-| POST | `/api/chat/sessions` | Nova sessão |
-| GET | `/api/chat/sessions/:id` | Sessão + mensagens |
-| POST | `/api/chat/sessions/:id/messages` | Enviar mensagem |
-| GET | `/api/documents` | Listar documentos |
-| GET | `/api/documents/templates` | Templates |
-| POST | `/api/documents/generate` | Gerar documento |
-| GET | `/api/documents/:id` | Ver documento |
-| PUT | `/api/documents/:id` | Editar documento |
-| GET | `/api/images` | Listar imagens |
-| POST | `/api/images/generate` | Gerar imagem |
-| GET | `/api/landing-pages` | Listar LPs |
-| POST | `/api/landing-pages/generate` | Gerar LP |
-| GET | `/api/landing-pages/:id/preview` | Preview HTML |
+### Projects (`/api/projects`)
+- GET/POST `/` — Listar/criar
+- GET/PUT/DELETE `/:id` — CRUD
 
----
+### Settings (`/api/settings`)
+- GET `/` — Obter configurações (chaves mascaradas)
+- POST `/` — Salvar chaves OpenAI/Stripe
 
-## 🚀 Como Executar
+### Analytics (`/api/analytics`)
+- GET `/` — Totais + gráfico 6 meses + atividade recente
 
-```bash
-# Instalar dependências
-npm install
+### Stripe (`/api/stripe`)
+- POST `/checkout` — Criar sessão de pagamento
+- POST `/webhook` — Webhook Stripe
 
-# Build
-npm run build
+## 📱 Responsividade
+- Sidebar colapsável em mobile
+- Layout responsivo em todos os módulos
+- Touch-friendly
 
-# Aplicar migrations
-npm run db:migrate:local
+## 🔒 Segurança
+- JWT com expiração de 7 dias
+- Senhas com SHA-256 + salt
+- Chaves de API mascaradas no retorno
+- Middleware de autenticação em todas as rotas privadas
+- Limites de uso por plano
 
-# Iniciar servidor
-pm2 start ecosystem.config.cjs
+## Deployment
+- **Plataforma:** Cloudflare Pages
+- **Status:** ✅ Desenvolvimento ativo
+- **Última atualização:** Março 2026
 
-# Ou desenvolvimento
-npm run dev:sandbox
-```
-
----
-
-## 📈 Próximos Passos (Roadmap)
-
-- [ ] Integração com OpenAI/Anthropic para respostas reais
-- [ ] Upload de arquivos no chat
-- [ ] Exportação de documentos em PDF
-- [ ] Editor visual de landing pages (drag & drop)
-- [ ] Integração com Stripe para pagamentos
-- [ ] Autenticação com Google OAuth
-- [ ] Compartilhamento de projetos em equipe
-- [ ] Webhooks e integrações (Zapier, Make)
-- [ ] Dashboard de analytics avançado
-- [ ] PWA (app instalável)
-
----
-
-*Criado com Studio IA para Negócios | © 2024*
+## Como Usar (Demo)
+1. Acesse o app e clique em "Entrar"
+2. Use: **ana@exemplo.com** / **demo123**
+3. Explore Dashboard, Chat, Documentos, Imagens e Landing Pages
+4. Para IA real, vá em **Conta > Configurações** e insira sua chave OpenAI
+5. Para pagamentos reais, configure o Stripe nas mesmas configurações

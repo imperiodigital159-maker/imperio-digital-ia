@@ -171,6 +171,7 @@ async function render() {
   else if (route === '/projetos') renderProjects(main)
   else if (route.startsWith('/projetos/')) renderProjectDetail(main, route.split('/')[2])
   else if (route === '/conta') renderAccount(main)
+  else if (route === '/analytics') renderAnalytics(main)
   else renderDashboard(main)
 }
 
@@ -181,7 +182,7 @@ function renderAppShell() {
   return `
   <div class="flex h-screen overflow-hidden bg-slate-50">
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar w-64 bg-white border-r border-slate-100 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-sm">
+    <aside id="sidebar" class="sidebar w-64 bg-white border-r border-slate-100 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-sm -translate-x-full lg:translate-x-0 transition-transform duration-300">
       <div class="p-5 border-b border-slate-100">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
@@ -203,8 +204,9 @@ function renderAppShell() {
           { icon: 'fa-image', label: 'Imagens', route: '/imagens' },
           { icon: 'fa-globe', label: 'Landing Pages', route: '/landing-pages' },
           { icon: 'fa-folder', label: 'Projetos', route: '/projetos' },
+          { icon: 'fa-chart-bar', label: 'Analytics', route: '/analytics' },
         ].map(item => `
-          <button onclick="navigate('${item.route}')" class="sidebar-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 ${currentRoute === item.route || currentRoute.startsWith(item.route + '/') ? 'active' : ''}" id="nav-${item.route.replace('/', '').replace('-', '')}">
+          <button onclick="navigate('${item.route}'); closeSidebar()" class="sidebar-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 ${currentRoute === item.route || currentRoute.startsWith(item.route + '/') ? 'active' : ''}" id="nav-${item.route.replace(/\//g, '').replace(/-/g, '')}">
             <i class="fas ${item.icon} w-4 text-center"></i>
             <span>${item.label}</span>
           </button>
@@ -212,7 +214,7 @@ function renderAppShell() {
         
         <div class="pt-4 mt-4 border-t border-slate-100">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-3">Conta</p>
-          <button onclick="navigate('/conta')" class="sidebar-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 ${currentRoute === '/conta' ? 'active' : ''}">
+          <button onclick="navigate('/conta'); closeSidebar()" class="sidebar-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 ${currentRoute === '/conta' ? 'active' : ''}">
             <i class="fas fa-user-circle w-4 text-center"></i>
             <span>Minha Conta</span>
           </button>
@@ -274,13 +276,28 @@ function initSidebar() {
   qsa('[id^="nav-"]').forEach(el => {
     el.classList.remove('active')
   })
+  // On mobile, hide sidebar by default
+  if (window.innerWidth < 1024) {
+    const sidebar = document.getElementById('sidebar')
+    if (sidebar) sidebar.classList.add('-translate-x-full')
+  }
 }
 
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar')
   const overlay = document.getElementById('sidebar-overlay')
+  if (!sidebar) return
   sidebar.classList.toggle('-translate-x-full')
-  overlay.classList.toggle('hidden')
+  if (overlay) overlay.classList.toggle('hidden')
+}
+
+function closeSidebar() {
+  if (window.innerWidth < 1024) {
+    const sidebar = document.getElementById('sidebar')
+    const overlay = document.getElementById('sidebar-overlay')
+    if (sidebar) sidebar.classList.add('-translate-x-full')
+    if (overlay) overlay.classList.add('hidden')
+  }
 }
 
 function logout() {
@@ -583,7 +600,7 @@ function renderAuthPage(mode) {
   const isLogin = mode === 'login'
   return `
   <div class="min-h-screen flex" style="background: linear-gradient(135deg, #fafafe, #f0f4ff)">
-    <!-- Left panel -->
+    <!-- Left panel — hidden on mobile -->
     <div class="hidden lg:flex flex-col justify-between w-1/2 gradient-bg p-12">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
@@ -596,10 +613,11 @@ function renderAuthPage(mode) {
         <p class="text-white/70 text-lg mb-8">Documentos, imagens, páginas e muito mais para o seu negócio crescer.</p>
         <div class="space-y-4">
           ${[
-            { icon: 'fa-comments', text: 'Chat inteligente para estratégias de negócio' },
+            { icon: 'fa-comments', text: 'Chat com IA real (OpenAI GPT-4o-mini)' },
             { icon: 'fa-file-lines', text: 'Propostas, contratos e e-mails em minutos' },
-            { icon: 'fa-image', text: 'Imagens e criativos profissionais com IA' },
+            { icon: 'fa-image', text: 'Imagens e criativos profissionais' },
             { icon: 'fa-globe', text: 'Landing pages que convertem' },
+            { icon: 'fa-chart-bar', text: 'Analytics e métricas de uso' },
           ].map(f => `
           <div class="flex items-center gap-3 text-white/80">
             <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
@@ -613,60 +631,71 @@ function renderAuthPage(mode) {
     </div>
 
     <!-- Right panel -->
-    <div class="flex-1 flex items-center justify-center p-8">
+    <div class="flex-1 flex items-center justify-center p-6 sm:p-8">
       <div class="w-full max-w-md">
+        <!-- Mobile logo -->
         <div class="lg:hidden flex items-center gap-3 mb-8">
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
             <i class="fas fa-brain text-white text-sm"></i>
           </div>
-          <span class="font-bold text-gray-900">Studio IA</span>
+          <span class="font-bold text-gray-900">Studio IA para Negócios</span>
         </div>
-        
+
         <h1 class="text-3xl font-black text-gray-900 mb-2">${isLogin ? 'Bem-vindo de volta!' : 'Criar conta grátis'}</h1>
-        <p class="text-gray-500 mb-8">${isLogin ? 'Entre para acessar seu workspace.' : 'Comece a criar com IA em segundos.'}</p>
+        <p class="text-gray-500 mb-6">${isLogin ? 'Entre para acessar seu workspace.' : 'Comece a criar com IA em segundos.'}</p>
+
+        <!-- Google OAuth button -->
+        <a href="/api/oauth/google" class="flex items-center justify-center gap-3 w-full border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-all mb-4 shadow-sm">
+          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continuar com Google
+        </a>
+
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 h-px bg-gray-200"></div>
+          <span class="text-xs text-gray-400 font-medium">ou com e-mail</span>
+          <div class="flex-1 h-px bg-gray-200"></div>
+        </div>
 
         <!-- Demo hint -->
-        ${isLogin ? `<div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-6 text-sm text-indigo-700">
-          <p class="font-semibold mb-1">🎯 Conta demo disponível:</p>
-          <p>E-mail: <strong>ana@exemplo.com</strong></p>
-          <p>Senha: <strong>demo123</strong></p>
+        ${isLogin ? `<div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 mb-4 text-sm text-indigo-700">
+          <p class="font-semibold mb-1">🎯 Conta demo:</p>
+          <p>E-mail: <strong>ana@exemplo.com</strong> · Senha: <strong>demo123</strong></p>
         </div>` : ''}
 
         <form id="auth-form" class="space-y-4">
           ${!isLogin ? `<div>
             <label class="block text-sm font-medium text-gray-700 mb-1.5">Nome completo</label>
-            <input id="auth-name" type="text" class="input-field w-full" placeholder="Seu nome" required>
+            <input id="auth-name" type="text" class="input-field w-full" placeholder="Seu nome completo" required autocomplete="name">
           </div>` : ''}
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1.5">E-mail</label>
-            <input id="auth-email" type="email" class="input-field w-full" placeholder="seu@email.com" required value="${isLogin ? 'ana@exemplo.com' : ''}">
+            <input id="auth-email" type="email" class="input-field w-full" placeholder="seu@email.com" required autocomplete="email" value="${isLogin ? 'ana@exemplo.com' : ''}">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1.5">Senha</label>
             <div class="relative">
-              <input id="auth-password" type="password" class="input-field w-full pr-10" placeholder="${isLogin ? 'Sua senha' : 'Mínimo 6 caracteres'}" required value="${isLogin ? 'demo123' : ''}">
+              <input id="auth-password" type="password" class="input-field w-full pr-10" placeholder="${isLogin ? 'Sua senha' : 'Mínimo 6 caracteres'}" required autocomplete="${isLogin ? 'current-password' : 'new-password'}" value="${isLogin ? 'demo123' : ''}">
               <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                 <i id="eye-icon" class="fas fa-eye text-sm"></i>
               </button>
             </div>
           </div>
-          
-          <button type="submit" id="auth-btn" class="w-full btn-primary py-3.5 rounded-xl font-bold text-base mt-2">
+
+          <button type="submit" id="auth-btn" class="w-full btn-primary py-3.5 rounded-xl font-bold text-base mt-1">
             ${isLogin ? '<i class="fas fa-sign-in-alt mr-2"></i>Entrar na conta' : '<i class="fas fa-user-plus mr-2"></i>Criar conta gratuita'}
           </button>
-          
+
           <div id="auth-error" class="hidden bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl p-3 text-center"></div>
         </form>
 
-        <p class="text-center text-gray-500 text-sm mt-6">
+        <p class="text-center text-gray-500 text-sm mt-5">
           ${isLogin ? 'Não tem conta?' : 'Já tem conta?'}
           <button onclick="navigate('${isLogin ? '/cadastro' : '/login'}')" class="text-indigo-600 font-semibold hover:underline ml-1">
             ${isLogin ? 'Criar agora' : 'Fazer login'}
           </button>
         </p>
-        
-        <div class="text-center mt-4">
-          <button onclick="navigate('/')" class="text-gray-400 text-sm hover:text-gray-600">
+        <div class="text-center mt-3">
+          <button onclick="navigate('/')" class="text-gray-400 text-sm hover:text-gray-600 transition-colors">
             <i class="fas fa-arrow-left mr-1"></i>Voltar ao início
           </button>
         </div>
@@ -914,3 +943,34 @@ function setBreadcrumb(text) {
   const bc = document.getElementById('breadcrumb')
   if (bc) bc.innerHTML = `<span class="text-gray-800 font-semibold">${text}</span>`
 }
+
+// ============================================================
+// OAUTH - Handle Google callback token in hash
+// ============================================================
+function checkOAuthHash() {
+  const hash = window.location.hash
+  if (hash.includes('oauth_token=')) {
+    const params = new URLSearchParams(hash.slice(1))
+    const token = params.get('oauth_token')
+    const name = params.get('user_name')
+    const plan = params.get('user_plan')
+    if (token) {
+      setToken(token)
+      currentUser = { name: decodeURIComponent(name || 'Usuário'), plan: plan || 'free' }
+      localStorage.setItem('studio_user', JSON.stringify(currentUser))
+      window.history.replaceState({}, '', '/dashboard')
+      currentRoute = '/dashboard'
+      showToast(`Bem-vindo, ${decodeURIComponent(name || 'Usuário')}! Login com Google realizado.`, 'success')
+      render()
+    }
+  }
+}
+
+// Call on init
+checkOAuthHash()
+
+// ============================================================
+// INIT
+// ============================================================
+currentRoute = window.location.pathname || '/'
+render()

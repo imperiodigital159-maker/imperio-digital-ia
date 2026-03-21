@@ -65,8 +65,26 @@ imageRoutes.post('/generate', async (c) => {
     return c.json({ error: 'Prompt e tipo de imagem são obrigatórios' }, 400)
   }
   
-  // Use Unsplash for demo images based on prompt keywords
-  const imageUrl = getStockImage(prompt, image_type, style)
+  // Try DALL-E first if OpenAI is configured
+  let imageUrl: string
+  let usedDalle = false
+
+  try {
+    const settingsRow = await c.env.DB.prepare(
+      'SELECT openai_key FROM user_settings WHERE user_id = ?'
+    ).bind(userId).first() as any
+
+    if (settingsRow?.openai_key) {
+      imageUrl = await generateWithDallE(settingsRow.openai_key, prompt, image_type, style, colors, cta)
+      usedDalle = true
+    } else {
+      imageUrl = getStockImage(prompt, image_type, style)
+    }
+  } catch (err: any) {
+    console.error('DALL-E error:', err.message)
+    imageUrl = getStockImage(prompt, image_type, style)
+  }
+
   const imageTitle = title || `${IMAGE_TYPES[image_type as keyof typeof IMAGE_TYPES] || image_type} - ${new Date().toLocaleDateString('pt-BR')}`
   
   const id = generateId()
@@ -79,7 +97,7 @@ imageRoutes.post('/generate', async (c) => {
     .bind(generateId(), userId, 'create', 'image', id, monthYear).run()
   
   const image = await c.env.DB.prepare('SELECT * FROM images WHERE id = ?').bind(id).first()
-  return c.json({ image })
+  return c.json({ image, used_dalle: usedDalle })
 })
 
 // Get image
@@ -107,6 +125,59 @@ imageRoutes.delete('/:id', async (c) => {
   await c.env.DB.prepare('DELETE FROM images WHERE id = ? AND user_id = ?').bind(c.req.param('id'), userId).run()
   return c.json({ success: true })
 })
+
+// ─── DALL-E Integration ──────────────────────────────────────
+async function generateWithDallE(apiKey: string, prompt: string, imageType: string, style?: string, colors?: string, cta?: string): Promise<string> {
+  const styleDescriptions: Record<string, string> = {
+    minimalista: 'minimalist, clean, white background, simple design',
+    moderno: 'modern, tech-style, gradient colors, sleek',
+    elegante: 'elegant, premium, luxury, sophisticated',
+    vibrante: 'vibrant, colorful, eye-catching, bold colors',
+    corporativo: 'corporate, professional, business, formal',
+    casual: 'casual, friendly, warm, approachable'
+  }
+
+  const typeDescriptions: Record<string, string> = {
+    post_social: 'square social media post for Instagram',
+    banner: 'promotional horizontal banner',
+    capa: 'profile cover image',
+    criativo_anuncio: 'advertising creative for Facebook/Instagram Ads',
+    thumbnail: 'YouTube thumbnail or blog post image',
+    logo_concept: 'logo concept design'
+  }
+
+  const fullPrompt = [
+    `Create a ${typeDescriptions[imageType] || 'marketing image'} for a Brazilian business.`,
+    `Description: ${prompt}`,
+    style && styleDescriptions[style] ? `Style: ${styleDescriptions[style]}` : '',
+    colors ? `Colors: ${colors}` : '',
+    cta ? `Include text: "${cta}"` : '',
+    'High quality, professional, marketing-ready. No watermarks.'
+  ].filter(Boolean).join(' ')
+
+  const response = await fetch('https://api.openai.com/v1/images/generations', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: 'dall-e-3',
+      prompt: fullPrompt,
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard',
+    })
+  })
+
+  if (!response.ok) {
+    const err = await response.json() as any
+    throw new Error(err.error?.message || `DALL-E error ${response.status}`)
+  }
+
+  const data = await response.json() as any
+  return data.data[0]?.url || ''
+}
 
 function getStockImage(prompt: string, imageType: string, style?: string): string {
   const lowerPrompt = prompt.toLowerCase()

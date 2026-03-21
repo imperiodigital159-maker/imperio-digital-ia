@@ -9,13 +9,17 @@ import documentRoutes from './routes/documents'
 import imageRoutes from './routes/images'
 import landingPageRoutes from './routes/landingPages'
 import userRoutes from './routes/users'
+import settingsRoutes from './routes/settings'
+import stripeRoutes from './routes/stripe'
+import oauthRoutes from './routes/oauth'
+import analyticsRoutes from './routes/analytics'
 
 const app = new Hono<HonoEnv>()
 
 // CORS
 app.use('/api/*', cors({
-  origin: ['http://localhost:3000', 'https://localhost:3000'],
-  credentials: true,
+  origin: '*',
+  credentials: false,
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }))
@@ -28,6 +32,10 @@ app.route('/api/documents', documentRoutes)
 app.route('/api/images', imageRoutes)
 app.route('/api/landing-pages', landingPageRoutes)
 app.route('/api/users', userRoutes)
+app.route('/api/settings', settingsRoutes)
+app.route('/api/stripe', stripeRoutes)
+app.route('/api/oauth', oauthRoutes)
+app.route('/api/analytics', analyticsRoutes)
 
 // Health check
 app.get('/api/health', (c) => c.json({ status: 'ok', service: 'Studio IA para Negócios' }))
