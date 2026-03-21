@@ -320,15 +320,15 @@ function renderLandingPage() {
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
             <i class="fas fa-brain text-black text-sm"></i>
           </div>
-          <span class="font-bold text-gray-900">Studio IA</span>
+          <span class="font-bold" style="color:#F5F0E8">Studio IA</span>
         </div>
-        <div class="hidden md:flex items-center gap-8 text-sm text-gray-600">
-          <a href="#funcionalidades" class="hover:text-yellow-500 transition-colors">Funcionalidades</a>
-          <a href="#como-funciona" class="hover:text-yellow-500 transition-colors">Como Funciona</a>
-          <a href="#planos" class="hover:text-yellow-500 transition-colors">Planos</a>
+        <div class="hidden md:flex items-center gap-8 text-sm" style="color:#A09880">
+          <a href="#funcionalidades" class="hover:text-yellow-400 transition-colors">Funcionalidades</a>
+          <a href="#como-funciona" class="hover:text-yellow-400 transition-colors">Como Funciona</a>
+          <a href="#planos" class="hover:text-yellow-400 transition-colors">Planos</a>
         </div>
         <div class="flex items-center gap-3">
-          <button onclick="navigate('/login')" class="text-sm text-gray-600 hover:text-yellow-500 font-medium transition-colors">Entrar</button>
+          <button onclick="navigate('/login')" class="text-sm font-medium transition-colors" style="color:#A09880">Entrar</button>
           <button onclick="navigate('/cadastro')" class="btn-primary px-5 py-2 rounded-xl text-sm font-semibold">Começar grátis</button>
         </div>
       </div>
@@ -336,13 +336,13 @@ function renderLandingPage() {
 
     <!-- Hero -->
     <section class="pt-32 pb-24 px-6 relative overflow-hidden" style="background: linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)">
-      <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-yellow-900/30 rounded-full opacity-40 blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-900/20 rounded-full opacity-40 blur-3xl"></div>
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl" style="background:radial-gradient(circle, rgba(212,175,55,0.15), transparent); opacity:0.8"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl" style="background:radial-gradient(circle, rgba(168,137,26,0.12), transparent); opacity:0.8"></div>
       </div>
       <div class="max-w-5xl mx-auto text-center relative">
-        <div class="inline-flex items-center gap-2 bg-yellow-900/20 border border-yellow-900/40 text-yellow-400 px-4 py-1.5 rounded-full text-sm font-medium mb-8">
-          <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8" style="background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.35); color:#D4AF37">
+          <span class="w-2 h-2 rounded-full animate-pulse" style="background:#D4AF37"></span>
           Plataforma de IA para Pequenos Negócios
         </div>
         <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight" style="color:#F5F0E8">
@@ -364,40 +364,68 @@ function renderLandingPage() {
       
       <!-- App preview -->
       <div class="max-w-5xl mx-auto mt-16 relative">
-        <div class="bg-white rounded-3xl shadow-2xl shadow-indigo-100 border border-gray-100 overflow-hidden">
-          <div class="bg-gray-50 px-4 py-3 flex items-center gap-2 border-b border-gray-100">
-            <div class="w-3 h-3 rounded-full bg-red-400"></div>
-            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
-            <div class="w-3 h-3 rounded-full bg-green-400"></div>
-            <div class="flex-1 bg-white rounded-lg mx-4 py-1 px-3 text-xs text-gray-400 text-center">studio-ia.negócios.app</div>
+        <!-- Glow effect behind preview -->
+        <div class="absolute inset-0 rounded-3xl blur-2xl opacity-20" style="background: radial-gradient(ellipse, #D4AF37, transparent 70%); transform: scale(0.9) translateY(20px)"></div>
+        <div class="relative rounded-3xl overflow-hidden" style="background:#111111; border:1px solid rgba(212,175,55,0.35); box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,175,55,0.1)">
+          <!-- Browser chrome -->
+          <div class="px-4 py-3 flex items-center gap-2" style="background:#0D0D0D; border-bottom:1px solid rgba(212,175,55,0.2)">
+            <div class="w-3 h-3 rounded-full" style="background:#FF5F57"></div>
+            <div class="w-3 h-3 rounded-full" style="background:#FFBD2E"></div>
+            <div class="w-3 h-3 rounded-full" style="background:#28C840"></div>
+            <div class="flex-1 rounded-lg mx-4 py-1 px-3 text-xs text-center" style="background:#1A1A1A; color:#6B6355; border:1px solid rgba(212,175,55,0.1)">studio-ia.negócios.app</div>
           </div>
-          <div class="flex" style="height: 380px">
-            <div class="w-52 bg-white border-r border-gray-100 p-4">
-              <div class="flex items-center gap-2 mb-6">
-                <div class="w-7 h-7 rounded-lg gradient-bg"></div>
-                <span class="text-xs font-bold text-gray-700">Studio IA</span>
+          <!-- App content -->
+          <div class="flex" style="height: 340px">
+            <!-- Sidebar preview -->
+            <div class="w-44 p-4 flex-shrink-0" style="background:#111111; border-right:1px solid rgba(212,175,55,0.15)">
+              <div class="flex items-center gap-2 mb-5">
+                <div class="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center">
+                  <i class="fas fa-brain text-black" style="font-size:10px"></i>
+                </div>
+                <span class="text-xs font-bold" style="color:#D4AF37">Studio IA</span>
               </div>
               ${['Dashboard','Chat IA','Documentos','Imagens','Landing Pages','Projetos'].map((item, i) => `
-              <div class="flex items-center gap-2 px-3 py-2 rounded-lg mb-1 text-xs font-medium ${i === 0 ? 'bg-yellow-900/20 text-yellow-500' : 'text-gray-500'}">
-                <div class="w-3 h-3 rounded ${i === 0 ? 'bg-indigo-400' : 'bg-gray-200'}"></div>${item}
+              <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg mb-1 text-xs font-medium" style="${i === 0 ? 'background:rgba(212,175,55,0.15); color:#D4AF37; border-left:2px solid #D4AF37; padding-left:8px' : 'color:#6B6355'}">
+                <div class="w-2.5 h-2.5 rounded flex-shrink-0" style="background:${i === 0 ? '#D4AF37' : '#2A2A2A'}"></div>${item}
               </div>`).join('')}
             </div>
-            <div class="flex-1 p-6 bg-slate-50">
-              <div class="flex items-center justify-between mb-5">
+            <!-- Main content preview -->
+            <div class="flex-1 p-5" style="background:#0A0A0A">
+              <!-- Welcome bar -->
+              <div class="rounded-xl p-3 mb-3 flex items-center justify-between" style="background:#111111; border:1px solid rgba(212,175,55,0.15)">
                 <div>
-                  <div class="h-4 bg-gray-200 rounded w-40 mb-1"></div>
-                  <div class="h-3 bg-gray-100 rounded w-56"></div>
+                  <div class="h-3 rounded mb-1" style="background:#2A2A2A; width:120px"></div>
+                  <div class="h-2 rounded" style="background:#1A1A1A; width:160px"></div>
                 </div>
-                <div class="flex gap-2">
-                  <div class="h-8 w-24 bg-yellow-900/30 rounded-lg"></div>
-                  <div class="h-8 w-24 gradient-bg rounded-lg"></div>
-                </div>
+                <div class="h-7 w-20 rounded-lg gradient-bg" style="opacity:0.9"></div>
               </div>
-              <div class="grid grid-cols-3 gap-3 mb-4">
-                ${['bg-yellow-900/20','bg-yellow-900/10','bg-green-50'].map(bg => `<div class="${bg} rounded-xl p-3"><div class="h-3 bg-white rounded w-1/2 mb-2"></div><div class="h-6 bg-white rounded w-3/4"></div></div>`).join('')}
+              <!-- Stats cards -->
+              <div class="grid grid-cols-3 gap-2 mb-3">
+                ${[
+                  { label: 'Chat', val: '12/30' },
+                  { label: 'Docs', val: '3/5' },
+                  { label: 'Imgs', val: '2/5' }
+                ].map(s => `
+                <div class="rounded-lg p-2" style="background:#111111; border:1px solid rgba(212,175,55,0.12)">
+                  <div class="text-xs mb-1" style="color:#6B6355">${s.label}</div>
+                  <div class="text-sm font-bold" style="color:#D4AF37">${s.val}</div>
+                  <div class="h-1 rounded-full mt-1" style="background:#1A1A1A">
+                    <div class="h-1 rounded-full gradient-bg" style="width:40%"></div>
+                  </div>
+                </div>`).join('')}
               </div>
-              <div class="grid grid-cols-2 gap-3">
-                ${['',''].map(() => `<div class="bg-white rounded-xl p-3 border border-gray-100"><div class="h-2 bg-gray-100 rounded w-3/4 mb-2"></div><div class="h-2 bg-gray-100 rounded w-1/2 mb-3"></div><div class="h-16 bg-slate-50 rounded-lg"></div></div>`).join('')}
+              <!-- Recent items -->
+              <div class="grid grid-cols-2 gap-2">
+                ${['Proposta Cliente A','Landing Page Promo'].map(title => `
+                <div class="rounded-lg p-2" style="background:#111111; border:1px solid rgba(212,175,55,0.1)">
+                  <div class="flex items-center gap-2 mb-1">
+                    <div class="w-5 h-5 rounded flex items-center justify-center" style="background:rgba(212,175,55,0.15)">
+                      <i class="fas fa-file-lines" style="color:#D4AF37; font-size:8px"></i>
+                    </div>
+                    <span class="text-xs truncate" style="color:#A09880">${title}</span>
+                  </div>
+                  <div class="h-8 rounded" style="background:#0A0A0A"></div>
+                </div>`).join('')}
               </div>
             </div>
           </div>
@@ -408,10 +436,10 @@ function renderLandingPage() {
     <!-- Social proof -->
     <div class="py-10" style="background:#0A0A0A; border-top:1px solid rgba(212,175,55,0.15); border-bottom:1px solid rgba(212,175,55,0.15)">
       <div class="max-w-5xl mx-auto px-6">
-        <p class="text-center text-gray-400 text-sm mb-6 uppercase tracking-wider font-medium">Ideal para profissionais de</p>
-        <div class="flex flex-wrap justify-center gap-8 text-gray-400">
+        <p class="text-center text-sm mb-6 uppercase tracking-wider font-medium" style="color:#6B6355">Ideal para profissionais de</p>
+        <div class="flex flex-wrap justify-center gap-8">
           ${['Consultorias', 'Clínicas', 'Agências', 'Advogados', 'Corretores', 'Freelancers', 'Coaches', 'E-commerce'].map(item => `
-          <span class="font-semibold text-gray-500">${item}</span>`).join('')}
+          <span class="font-semibold" style="color:#A09880">${item}</span>`).join('')}
         </div>
       </div>
     </div>
@@ -433,11 +461,11 @@ function renderLandingPage() {
             { icon: 'fa-chart-bar', color: 'orange', title: 'Painel de Controle', desc: 'Acompanhe seu uso, histórico de criações e métricas do plano com um dashboard profissional e intuitivo.' },
           ].map(f => `
           <div class="card p-6 group">
-            <div class="w-12 h-12 rounded-2xl bg-${f.color}-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <i class="fas ${f.icon} text-${f.color}-600"></i>
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style="background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.2)">
+              <i class="fas ${f.icon}" style="color:#D4AF37"></i>
             </div>
-            <h3 class="font-bold text-gray-900 text-lg mb-2">${f.title}</h3>
-            <p class="text-gray-500 text-sm leading-relaxed">${f.desc}</p>
+            <h3 class="font-bold text-lg mb-2" style="color:#F5F0E8">${f.title}</h3>
+            <p class="text-sm leading-relaxed" style="color:#A09880">${f.desc}</p>
           </div>`).join('')}
         </div>
       </div>
@@ -458,11 +486,11 @@ function renderLandingPage() {
           ].map(s => `
           <div class="text-center">
             <div class="w-16 h-16 rounded-3xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-900/30">
-              <i class="fas ${s.icon} text-white text-xl"></i>
+              <i class="fas ${s.icon} text-xl" style="color:#0A0A0A"></i>
             </div>
-            <div class="text-xs font-bold text-yellow-500 mb-2">PASSO ${s.n}</div>
-            <h3 class="font-bold text-gray-900 text-xl mb-2">${s.title}</h3>
-            <p class="text-gray-500">${s.desc}</p>
+            <div class="text-xs font-bold mb-2" style="color:#D4AF37">PASSO ${s.n}</div>
+            <h3 class="font-bold text-xl mb-2" style="color:#F5F0E8">${s.title}</h3>
+            <p style="color:#A09880">${s.desc}</p>
           </div>`).join('')}
         </div>
       </div>
@@ -477,20 +505,20 @@ function renderLandingPage() {
         </div>
         <div class="grid md:grid-cols-2 gap-6">
           ${[
-            { tag: 'Consultora de RH', title: 'Proposta comercial em 3 minutos', desc: 'Ana gera propostas profissionais para novos clientes usando o template de proposta comercial. O que levava 2 horas agora leva minutos.', icon: 'fa-briefcase', color: 'indigo' },
-            { tag: 'Clínica Odontológica', title: 'Posts diários para Instagram', desc: 'A clínica do Dr. Carlos cria 30 posts mensais para redes sociais com a IA. Engajamento aumentou 140% em 2 meses.', icon: 'fa-tooth', color: 'blue' },
+            { tag: 'Consultora de RH', title: 'Proposta comercial em 3 minutos', desc: 'Ana gera propostas profissionais para novos clientes usando o template de proposta comercial. O que levava 2 horas agora leva minutos.', icon: 'fa-briefcase' },
+            { tag: 'Clínica Odontológica', title: 'Posts diários para Instagram', desc: 'A clínica do Dr. Carlos cria 30 posts mensais para redes sociais com a IA. Engajamento aumentou 140% em 2 meses.', icon: 'fa-tooth' },
             { tag: 'Corretor de Imóveis', title: 'Landing pages para cada imóvel', desc: 'Pedro cria uma landing page personalizada para cada imóvel que vai vender. Conversão aumentou significativamente.', icon: 'fa-house', color: 'green' },
             { tag: 'Agência de Marketing', title: 'Criativos para anúncios rápidos', desc: 'A equipe da Marina gera criativos para anúncios dos clientes em minutos, acelerando as entregas e satisfação.', icon: 'fa-bullhorn', color: 'purple' },
           ].map(u => `
           <div class="card p-6">
             <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-${u.color}-100 flex items-center justify-center flex-shrink-0">
-                <i class="fas ${u.icon} text-${u.color}-600"></i>
+              <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style="background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.2)">
+                <i class="fas ${u.icon}" style="color:#D4AF37"></i>
               </div>
               <div>
-                <span class="tag text-${u.color}-600 bg-${u.color}-50 mb-2 inline-block">${u.tag}</span>
-                <h3 class="font-bold text-gray-900 mb-2">${u.title}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">${u.desc}</p>
+                <span class="tag mb-2 inline-block">${u.tag}</span>
+                <h3 class="font-bold mb-2" style="color:#F5F0E8">${u.title}</h3>
+                <p class="text-sm leading-relaxed" style="color:#A09880">${u.desc}</p>
               </div>
             </div>
           </div>`).join('')}
@@ -509,11 +537,11 @@ function renderLandingPage() {
             { name: 'Juliana Santos', role: 'Advogada Autônoma', text: 'Criar contratos e propostas ficou muito mais rápido. Profissionalismo que antes eu não conseguia sozinha.' },
           ].map(t => `
           <div class="card p-6">
-            <div class="flex gap-1 mb-3">${[1,2,3,4,5].map(() => '<i class="fas fa-star text-yellow-400 text-sm"></i>').join('')}</div>
-            <p class="text-gray-700 mb-4 italic leading-relaxed">"${t.text}"</p>
+            <div class="flex gap-1 mb-3">${[1,2,3,4,5].map(() => '<i class="fas fa-star text-sm" style="color:#D4AF37"></i>').join('')}</div>
+            <p class="mb-4 italic leading-relaxed" style="color:#D0C8B8">"${t.text}"</p>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center text-white font-bold">${t.name[0]}</div>
-              <div><p class="font-bold text-gray-900 text-sm">${t.name}</p><p class="text-xs text-gray-500">${t.role}</p></div>
+              <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center font-bold" style="color:#0A0A0A">${t.name[0]}</div>
+              <div><p class="font-bold text-sm" style="color:#F5F0E8">${t.name}</p><p class="text-xs" style="color:#6B6355">${t.role}</p></div>
             </div>
           </div>`).join('')}
         </div>
@@ -529,20 +557,20 @@ function renderLandingPage() {
         </div>
         <div class="grid md:grid-cols-2 gap-8">
           <div class="card p-8 border-2 border-gray-100">
-            <div class="text-gray-400 text-sm font-semibold uppercase tracking-wider mb-2">GRÁTIS</div>
-            <div class="text-4xl font-black text-gray-900 mb-1">R$ 0</div>
-            <div class="text-gray-500 text-sm mb-6">para sempre</div>
-            <ul class="space-y-3 mb-8 text-sm text-gray-600">
-              ${['30 mensagens de chat/mês','5 documentos/mês','5 imagens/mês','2 landing pages/mês','3 projetos','Templates básicos'].map(f => `<li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i>${f}</li>`).join('')}
+            <div class="text-sm font-semibold uppercase tracking-wider mb-2" style="color:#6B6355">GRÁTIS</div>
+            <div class="text-4xl font-black mb-1" style="color:#F5F0E8">R$ 0</div>
+            <div class="text-sm mb-6" style="color:#6B6355">para sempre</div>
+            <ul class="space-y-3 mb-8 text-sm" style="color:#A09880">
+              ${['30 mensagens de chat/mês','5 documentos/mês','5 imagens/mês','2 landing pages/mês','3 projetos','Templates básicos'].map(f => `<li class="flex items-center gap-2"><i class="fas fa-check" style="color:#D4AF37"></i>${f}</li>`).join('')}
             </ul>
             <button onclick="navigate('/cadastro')" class="w-full btn-secondary py-3 rounded-xl font-semibold">Começar grátis</button>
           </div>
           <div class="card p-8 border-2 border-yellow-500 relative overflow-hidden">
             <div class="absolute top-4 right-4 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">POPULAR</div>
             <div class="text-yellow-500 text-sm font-semibold uppercase tracking-wider mb-2">PRO</div>
-            <div class="text-4xl font-black text-gray-900 mb-1">R$ 97</div>
-            <div class="text-gray-500 text-sm mb-6">por mês</div>
-            <ul class="space-y-3 mb-8 text-sm text-gray-600">
+            <div class="text-4xl font-black mb-1" style="color:#F5F0E8">R$ 97</div>
+            <div class="text-sm mb-6" style="color:#6B6355">por mês</div>
+            <ul class="space-y-3 mb-8 text-sm" style="color:#A09880">
               ${['500 mensagens de chat/mês','100 documentos/mês','50 imagens/mês','20 landing pages/mês','50 projetos','Todos os templates','Prioridade no suporte','Exportação avançada'].map(f => `<li class="flex items-center gap-2"><i class="fas fa-check text-yellow-500"></i>${f}</li>`).join('')}
             </ul>
             <button onclick="navigate('/cadastro')" class="w-full btn-primary py-3 rounded-xl font-semibold">Assinar Pro</button>
@@ -773,7 +801,7 @@ async function renderDashboard(container) {
         </div>
         <div class="flex items-center gap-2">
           <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${isProPlan ? 'bg-yellow-900/30 text-yellow-400' : 'bg-gray-100 text-gray-600'}">
-            ${isProPlan ? '<i class="fas fa-star text-yellow-500"></i> Plano Pro' : '<i class="fas fa-user"></i> Plano Grátis'}
+            ${isProPlan ? '<i class="fas fa-star" style="color:#D4AF37"></i> Plano Pro' : '<i class="fas fa-user"></i> Plano Grátis'}
           </span>
           ${!isProPlan ? `<button onclick="navigate('/conta')" class="btn-primary px-4 py-1.5 rounded-xl text-sm font-semibold">Fazer upgrade</button>` : ''}
         </div>
@@ -787,11 +815,11 @@ async function renderDashboard(container) {
           { icon: 'fa-image', label: 'Nova Imagem', route: '/imagens', color: 'pink' },
           { icon: 'fa-globe', label: 'Nova Landing Page', route: '/landing-pages', color: 'blue' },
         ].map(a => `
-        <button onclick="navigate('${a.route}')" class="card p-4 text-center group">
+        <button onclick="navigate('${a.route}')" class="card p-4 text-center group" style="cursor:pointer">
           <div class="w-12 h-12 rounded-2xl bg-${a.color}-100 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
             <i class="fas ${a.icon} text-${a.color}-600"></i>
           </div>
-          <span class="text-sm font-semibold text-gray-700">${a.label}</span>
+          <span class="text-sm font-semibold" style="color:#D0C8B8">${a.label}</span>
         </button>`).join('')}
       </div>
 
@@ -813,14 +841,14 @@ async function renderDashboard(container) {
             <div class="rounded-xl p-4" style="background:#1A1A1A">
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2 text-sm font-medium text-gray-700">
-                  <i class="fas ${u.icon} text-${u.color}-500"></i>${u.label}
+                  <i class="fas ${u.icon}" style="color:#D4AF37"></i><span style="color:#D0C8B8">${u.label}</span>
                 </div>
-                <span class="text-xs text-gray-500">${u.used}/${u.limit}</span>
+                <span class="text-xs" style="color:#6B6355">${u.used}/${u.limit}</span>
               </div>
               <div class="rounded-full h-1.5 mb-1" style="background:#2A2A2A">
                 <div class="${barColor} h-1.5 rounded-full transition-all" style="width: ${pct}%"></div>
               </div>
-              <p class="text-xs text-gray-400">${pct}% utilizado</p>
+              <p class="text-xs" style="color:#6B6355">${pct}% utilizado</p>
             </div>`
           }).join('')}
         </div>
@@ -836,7 +864,7 @@ async function renderDashboard(container) {
           ${recentProjects.length > 0 ? `
           <div class="space-y-3">
             ${recentProjects.map(p => `
-            <div onclick="navigate('/projetos/${p.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group">
+            <div onclick="navigate('/projetos/${p.id}')" class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors group" onmouseover="this.style.background='rgba(212,175,55,0.05)'" onmouseout="this.style.background='transparent'">
               <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background: ${p.color}20">
                 <i class="fas fa-folder text-sm" style="color: ${p.color}"></i>
               </div>
@@ -863,7 +891,7 @@ async function renderDashboard(container) {
           ${recentDocs.length > 0 ? `
           <div class="space-y-3">
             ${recentDocs.map(d => `
-            <div onclick="navigate('/documentos/${d.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group">
+            <div onclick="navigate('/documentos/${d.id}')" class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors group" onmouseover="this.style.background='rgba(212,175,55,0.05)'" onmouseout="this.style.background='transparent'">
               <div class="w-9 h-9 rounded-xl bg-yellow-900/20 flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-file-lines text-yellow-400 text-sm"></i>
               </div>
@@ -871,7 +899,7 @@ async function renderDashboard(container) {
                 <p class="font-semibold text-gray-800 text-sm truncate group-hover:text-yellow-500 transition-colors">${d.title}</p>
                 <p class="text-xs" style="color:#6B6355">${d.template_type?.replace(/_/g, ' ')} • ${formatDate(d.created_at)}</p>
               </div>
-              <span class="tag ${d.status === 'draft' ? 'bg-yellow-50 text-yellow-600' : 'bg-green-50 text-green-600'}">${d.status === 'draft' ? 'Rascunho' : 'Finalizado'}</span>
+              <span class="tag" style="${d.status === 'draft' ? 'color:#FBBF24; background:rgba(234,179,8,0.1); border-color:rgba(234,179,8,0.3)' : 'color:#4ADE80; background:rgba(74,222,128,0.1); border-color:rgba(74,222,128,0.3)'}">${d.status === 'draft' ? 'Rascunho' : 'Finalizado'}</span>
             </div>`).join('')}
           </div>` : `
           <div class="text-center py-8" style="color:#A09880">
@@ -916,7 +944,7 @@ async function renderDashboard(container) {
           ${recentChats.length > 0 ? `
           <div class="space-y-3">
             ${recentChats.map(s => `
-            <div onclick="navigate('/chat/${s.id}')" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors group">
+            <div onclick="navigate('/chat/${s.id}')" class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors group" onmouseover="this.style.background='rgba(212,175,55,0.05)'" onmouseout="this.style.background='transparent'">
               <div class="w-9 h-9 rounded-xl bg-yellow-900/30 flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-comments text-yellow-500 text-sm"></i>
               </div>
