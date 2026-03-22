@@ -38,7 +38,7 @@ app.route('/api/oauth', oauthRoutes)
 app.route('/api/analytics', analyticsRoutes)
 
 // Health check
-app.get('/api/health', (c) => c.json({ status: 'ok', service: 'Studio IA para Negócios' }))
+app.get('/api/health', (c) => c.json({ status: 'ok', service: 'Império Digital IA' }))
 
 // Serve static files
 app.use('/static/*', serveStatic({ root: './' }))
@@ -57,21 +57,45 @@ app.get('*', async (c) => {
 
 function getAppHTML(): string {
   return `<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio IA para Negócios</title>
+  <title>Império Digital IA</title>
   <meta name="description" content="Uma central de criação com IA para pequenos negócios criarem documentos, imagens e páginas em um só lugar.">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind config MUST come before CDN script -->
+  <script>
+    window.tailwind = window.tailwind || {};
+    window.tailwindConfig = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#D4AF37', light: '#F0D060', dark: '#A8891A' }
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script>
+    if (window.tailwind && window.tailwind.config) {
+      tailwind.config = { darkMode: 'class', theme: { extend: { colors: { gold: '#D4AF37' } } } }
+    }
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     * { box-sizing: border-box; }
+    html, body { background-color: #0A0A0A !important; color: #F5F0E8 !important; }
     body { font-family: 'Inter', sans-serif; }
-    
+
+    /* ===== RESET ANTI-AZUL: Tailwind preflight override ===== */
+    /* Remove qualquer azul residual do Tailwind */
+    *, *::before, *::after { --tw-ring-color: rgba(212,175,55,0.5); }
+
     /* ===== TEMA PRETO & DOURADO ===== */
     :root {
       --gold: #D4AF37;
@@ -228,6 +252,35 @@ function getAppHTML(): string {
     /* Nav Plan badge */
     .bg-indigo-100.text-indigo-700 { background-color: var(--gold-muted) !important; color: var(--gold) !important; }
 
+    /* ===== NUCLEAR ANTI-BLUE OVERRIDE ===== */
+    /* Tailwind slate colors → pure black */
+    .bg-slate-900 { background-color: #0A0A0A !important; }
+    .bg-slate-800 { background-color: #111111 !important; }
+    .bg-slate-700 { background-color: #1A1A1A !important; }
+    .bg-slate-600 { background-color: #222222 !important; }
+    .bg-slate-500 { background-color: #2A2A2A !important; }
+    .bg-slate-400 { background-color: #333333 !important; }
+    .bg-slate-300 { background-color: #2A2A2A !important; }
+    .bg-slate-200 { background-color: #222222 !important; }
+    .bg-slate-50  { background-color: #111111 !important; }
+    /* Blue/Indigo completely removed */
+    [class*="bg-blue-"]   { background-color: rgba(212,175,55,0.1) !important; }
+    [class*="bg-indigo-"] { background-color: rgba(212,175,55,0.1) !important; }
+    [class*="bg-violet-"] { background-color: rgba(212,175,55,0.1) !important; }
+    /* Ensure all white backgrounds are dark */
+    .bg-white  { background-color: #1A1A1A !important; }
+    .bg-gray-50  { background-color: #111111 !important; }
+    .bg-gray-100 { background-color: #1A1A1A !important; }
+    .bg-gray-200 { background-color: #222222 !important; }
+    .bg-gray-300 { background-color: #2A2A2A !important; }
+    /* Borders dark */
+    [class*="border-slate-"] { border-color: rgba(212,175,55,0.15) !important; }
+    [class*="border-gray-"]  { border-color: rgba(212,175,55,0.15) !important; }
+    /* All text-gray stay warm */
+    [class*="text-slate-"] { color: #A09880 !important; }
+    /* Fix: black text on dark background */
+    .text-black { color: #0A0A0A !important; }
+
     /* ===== CUSTOM UTILITY CLASSES (used in JS-generated HTML) ===== */
     /* Background utilities */
     .bg-dark-2 { background-color: var(--black-2) !important; }
@@ -279,9 +332,33 @@ function getAppHTML(): string {
     .border-t-yellow-500 { border-top-color: var(--gold) !important; }
   </style>
 </head>
-<body class="bg-black text-gray-100" style="background-color: var(--black-2)">
+<body class="dark" style="background-color:#0A0A0A; color:#F5F0E8; font-family:'Inter',sans-serif">
   <div id="app"></div>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Override Tailwind after it loads -->
+  <style id="gold-override">
+    /* Applied AFTER Tailwind CDN to ensure black/gold theme wins */
+    .bg-white, [class~="bg-white"] { background-color: #1A1A1A !important; }
+    .bg-slate-50, [class~="bg-slate-50"] { background-color: #111111 !important; }
+    .bg-slate-100, [class~="bg-slate-100"] { background-color: #1A1A1A !important; }
+    .bg-gray-50, [class~="bg-gray-50"] { background-color: #111111 !important; }
+    .bg-gray-100, [class~="bg-gray-100"] { background-color: #1A1A1A !important; }
+    .bg-gray-200, [class~="bg-gray-200"] { background-color: #222222 !important; }
+    .text-gray-900 { color: #F5F0E8 !important; }
+    .text-gray-800 { color: #E8E0D0 !important; }
+    .text-gray-700 { color: #D0C8B8 !important; }
+    .text-gray-600 { color: #B8B0A0 !important; }
+    .text-gray-500 { color: #A09880 !important; }
+    .text-gray-400 { color: #6B6355 !important; }
+    .border-gray-100, .border-gray-200, .border-slate-100 { border-color: rgba(212,175,55,0.15) !important; }
+    .text-indigo-600, .text-indigo-700, .text-indigo-500 { color: #D4AF37 !important; }
+    .bg-indigo-50, .bg-indigo-100 { background-color: rgba(212,175,55,0.1) !important; }
+    .bg-indigo-500, .bg-indigo-600 { background: linear-gradient(135deg, #A8891A, #D4AF37) !important; }
+    [class*="bg-blue-"], [class*="bg-indigo-"], [class*="bg-violet-"] { background-color: rgba(212,175,55,0.08) !important; }
+    [class*="text-blue-"], [class*="text-violet-"] { color: #D4AF37 !important; }
+    .text-yellow-400, .text-yellow-500 { color: #D4AF37 !important; }
+    .bg-yellow-900\/30, .bg-yellow-900\/20, .bg-yellow-900\/10 { background-color: rgba(212,175,55,0.1) !important; }
+  </style>
   <script src="/static/app.js"></script>
   <script src="/static/chat_docs.js"></script>
   <script src="/static/images_lp.js"></script>

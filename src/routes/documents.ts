@@ -378,7 +378,7 @@ Gerado em ${date}
 
 [Conteúdo gerado para ${TEMPLATES[templateType]?.name || templateType}]
 
-Este documento foi criado com Studio IA para Negócios.`
+Este documento foi criado com Império Digital IA.`
   }
 }
 

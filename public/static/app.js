@@ -1,5 +1,5 @@
 // ============================================================
-// STUDIO IA PARA NEGÓCIOS - Frontend App
+// IMPÉRIO DIGITAL IA - Frontend App
 // ============================================================
 
 const API = '/api'
@@ -189,7 +189,7 @@ function renderAppShell() {
             <i class="fas fa-brain text-black text-sm"></i>
           </div>
           <div>
-            <h1 class="font-bold text-sm leading-tight" style="color:#F5F0E8">Studio IA</h1>
+            <h1 class="font-bold text-sm leading-tight" style="color:#F5F0E8">Império Digital IA</h1>
             <p class="text-xs" style="color:#6B6355">para Negócios</p>
           </div>
         </div>
@@ -320,7 +320,7 @@ function renderLandingPage() {
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
             <i class="fas fa-brain text-black text-sm"></i>
           </div>
-          <span class="font-bold" style="color:#F5F0E8">Studio IA</span>
+          <span class="font-bold" style="color:#F5F0E8">Império Digital IA</span>
         </div>
         <div class="hidden md:flex items-center gap-8 text-sm" style="color:#A09880">
           <a href="#funcionalidades" class="hover:text-yellow-400 transition-colors">Funcionalidades</a>
@@ -372,7 +372,7 @@ function renderLandingPage() {
             <div class="w-3 h-3 rounded-full" style="background:#FF5F57"></div>
             <div class="w-3 h-3 rounded-full" style="background:#FFBD2E"></div>
             <div class="w-3 h-3 rounded-full" style="background:#28C840"></div>
-            <div class="flex-1 rounded-lg mx-4 py-1 px-3 text-xs text-center" style="background:#1A1A1A; color:#6B6355; border:1px solid rgba(212,175,55,0.1)">studio-ia.negócios.app</div>
+            <div class="flex-1 rounded-lg mx-4 py-1 px-3 text-xs text-center" style="background:#1A1A1A; color:#6B6355; border:1px solid rgba(212,175,55,0.1)">imperio-digital-ia.app</div>
           </div>
           <!-- App content -->
           <div class="flex" style="height: 340px">
@@ -382,7 +382,7 @@ function renderLandingPage() {
                 <div class="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center">
                   <i class="fas fa-brain text-black" style="font-size:10px"></i>
                 </div>
-                <span class="text-xs font-bold" style="color:#D4AF37">Studio IA</span>
+                <span class="text-xs font-bold" style="color:#D4AF37">Império Digital IA</span>
               </div>
               ${['Dashboard','Chat IA','Documentos','Imagens','Landing Pages','Projetos'].map((item, i) => `
               <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg mb-1 text-xs font-medium" style="${i === 0 ? 'background:rgba(212,175,55,0.15); color:#D4AF37; border-left:2px solid #D4AF37; padding-left:8px' : 'color:#6B6355'}">
@@ -501,7 +501,7 @@ function renderLandingPage() {
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16">
           <h2 class="text-4xl font-black mb-4" style="color:#F5F0E8">Veja na prática</h2>
-          <p class="text-xl" style="color:#A09880">Exemplos reais de como nossos usuários usam o Studio IA</p>
+          <p class="text-xl" style="color:#A09880">Exemplos reais de como nossos usuários usam o Império Digital IA</p>
         </div>
         <div class="grid md:grid-cols-2 gap-6">
           ${[
@@ -533,7 +533,7 @@ function renderLandingPage() {
         <div class="grid md:grid-cols-3 gap-6">
           ${[
             { name: 'Mariana Costa', role: 'Consultora de Negócios', text: 'Economizo pelo menos 10 horas por semana em criação de conteúdo. O retorno sobre o investimento é absurdo!' },
-            { name: 'Rafael Almeida', role: 'Dono de Agência', text: 'Minha equipe entrega 3x mais para os clientes usando o Studio IA. É um diferencial competitivo enorme.' },
+            { name: 'Rafael Almeida', role: 'Dono de Agência', text: 'Minha equipe entrega 3x mais para os clientes usando o Império Digital IA. É um diferencial competitivo enorme.' },
             { name: 'Juliana Santos', role: 'Advogada Autônoma', text: 'Criar contratos e propostas ficou muito mais rápido. Profissionalismo que antes eu não conseguia sozinha.' },
           ].map(t => `
           <div class="card p-6">
@@ -583,7 +583,7 @@ function renderLandingPage() {
     <section class="py-24 px-6" style="background:linear-gradient(135deg,#0A0A0A,#1A1500,#0A0A0A); border-top:1px solid rgba(212,175,55,0.2)">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="text-4xl md:text-5xl font-black mb-4" style="color:#F5F0E8">Pronto para começar?</h2>
-        <p class="text-xl mb-8" style="color:#A09880">Junte-se a centenas de profissionais que já usam o Studio IA para crescer.</p>
+        <p class="text-xl mb-8" style="color:#A09880">Junte-se a centenas de profissionais que já usam o Império Digital IA para crescer.</p>
         <button onclick="navigate('/cadastro')" class="bg-white text-yellow-400 px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-xl transition-all hover:scale-105">
           Criar conta gratuita <i class="fas fa-arrow-right ml-2"></i>
         </button>
@@ -598,9 +598,9 @@ function renderLandingPage() {
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
             <i class="fas fa-brain text-black text-sm"></i>
           </div>
-          <span class="font-bold" style="color:#F5F0E8">Studio IA para Negócios</span>
+          <span class="font-bold" style="color:#F5F0E8">Império Digital IA</span>
         </div>
-        <p class="text-sm" style="color:#6B6355">&copy; ${new Date().getFullYear()} Studio IA. Todos os direitos reservados.</p>
+        <p class="text-sm" style="color:#6B6355">&copy; ${new Date().getFullYear()} Império Digital IA. Todos os direitos reservados.</p>
         <div class="flex gap-6 text-sm text-gray-500">
           <a href="#" class="hover:text-white transition-colors">Privacidade</a>
           <a href="#" class="hover:text-white transition-colors">Termos</a>
@@ -634,7 +634,7 @@ function renderAuthPage(mode) {
         <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(212,175,55,0.15)">
           <i class="fas fa-brain text-white"></i>
         </div>
-        <span class="font-bold text-lg" style="color:#F5F0E8">Studio IA para Negócios</span>
+        <span class="font-bold text-lg" style="color:#F5F0E8">Império Digital IA</span>
       </div>
       <div>
         <h2 class="text-4xl font-black mb-4 leading-tight" style="color:#F5F0E8">Sua central de criação<br>com Inteligência Artificial</h2>
@@ -655,7 +655,7 @@ function renderAuthPage(mode) {
           </div>`).join('')}
         </div>
       </div>
-      <p class="text-sm" style="color:#6B6355">© ${new Date().getFullYear()} Studio IA para Negócios</p>
+      <p class="text-sm" style="color:#6B6355">© ${new Date().getFullYear()} Império Digital IA</p>
     </div>
 
     <!-- Right panel -->
@@ -666,7 +666,7 @@ function renderAuthPage(mode) {
           <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
             <i class="fas fa-brain text-black text-sm"></i>
           </div>
-          <span class="font-bold text-gray-900">Studio IA para Negócios</span>
+          <span class="font-bold text-gray-900">Império Digital IA</span>
         </div>
 
         <h1 class="text-3xl font-black mb-2" style="color:#F5F0E8">${isLogin ? 'Bem-vindo de volta!' : 'Criar conta grátis'}</h1>

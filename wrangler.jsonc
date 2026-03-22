@@ -1,14 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "webapp",
+  "name": "imperio-digital-ia",
   "compatibility_date": "2024-01-01",
   "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": "./dist",
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "webapp-production",
-      "database_id": "local-dev-db"
+      "database_name": "imperio-digital-ia-production",
+      "database_id": "343d7a1f-e59f-4ae9-9535-2f24b20e7933"
     }
   ]
 }

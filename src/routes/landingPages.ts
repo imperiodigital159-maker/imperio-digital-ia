@@ -290,7 +290,7 @@ function generateLandingPageHTML(data: {
   <!-- Footer -->
   <footer class="py-8 px-6 bg-gray-900 text-center">
     <p class="text-gray-400">&copy; ${new Date().getFullYear()} ${business_name}. Todos os direitos reservados.</p>
-    <p class="text-gray-600 text-sm mt-2">Criado com Studio IA para Negócios</p>
+    <p class="text-gray-600 text-sm mt-2">Criado com Império Digital IA</p>
   </footer>
 
   <script>

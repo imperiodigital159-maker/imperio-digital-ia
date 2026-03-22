@@ -411,7 +411,7 @@ async function clearChatHistory() {
 
 function exportChat() {
   if (!chatMessages.length) { showToast('Nenhuma mensagem para exportar', 'info'); return }
-  let text = `# Conversa - Studio IA para Negócios\n\n`
+  let text = `# Conversa - Império Digital IA\n\n`
   text += `Data: ${new Date().toLocaleDateString('pt-BR')}\n\n---\n\n`
   chatMessages.forEach(m => {
     text += `**${m.role === 'user' ? '👤 Você' : '🤖 Assistente IA'}**\n${m.content}\n\n---\n\n`
@@ -1029,11 +1029,11 @@ function printDocument(docId) {
 </head>
 <body>
 <div class="header">
-  <div><strong>Studio IA para Negócios</strong></div>
+  <div><strong>Império Digital IA</strong></div>
   <div style="color:#888;font-size:0.85rem">${new Date().toLocaleDateString('pt-BR')}</div>
 </div>
 <div id="content"></div>
-<div class="footer">Gerado com Studio IA para Negócios</div>
+<div class="footer">Gerado com Império Digital IA</div>
 <script>
   document.getElementById('content').innerHTML = marked.parse(${JSON.stringify(doc.content || '')})
   window.onload = () => setTimeout(() => window.print(), 300)
