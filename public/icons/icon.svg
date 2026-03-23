@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fundo preto -->
+  <rect width="512" height="512" rx="80" fill="#0A0A0A"/>
+  
+  <!-- Borda dourada -->
+  <rect width="512" height="512" rx="80" fill="none" stroke="#D4AF37" stroke-width="12"/>
+  
+  <!-- Coroa dourada -->
+  <path d="M256 120 L180 220 L120 160 L156 280 L356 280 L392 160 L332 220 Z" 
+        fill="#D4AF37"/>
+  
+  <!-- Diamante no centro da coroa -->
+  <polygon points="256,130 276,160 256,185 236,160" fill="#F5F0E8"/>
+  
+  <!-- Corpo da coroa -->
+  <rect x="140" y="280" width="232" height="40" rx="8" fill="#D4AF37"/>
+  
+  <!-- Base da coroa -->
+  <rect x="120" y="320" width="272" height="30" rx="8" fill="#A8891A"/>
+  
+  <!-- Letra I estilizada (IA) -->
+  <text x="256" y="420" 
+        font-family="Arial, sans-serif" 
+        font-size="72" 
+        font-weight="900" 
+        fill="#D4AF37" 
+        text-anchor="middle"
+        letter-spacing="4">IA</text>
+</svg>

@@ -40,8 +40,89 @@ app.route('/api/analytics', analyticsRoutes)
 // Health check
 app.get('/api/health', (c) => c.json({ status: 'ok', service: 'Império Digital IA' }))
 
-// Serve static files
+// Serve static files (JS, CSS)
 app.use('/static/*', serveStatic({ root: './' }))
+
+// Serve PWA assets from public root
+app.use('/icons/*', serveStatic({ root: './' }))
+app.use('/screenshots/*', serveStatic({ root: './' }))
+
+// Serve manifest.json with correct MIME type
+app.get('/manifest.json', async (c) => {
+  const manifest = {
+    "name": "Império Digital IA",
+    "short_name": "Império IA",
+    "description": "Plataforma de IA para pequenos negócios — crie documentos, imagens e landing pages com IA",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0A0A0A",
+    "theme_color": "#D4AF37",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "pt-BR",
+    "categories": ["business", "productivity", "utilities"],
+    "icons": [
+      { "src": "/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+      { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    ],
+    "shortcuts": [
+      { "name": "Chat IA", "short_name": "Chat", "description": "Abrir Chat com IA", "url": "/chat", "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }] },
+      { "name": "Documentos", "short_name": "Docs", "description": "Criar documento com IA", "url": "/documentos", "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }] },
+      { "name": "Imagens", "short_name": "Imgs", "description": "Gerar imagens com IA", "url": "/imagens", "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }] }
+    ]
+  }
+  return c.json(manifest, 200, { 'Content-Type': 'application/manifest+json' })
+})
+
+// Serve service worker with correct MIME type
+app.get('/sw.js', async (c) => {
+  const swCode = `// Service Worker — Império Digital IA PWA v2
+const CACHE_NAME = 'imperio-digital-ia-v2'
+const STATIC_ASSETS = [
+  '/',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
+]
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+  )
+  self.skipWaiting()
+})
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => 
+      Promise.all(cacheNames.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n)))
+    )
+  )
+  self.clients.claim()
+})
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('/api/')) return
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        if (response.status === 200) {
+          const clone = response.clone()
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone))
+        }
+        return response
+      })
+      .catch(() => caches.match(event.request).then((r) => r || caches.match('/')))
+  )
+})`
+  return c.text(swCode, 200, { 'Content-Type': 'application/javascript' })
+})
 
 // SPA fallback - serve index.html for all non-API routes
 app.get('*', async (c) => {
@@ -63,6 +144,24 @@ function getAppHTML(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Império Digital IA</title>
   <meta name="description" content="Uma central de criação com IA para pequenos negócios criarem documentos, imagens e páginas em um só lugar.">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#D4AF37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Império IA">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Império Digital IA">
+  <meta name="msapplication-TileColor" content="#0A0A0A">
+  <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+  
+  <!-- PWA Icons -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72x72.png">
   <!-- Tailwind config MUST come before CDN script -->
   <script>
     window.tailwind = window.tailwind || {};
