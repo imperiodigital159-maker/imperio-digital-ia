@@ -111,4 +111,34 @@ authRoutes.get('/me', async (c) => {
   return c.json({ user })
 })
 
+// Forgot password — send reset link
+authRoutes.post('/forgot-password', async (c) => {
+  try {
+    const { email } = await c.req.json()
+    if (!email) return c.json({ error: 'Email obrigatório' }, 400)
+
+    const db = c.env.DB
+    const user = await db.prepare('SELECT id, name FROM users WHERE email = ?').bind(email).first() as any
+
+    // Always return success (don't reveal if email exists)
+    if (!user) return c.json({ success: true, message: 'Se o email existir, você receberá as instruções.' })
+
+    // Generate reset token (valid 1h)
+    const resetToken = generateId() + generateId()
+    const expiresAt = new Date(Date.now() + 3600000).toISOString()
+
+    await db.prepare(
+      'INSERT OR REPLACE INTO auth_sessions (id, user_id, token_hash, expires_at) VALUES (?, ?, ?, ?)'
+    ).bind(generateId(), user.id, 'reset_' + resetToken, expiresAt).run()
+
+    // In production: send email via Resend/SendGrid
+    // For now: log the reset link
+    console.log(`[RESET] Link para ${email}: /redefinir-senha?token=${resetToken}`)
+
+    return c.json({ success: true, message: 'Se o email existir, você receberá as instruções.' })
+  } catch (err: any) {
+    return c.json({ error: 'Erro interno' }, 500)
+  }
+})
+
 export default authRoutes

@@ -147,6 +147,22 @@ async function render() {
     initAuthPage()
     return
   }
+  if (route === '/recuperar-senha') {
+    app.innerHTML = renderForgotPassword()
+    return
+  }
+  if (route === '/privacidade') {
+    app.innerHTML = renderPrivacyPage()
+    return
+  }
+  if (route === '/termos') {
+    app.innerHTML = renderTermsPage()
+    return
+  }
+  if (route === '/contato') {
+    app.innerHTML = renderContactPage()
+    return
+  }
 
   // Protected routes
   const authed = await checkAuth()
@@ -602,9 +618,9 @@ function renderLandingPage() {
         </div>
         <p class="text-sm" style="color:#6B6355">&copy; ${new Date().getFullYear()} Império Digital IA. Todos os direitos reservados.</p>
         <div class="flex gap-6 text-sm text-gray-500">
-          <a href="#" class="hover:text-white transition-colors">Privacidade</a>
-          <a href="#" class="hover:text-white transition-colors">Termos</a>
-          <a href="#" class="hover:text-white transition-colors">Contato</a>
+          <a href="#" onclick="navigate('/privacidade');return false;" class="hover:text-white transition-colors">Privacidade</a>
+          <a href="#" onclick="navigate('/termos');return false;" class="hover:text-white transition-colors">Termos</a>
+          <a href="#" onclick="navigate('/contato');return false;" class="hover:text-white transition-colors">Contato</a>
         </div>
       </div>
     </footer>
@@ -722,6 +738,7 @@ function renderAuthPage(mode) {
             ${isLogin ? 'Criar agora' : 'Fazer login'}
           </button>
         </p>
+        ${isLogin ? `<p class="text-center mt-2"><button onclick="navigate('/recuperar-senha')" class="text-sm hover:underline" style="color:#6B6355">Esqueceu a senha?</button></p>` : ''}
         <div class="text-center mt-3">
           <button onclick="navigate('/')" class="text-gray-400 text-sm hover:text-gray-600 transition-colors">
             <i class="fas fa-arrow-left mr-1"></i>Voltar ao início
@@ -1002,3 +1019,341 @@ checkOAuthHash()
 // ============================================================
 currentRoute = window.location.pathname || '/'
 render()
+
+// ============================================================
+// PÁGINA: RECUPERAR SENHA
+// ============================================================
+function renderForgotPassword() {
+  return `
+  <div class="min-h-screen flex items-center justify-center px-4" style="background:#0A0A0A">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <div class="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-key text-black text-xl"></i>
+        </div>
+        <h1 class="text-2xl font-bold" style="color:#F5F0E8">Recuperar Senha</h1>
+        <p class="text-sm mt-1" style="color:#A09880">Digite seu email para receber um link de recuperação</p>
+      </div>
+      <div class="card p-8" style="background:#111111; border:1px solid rgba(212,175,55,0.2)">
+        <div id="forgot-success" class="hidden mb-4 p-4 rounded-xl text-sm text-center" style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:#4ADE80">
+          <i class="fas fa-check-circle mr-2"></i>
+          Se esse email existir no sistema, você receberá as instruções em breve.
+        </div>
+        <div id="forgot-error" class="hidden mb-4 p-3 rounded-xl text-sm text-center" style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:#F87171"></div>
+        <form id="forgot-form" onsubmit="submitForgotPassword(event)">
+          <label class="block text-sm font-medium mb-2" style="color:#D0C8B8">Email cadastrado</label>
+          <input type="email" id="forgot-email" class="input-field w-full mb-5" placeholder="seu@email.com" required>
+          <button type="submit" id="forgot-btn" class="btn-primary w-full py-3 rounded-xl font-semibold">
+            <i class="fas fa-paper-plane mr-2"></i>Enviar link de recuperação
+          </button>
+        </form>
+        <p class="text-center mt-5 text-sm" style="color:#6B6355">
+          Lembrou a senha?
+          <button onclick="navigate('/login')" class="text-yellow-500 font-semibold hover:underline ml-1">Fazer login</button>
+        </p>
+      </div>
+      <div class="text-center mt-4">
+        <button onclick="navigate('/')" class="text-sm" style="color:#6B6355"><i class="fas fa-arrow-left mr-1"></i>Voltar ao início</button>
+      </div>
+    </div>
+  </div>`
+}
+
+async function submitForgotPassword(e) {
+  e.preventDefault()
+  const email = document.getElementById('forgot-email').value
+  const btn = document.getElementById('forgot-btn')
+  const err = document.getElementById('forgot-error')
+  const success = document.getElementById('forgot-success')
+  btn.disabled = true
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...'
+  err.classList.add('hidden')
+  try {
+    await api('POST', '/auth/forgot-password', { email })
+  } catch(_) {}
+  // Always show success (security - don't reveal if email exists)
+  success.classList.remove('hidden')
+  document.getElementById('forgot-form').classList.add('hidden')
+  btn.disabled = false
+  btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Enviar link de recuperação'
+}
+
+// ============================================================
+// PÁGINA: POLÍTICA DE PRIVACIDADE
+// ============================================================
+function renderPrivacyPage() {
+  const year = new Date().getFullYear()
+  return `
+  <div class="min-h-screen" style="background:#0A0A0A;color:#F5F0E8">
+    <!-- Header -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-xl" style="background:rgba(10,10,10,0.9);border-bottom:1px solid rgba(212,175,55,0.2)">
+      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <button onclick="navigate('/')" class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl gradient-bg flex items-center justify-center">
+            <i class="fas fa-brain text-black text-xs"></i>
+          </div>
+          <span class="font-bold text-sm" style="color:#F5F0E8">Império Digital IA</span>
+        </button>
+        <button onclick="navigate('/')" class="text-sm hover:text-yellow-400 transition-colors" style="color:#A09880">
+          <i class="fas fa-arrow-left mr-1"></i>Voltar
+        </button>
+      </div>
+    </nav>
+    <!-- Content -->
+    <div class="max-w-3xl mx-auto px-6 pt-28 pb-16">
+      <h1 class="text-3xl font-black mb-2" style="color:#F5F0E8">Política de Privacidade</h1>
+      <p class="text-sm mb-8" style="color:#6B6355">Última atualização: março de ${year}</p>
+      <div class="space-y-8 text-sm leading-relaxed" style="color:#A09880">
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">1. Quem somos</h2>
+          <p>O <strong style="color:#F5F0E8">Império Digital IA</strong> é uma plataforma SaaS de inteligência artificial para pequenos negócios, disponível em <strong style="color:#F5F0E8">https://imperio-digital-ia.pages.dev</strong>. Respeitamos sua privacidade e nos comprometemos a proteger seus dados pessoais.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">2. Dados que coletamos</h2>
+          <ul class="space-y-2 ml-4">
+            <li><strong style="color:#F5F0E8">Dados de cadastro:</strong> nome, endereço de email e senha (armazenada com hash seguro).</li>
+            <li><strong style="color:#F5F0E8">Dados de uso:</strong> documentos criados, imagens geradas, sessões de chat e landing pages.</li>
+            <li><strong style="color:#F5F0E8">Dados de pagamento:</strong> processados pelo Stripe — não armazenamos dados de cartão.</li>
+            <li><strong style="color:#F5F0E8">Dados técnicos:</strong> endereço IP, tipo de dispositivo e navegador (para segurança e diagnóstico).</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">3. Como usamos seus dados</h2>
+          <ul class="space-y-2 ml-4">
+            <li>Fornecer e melhorar os serviços da plataforma.</li>
+            <li>Processar pagamentos e gerenciar assinaturas.</li>
+            <li>Enviar comunicações relacionadas ao serviço (confirmações, atualizações).</li>
+            <li>Garantir a segurança e prevenir fraudes.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">4. Compartilhamento de dados</h2>
+          <p>Não vendemos seus dados. Compartilhamos apenas com:</p>
+          <ul class="space-y-2 ml-4 mt-2">
+            <li><strong style="color:#F5F0E8">Stripe:</strong> para processamento seguro de pagamentos.</li>
+            <li><strong style="color:#F5F0E8">OpenAI:</strong> para geração de conteúdo com IA (dados anonimizados).</li>
+            <li><strong style="color:#F5F0E8">Cloudflare:</strong> para hospedagem e segurança da plataforma.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">5. Seus direitos (LGPD)</h2>
+          <p>Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito a:</p>
+          <ul class="space-y-2 ml-4 mt-2">
+            <li>Acessar, corrigir ou excluir seus dados pessoais.</li>
+            <li>Revogar o consentimento a qualquer momento.</li>
+            <li>Portabilidade dos seus dados.</li>
+            <li>Ser informado sobre uso dos dados.</li>
+          </ul>
+          <p class="mt-3">Para exercer esses direitos, entre em contato: <strong style="color:#D4AF37">imperiodigital159@gmail.com</strong></p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">6. Segurança</h2>
+          <p>Utilizamos criptografia TLS/HTTPS, senhas com hash bcrypt, tokens JWT com expiração e infraestrutura Cloudflare com proteção DDoS.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">7. Cookies</h2>
+          <p>Usamos cookies estritamente necessários para autenticação e sessão. Não utilizamos cookies de rastreamento ou publicidade.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">8. Retenção de dados</h2>
+          <p>Seus dados são mantidos enquanto sua conta estiver ativa. Após exclusão da conta, os dados são removidos em até 30 dias.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">9. Contato</h2>
+          <p>Dúvidas sobre privacidade: <strong style="color:#D4AF37">imperiodigital159@gmail.com</strong></p>
+        </section>
+      </div>
+      <div class="mt-10 pt-6" style="border-top:1px solid rgba(212,175,55,0.15)">
+        <div class="flex gap-4">
+          <button onclick="navigate('/termos')" class="btn-secondary px-5 py-2 rounded-xl text-sm">Ver Termos de Uso</button>
+          <button onclick="navigate('/')" class="btn-primary px-5 py-2 rounded-xl text-sm">Voltar ao início</button>
+        </div>
+      </div>
+    </div>
+  </div>`
+}
+
+// ============================================================
+// PÁGINA: TERMOS DE USO
+// ============================================================
+function renderTermsPage() {
+  const year = new Date().getFullYear()
+  return `
+  <div class="min-h-screen" style="background:#0A0A0A;color:#F5F0E8">
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-xl" style="background:rgba(10,10,10,0.9);border-bottom:1px solid rgba(212,175,55,0.2)">
+      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <button onclick="navigate('/')" class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl gradient-bg flex items-center justify-center">
+            <i class="fas fa-brain text-black text-xs"></i>
+          </div>
+          <span class="font-bold text-sm" style="color:#F5F0E8">Império Digital IA</span>
+        </button>
+        <button onclick="navigate('/')" class="text-sm hover:text-yellow-400 transition-colors" style="color:#A09880">
+          <i class="fas fa-arrow-left mr-1"></i>Voltar
+        </button>
+      </div>
+    </nav>
+    <div class="max-w-3xl mx-auto px-6 pt-28 pb-16">
+      <h1 class="text-3xl font-black mb-2" style="color:#F5F0E8">Termos de Uso</h1>
+      <p class="text-sm mb-8" style="color:#6B6355">Última atualização: março de ${year}</p>
+      <div class="space-y-8 text-sm leading-relaxed" style="color:#A09880">
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">1. Aceitação dos Termos</h2>
+          <p>Ao criar uma conta ou usar o <strong style="color:#F5F0E8">Império Digital IA</strong>, você concorda com estes Termos de Uso. Se não concordar, não utilize a plataforma.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">2. Descrição do Serviço</h2>
+          <p>O Império Digital IA é uma plataforma SaaS que oferece ferramentas de inteligência artificial para criação de documentos, imagens, landing pages e chat assistido por IA, destinada a pequenos empreendedores e negócios.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">3. Planos e Pagamentos</h2>
+          <ul class="space-y-2 ml-4">
+            <li><strong style="color:#F5F0E8">Plano Grátis:</strong> acesso limitado a funcionalidades básicas sem custo.</li>
+            <li><strong style="color:#F5F0E8">Plano Pro (R$97/mês):</strong> acesso completo a todas as funcionalidades, com cobrança recorrente mensal.</li>
+            <li>O cancelamento pode ser feito a qualquer momento. O acesso Pro permanece até o final do período pago.</li>
+            <li>Pagamentos processados com segurança pelo Stripe.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">4. Uso Permitido</h2>
+          <p>Você pode usar a plataforma para fins comerciais legítimos. É proibido:</p>
+          <ul class="space-y-2 ml-4 mt-2">
+            <li>Criar conteúdo ilegal, ofensivo, difamatório ou que viole direitos de terceiros.</li>
+            <li>Tentar invadir, sobrecarregar ou comprometer a segurança da plataforma.</li>
+            <li>Revender ou redistribuir o acesso à plataforma sem autorização.</li>
+            <li>Usar automação não autorizada para acessar os serviços.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">5. Propriedade Intelectual</h2>
+          <p><strong style="color:#F5F0E8">Conteúdo gerado por você:</strong> você é proprietário do conteúdo criado com a plataforma.</p>
+          <p class="mt-2"><strong style="color:#F5F0E8">Plataforma:</strong> o código, design e marca "Império Digital IA" são propriedade exclusiva do desenvolvedor.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">6. Limitação de Responsabilidade</h2>
+          <p>A plataforma é fornecida "como está". Não garantimos que o serviço será ininterrupto ou livre de erros. Não nos responsabilizamos por lucros cessantes ou danos indiretos decorrentes do uso.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">7. Cancelamento e Encerramento</h2>
+          <p>Você pode encerrar sua conta a qualquer momento. Reservamo-nos o direito de suspender contas que violem estes termos.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">8. Lei Aplicável</h2>
+          <p>Estes termos são regidos pela legislação brasileira. Foro eleito: comarca de São Paulo/SP.</p>
+        </section>
+        <section>
+          <h2 class="text-lg font-bold mb-3" style="color:#D4AF37">9. Contato</h2>
+          <p>Dúvidas: <strong style="color:#D4AF37">imperiodigital159@gmail.com</strong></p>
+        </section>
+      </div>
+      <div class="mt-10 pt-6" style="border-top:1px solid rgba(212,175,55,0.15)">
+        <div class="flex gap-4">
+          <button onclick="navigate('/privacidade')" class="btn-secondary px-5 py-2 rounded-xl text-sm">Ver Política de Privacidade</button>
+          <button onclick="navigate('/')" class="btn-primary px-5 py-2 rounded-xl text-sm">Voltar ao início</button>
+        </div>
+      </div>
+    </div>
+  </div>`
+}
+
+// ============================================================
+// PÁGINA: CONTATO
+// ============================================================
+function renderContactPage() {
+  return `
+  <div class="min-h-screen" style="background:#0A0A0A;color:#F5F0E8">
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-xl" style="background:rgba(10,10,10,0.9);border-bottom:1px solid rgba(212,175,55,0.2)">
+      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <button onclick="navigate('/')" class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl gradient-bg flex items-center justify-center">
+            <i class="fas fa-brain text-black text-xs"></i>
+          </div>
+          <span class="font-bold text-sm" style="color:#F5F0E8">Império Digital IA</span>
+        </button>
+        <button onclick="navigate('/')" class="text-sm hover:text-yellow-400 transition-colors" style="color:#A09880">
+          <i class="fas fa-arrow-left mr-1"></i>Voltar
+        </button>
+      </div>
+    </nav>
+    <div class="max-w-2xl mx-auto px-6 pt-28 pb-16">
+      <div class="text-center mb-10">
+        <div class="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-envelope text-black text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-black mb-2" style="color:#F5F0E8">Fale Conosco</h1>
+        <p style="color:#A09880">Estamos aqui para ajudar. Resposta em até 24h.</p>
+      </div>
+      <!-- Contact info -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div class="card p-5 text-center" style="background:#111111;border:1px solid rgba(212,175,55,0.2)">
+          <i class="fas fa-envelope text-2xl mb-3" style="color:#D4AF37"></i>
+          <p class="text-xs font-semibold mb-1" style="color:#A09880">EMAIL</p>
+          <p class="text-sm font-medium" style="color:#F5F0E8">imperiodigital159<br>@gmail.com</p>
+        </div>
+        <div class="card p-5 text-center" style="background:#111111;border:1px solid rgba(212,175,55,0.2)">
+          <i class="fab fa-whatsapp text-2xl mb-3" style="color:#4ADE80"></i>
+          <p class="text-xs font-semibold mb-1" style="color:#A09880">WHATSAPP</p>
+          <p class="text-sm font-medium" style="color:#F5F0E8">Disponível em<br>breve</p>
+        </div>
+        <div class="card p-5 text-center" style="background:#111111;border:1px solid rgba(212,175,55,0.2)">
+          <i class="fas fa-clock text-2xl mb-3" style="color:#D4AF37"></i>
+          <p class="text-xs font-semibold mb-1" style="color:#A09880">ATENDIMENTO</p>
+          <p class="text-sm font-medium" style="color:#F5F0E8">Seg–Sex<br>9h às 18h</p>
+        </div>
+      </div>
+      <!-- Contact form -->
+      <div class="card p-8" style="background:#111111;border:1px solid rgba(212,175,55,0.2)">
+        <h2 class="text-lg font-bold mb-5" style="color:#F5F0E8">Enviar mensagem</h2>
+        <div id="contact-success" class="hidden mb-4 p-4 rounded-xl text-sm text-center" style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:#4ADE80">
+          <i class="fas fa-check-circle mr-2"></i>Mensagem enviada! Responderemos em até 24h.
+        </div>
+        <form id="contact-form" onsubmit="submitContact(event)" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-1" style="color:#D0C8B8">Nome</label>
+              <input type="text" id="contact-name" class="input-field w-full" placeholder="Seu nome" required>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1" style="color:#D0C8B8">Email</label>
+              <input type="email" id="contact-email" class="input-field w-full" placeholder="seu@email.com" required>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" style="color:#D0C8B8">Assunto</label>
+            <select id="contact-subject" class="input-field w-full">
+              <option value="suporte">Suporte técnico</option>
+              <option value="pagamento">Dúvida sobre pagamento</option>
+              <option value="cancelamento">Cancelamento</option>
+              <option value="parceria">Parceria comercial</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" style="color:#D0C8B8">Mensagem</label>
+            <textarea id="contact-message" class="input-field w-full h-32 resize-none" placeholder="Descreva sua dúvida ou sugestão..." required></textarea>
+          </div>
+          <button type="submit" id="contact-btn" class="btn-primary w-full py-3 rounded-xl font-semibold">
+            <i class="fas fa-paper-plane mr-2"></i>Enviar mensagem
+          </button>
+        </form>
+      </div>
+      <div class="text-center mt-8">
+        <button onclick="navigate('/')" class="btn-secondary px-6 py-2.5 rounded-xl text-sm">
+          <i class="fas fa-arrow-left mr-2"></i>Voltar ao início
+        </button>
+      </div>
+    </div>
+  </div>`
+}
+
+async function submitContact(e) {
+  e.preventDefault()
+  const btn = document.getElementById('contact-btn')
+  btn.disabled = true
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...'
+  await new Promise(r => setTimeout(r, 1000))
+  document.getElementById('contact-success').classList.remove('hidden')
+  document.getElementById('contact-form').classList.add('hidden')
+  btn.disabled = false
+  btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Enviar mensagem'
+}
